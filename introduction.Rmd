@@ -1,0 +1,154 @@
+---
+output: 
+  xaringan::moon_reader:
+    includes:
+      after_body: images/insert-logo.html
+    seal : false
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+        ratio: "16:9"
+        highlightStyle: solarized-dark
+        highlightLines: true
+        countIncrementalSlides: false
+        titleSlideClass: [top, left, inverse]
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+x <- c("remotes", "maRce10/warbleR", "maRce10/baRulho", "ggplot2", "png", "maRce10/PhenotypeSpace", "maRce10/ohun",  "DT", "kableExtra", "xaringan", "xaringanthemer", "maRce10/Rraven", "formatR")
+
+aa <- lapply(x, function(y) {
+   if(!gsub("maRce10/", "", y) %in% installed.packages()[,"Package"])
+  if (grepl("/", y))
+    remotes::install_github(y) else
+  install.packages(y) 
+  
+  try(require(gsub("maRce10/", "", y), character.only = T), silent = T)
+})
+
+knitr::opts_chunk$set(fig.retina = 3, warning = FALSE, message = FALSE, tidy = TRUE)
+
+# options(htmltools.dir.version = FALSE)
+
+# citation
+# RefManageR::BibOptions(check.entries = FALSE, bib.style = "authoryear", style = "markdown",
+#            dashed = TRUE)
+# file.name <- system.file("library.bib", package = "RefManageR")
+# bib <- RefManageR::ReadBib(file.name)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+
+
+primary <- "#707e77" # light gray
+seconday <- "#ffffff" # white
+# gray <- "#333333"
+detalles <- "#22A884FF" # verde viridis 
+textcolor <- "#707e77" # white
+# colorspace::lighten(gray)
+headercolor <- "#ffffff" # white
+vinculos <-"#1f968b" # azul viridis "#fde725ff" # amarillo viridis
+
+
+
+xaringanthemer::style_duo(
+  # colors\
+  background_color = "#000000",
+  primary_color = primary,
+  secondary_color = seconday,
+  header_color = headercolor,
+  text_color = textcolor,
+  # code_inline_color = vinculos, #colorspace::darken(textcolor),
+  text_bold_color = detalles,
+  link_color = vinculos,
+  code_highlight_color = "pink",
+  title_slide_text_color = textcolor,
+  code_inline_background_color = textcolor,
+  base_font_size = "18px",
+  text_font_size = "32px"
+  
+  # fonts
+  # header_font_google = xaringanthemer::google_font("Raleway", "300", "400"),
+  # text_font_google = xaringanthemer::google_font("Raleway"),
+  # code_font_google = xaringanthemer::google_font("Fira Mono")
+)
+```
+
+
+class: inverse, center, middle
+background-image: url("images/portada5.png")
+background-size: cover
+
+
+# __Bioacoustic Analysis in R__
+
+## Organization for Tropical Studies
+
+&nbsp; 
+
+##### _Marcelo Araya-Salas PhD_ 
+
+##### _Neuroscience Research Center_
+##### _University of Costa Rica_
+
+
+<img src="images/ucr_cin.png" width="300px"/> 
+
+---
+class: middle
+
+## __Animal acoustic signals__
+
+<center><iframe width="100%" height="500" src="images/lbh_singing_30fps.mp4" allowtransparency="true" style="background: #000000;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+
+---
+class: inverse
+
+## __Animal acoustic signals__
+
+<center><iframe width="100%" height="500" src="images/house-wren.mp4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+
+---
+class: inverse
+
+
+## __Common research questions__
+
+* How animal acoustic signals vary in space and time? why?
+
+* What is their function?
+
+* What socio-ecological factors favor the evolution of specific features?
+
+* How the transmission properties of the environment have shaped signal structure?  
+
+---
+class: inverse
+
+## __Acoustic analysis workflow__
+
+<center><img src="images/bioacoustic_research_diagram.png" height="100%" width="800px"/></center>
+  
+---
+class: inverse
+
+## __Why bioacoustics in R?__
+
+- Improves reproducibility of research
+
+- Allows conducting analyses that better fit our research questions and study systems
+
+- Democratizes access to scientific resources
+
+---
+class: inverse
+
+## __Course outline__
+
+- Tutorials with combinations of theoretical background, demonstrations and proofs of concept using R code and self-learning practices on their own acoustic data or supplied example data
+
+- Additional practices and readings assigned after each session
+

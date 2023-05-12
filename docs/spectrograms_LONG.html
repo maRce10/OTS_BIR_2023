@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>spectrograms_LONG.knit</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">OTS Bioacoustic Analysis in R 2022</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="program.html">Program</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="r_basics.html">R basics</a>
+    </li>
+    <li>
+      <a href="sound.html">Sound</a>
+    </li>
+    <li>
+      <a href="spectrograms.html">Spectrograms</a>
+    </li>
+    <li>
+      <a href="seewave.html">seewave</a>
+    </li>
+    <li>
+      <a href="annotations.html">Annotations</a>
+    </li>
+    <li>
+      <a href="ohun.html">ohun: automatic detection</a>
+    </li>
+    <li>
+      <a href="intro_to_warbler.html">Intro to warbleR</a>
+    </li>
+    <li>
+      <a href="measure_acoustic_structure.html">Measure acoustic structure</a>
+    </li>
+    <li>
+      <a href="comparing_methods.html">Comparing measuring methods</a>
+    </li>
+    <li>
+      <a href="quality_checks.html">Quality checks</a>
+    </li>
+    <li>
+      <a href="measure_structure_green_hermit.html">Measure structure on XC recordings</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="course_prep.html">Course prep</a>
+</li>
+<li>
+  <a href="instructor.html">Instructor</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><center>
+<font size="7"><b>Building spectrograms</b></font>
+</center></h1>
+<h3 class="subtitle"><center>
+<font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
+</center></h3>
+<h4 class="author"><center>
+<font size="3"><a href="http://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></font>
+</center></h4>
+<h4 class="date"><center>
+“2022-05-16”
+</center></h4>
+
+</div>
+
+
+<p> </p>
+<p>The spectrogram is a fundamental tool in the study of acoustic communication in vertebrates. They are basically a visual representation of the sound where the variation in energy (or power spectral density) is shown on both the frequency and the time domains. Spectrograms allow us to visually explore acoustic variation in our study systems, which makes it easy to distinguish structural differences at small temporal/spectral scales that our ears cannot detect.</p>
+<p>We will use the <strong>seewave</strong> package and its sample data:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seewave)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># load examples</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(tico)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(orni)</span></code></pre></div>
+<div id="fourier-transformation" class="section level2">
+<h2>Fourier transformation</h2>
+<p>In order to understand the information contained in a spectrogram it is necessary to understand, at least briefly, the <a href="https://en.wikipedia.org/wiki/Fourier_transform">Fourier transformation</a>. In simple words, this is a mathematical transformation that detects the periodicity in time series, identifying the different frequencies that compose them and their relative energy. Therefore it is said that it transforms the signals from the time domain to the frequency domain.</p>
+<p>To better understand how it works, we can simulate time series composed of pre-defined frequencies. In this example we simulate 3 frequencies and join them in a single time series:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># freq</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="dv">11025</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># time sequence</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">/</span>f, <span class="dv">1</span>, <span class="at">length.out =</span> f)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># period</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>pr <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">440</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>w0 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi<span class="sc">/</span>pr</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># frec 1</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>h1 <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">*</span> <span class="fu">cos</span>(w0 <span class="sc">*</span> t)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(h1[<span class="dv">1</span><span class="sc">:</span><span class="dv">75</span>], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time (samples)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Amplitude (no units)&quot;</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># frec 2</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>h2 <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">*</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> w0 <span class="sc">*</span> t)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(h2[<span class="dv">1</span><span class="sc">:</span><span class="dv">75</span>], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time (samples)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Amplitude (no units)&quot;</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># frec 3</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>h3 <span class="ot">&lt;-</span> <span class="dv">15</span> <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">3</span> <span class="sc">*</span> w0 <span class="sc">*</span> t)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(h3[<span class="dv">1</span><span class="sc">:</span><span class="dv">75</span>], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time (samples)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Amplitude (no units)&quot;</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+<p>This is what the union of the three frequencies looks like:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>H0 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> h1 <span class="sc">+</span> h2 <span class="sc">+</span> h3</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(H0[<span class="dv">1</span><span class="sc">:</span><span class="dv">75</span>], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time (samples)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Amplitude (no units)&quot;</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Now we can apply the Fourier transform to this time series and graph the frequencies detected using a periodogram:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fspc <span class="ot">&lt;-</span> <span class="fu">Mod</span>(<span class="fu">fft</span>(H0))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fspc, <span class="at">type =</span> <span class="st">&quot;h&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Frecuency (Hz)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Amplitude (no units)&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> f<span class="sc">/</span><span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> (f<span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="dv">1650</span>, <span class="at">y =</span> <span class="dv">8000</span>, <span class="st">&quot;Nyquist Frequency&quot;</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>We can make zoom in to frequencies below the Nyquist frequency:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fspc[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(fspc)<span class="sc">/</span><span class="dv">2</span>)], <span class="at">type =</span> <span class="st">&quot;h&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Frecuency (Hz)&quot;</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&quot;Amplitude (no units)&quot;</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>This diagram (taken from Sueur 2018) summarizes the process we just simulated:</p>
+<p><img src="images/FFT_decomp.png" width="400px" style="display: block; margin: auto;" /> <font size="1"><b>Tomado de Sueur 2018</b></font></p>
+<p>The periodogram next to the spectrogram of these simulated sounds looks like this:</p>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p> </p>
+</div>
+<div id="from-the-fourier-transformation-to-the-spectrogram" class="section level2">
+<h2>From the Fourier transformation to the spectrogram</h2>
+<p>The spectrograms are constructed of the spectral decomposition of discrete time segments of amplitude values. Each segment (or window) of time is a column of spectral density values in a frequency range. Take for example this simple modulated sound, which goes up and down in frequency:</p>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-8-1.png" width="672" />  </p>
+<p>If we divide the sound into 10 segments and make periodograms for each of them we can see this pattern in the frequencies:</p>
+<p><img src="images/periodogram_spectro.gif" alt="Spectrogram resolution"></p>
+<p>This animation shows in a very simple way the logic behind the spectrograms: if we calculate Fourier transforms for short segments of time through a sound (e.g. amplitude changes in time) and concatenate them, we can visualize the variation in frequencies over time.  </p>
+</div>
+<div id="overlap" class="section level2">
+<h2>Overlap</h2>
+<p>When frequency spectra are combined to produce a spectrogram, the frequency and amplitude modulations are not gradual:</p>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-11-1.png" width="672" />  </p>
+<p>There are several “tricks” to smooth out the contours of signals with high modulation in a spectrogram, although the main and most common is window overlap. The overlap recycles a percentage of the amplitude samples of a window to calculate the next window. For example, the sound used as an example, with a window size of 512 points divides the sound into 15 segments:</p>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>A 50% overlap generates windows that share 50% of the amplitude values with the adjacent windows. This has the visual effect of making modulations much more gradual:</p>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Which increases (in some way artificially) the number of time windows, without changing the resolution in frequency. In this example, the number of time windows is doubled:</p>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>Therefore, the greater the overlap the greater the smoothing of the contours of the sounds:</p>
+<p><img src="images/spectro.overlap.gif" alt="Spectrogram overlap"></p>
+<p>This increases the number of windows as a function of the overlap for this particular sound:</p>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p> </p>
+<p>This increase in spectrogram sharpness does not come without a cost. The longer the time windows, the greater the number of Fourier transformations to compute, and therefore, the greater the duration of the process. This graphic shows the increase in duration as a function of the number of windows on my computer:</p>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p> </p>
+<p>It is necessary to take this cost into account when producing spectrograms of long sound files (&gt; 1 min).</p>
+<p> </p>
+</div>
+<div id="limitations" class="section level2">
+<h2>Limitations</h2>
+<p>However, there is a trade-off between the resolution between the 2 domains: the higher the frequency resolution, the lower the resolution in time. The following animation shows, for the sound of the previous example, how the resolution in frequency decreases as the resolution in time increases:</p>
+<p><img src="images/spectro.precision.tradeoff2.gif" alt="Spectrogram resolution 2"></p>
+<p> </p>
+<p>This is the relationship between frequency resolution and time resolution for the example signal:</p>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-20-1.png" width="672" />  </p>
+<p> </p>
+</div>
+<div id="creating-spectrograms-in-r" class="section level2">
+<h2>Creating spectrograms in R</h2>
+<p>There are several R packages with functions that produce spectrograms in the graphical device. This chart (taken from Sueur 2018) summarizes the functions and their arguments: <img src="images/r-spectrogram-funs.png" alt="Spectrogram functions"></p>
+<p> </p>
+<p>We will focus on making spectrograms using the <code>spectro ()</code> function of <strong>seewave</strong>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tico2 <span class="ot">&lt;-</span> <span class="fu">cutw</span>(tico, <span class="at">from =</span> <span class="fl">0.55</span>, <span class="at">to =</span> <span class="fl">0.9</span>, <span class="at">output =</span> <span class="st">&quot;Wave&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico2, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">40</span>, <span class="dv">0</span>, <span class="fl">0.5</span>), <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span>), <span class="at">scale =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li><p>How can I increase the overlap between time windows?</p></li>
+<li><p>How much longer it takes to create a 99%-overlap spectrogram compare to a 5%-overlap spectrogram?</p></li>
+<li><p>What does the argument ‘collevels’ do? Increase the range and look at the spectrogram.</p></li>
+<li><p>What do the ‘flim’ and ‘tlim’ arguments determine?</p></li>
+<li><p>Run the examples that come in the <code>spectro()</code> function documentation</p></li>
+</ul>
+</div>
+<p> </p>
+<p>Almost all components of a spectrogram in <strong>seewave</strong> can be modified. We can add scales:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico2, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">40</span>, <span class="dv">0</span>, <span class="fl">0.5</span>), <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span>), <span class="at">scale =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>Change the color palette:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico2, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">40</span>, <span class="dv">0</span>, <span class="fl">0.5</span>), <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span>), <span class="at">scale =</span> <span class="cn">TRUE</span>, <span class="at">palette =</span> reverse.cm.colors)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico2, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">40</span>, <span class="dv">0</span>, <span class="fl">0.5</span>), <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span>), <span class="at">scale =</span> <span class="cn">TRUE</span>, <span class="at">palette =</span> reverse.gray.colors<span class="fl">.1</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>Remove the vertical lines:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico2, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">40</span>, <span class="dv">0</span>, <span class="fl">0.5</span>), <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span>), <span class="at">scale =</span> <span class="cn">TRUE</span>, <span class="at">palette =</span> reverse.gray.colors<span class="fl">.1</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>Add oscillograms (waveforms):</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico2, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">40</span>, <span class="dv">0</span>, <span class="fl">0.5</span>), <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span>), <span class="at">scale =</span> <span class="cn">TRUE</span>, <span class="at">palette =</span> reverse.gray.colors<span class="fl">.1</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">osc =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="spectrograms_LONG_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li><p>Change the color of the oscillogram to a ‘heat color’ palette</p></li>
+<li><p>These are some of the color palettes that fit well the gradients in spectrograms:  </p></li>
+</ul>
+<center>
+<img src="images/palletes.png" alt="Spectrogram palletes" width="480">
+</center>
+<p><font size="1"><b>From Sueur 2018</b></font></p>
+<p> </p>
+<p>Use at least 3 palettes to generate the “tico2” spectrogram</p>
+<p> </p>
+<ul>
+<li><p>Change the relative height of the oscillogram so that it corresponds to 1/6 of the height of the spectrogram</p></li>
+<li><p>Change the relative width of the amplitude scale so that it corresponds to 1/8 of the spectrogram width</p></li>
+<li><p>What does the “zp” argument do? (hint: try <code>zp = 100</code> and notice the effect on the spectrogram)</p></li>
+<li><p>Which value of “wl” (window size) generates smoother spectrograms for the example “orni” object?</p></li>
+<li><p>The package <code>viridis</code> provides some color palettes that are better perceived by people with forms of color blindness and/or color vision deficiency. Install the package and try some of the color palettes available (try <code>?viridis</code>)</p></li>
+</ul>
+</div>
+<p> </p>
+</div>
+<div id="dynamic-spectrograms" class="section level2">
+<h2>Dynamic spectrograms</h2>
+<p>The package <a href="https://marce10.github.io/dynaSpec">dynaSpec</a> allows to create static and dynamic visualizations of sounds, ready for publication or presentation. These dynamic spectrograms are produced natively with base graphics, and are save as an .mp4 video in the working directory:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ngh_wren <span class="ot">&lt;-</span> <span class="fu">read_sound_file</span>(<span class="st">&quot;https://www.xeno-canto.org/518334/download&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>custom_pal <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">&quot;#2d2d86&quot;</span>, <span class="st">&quot;#2d2d86&quot;</span>, <span class="fu">reverse.terrain.colors</span>(<span class="dv">10</span>)[<span class="dv">5</span><span class="sc">:</span><span class="dv">10</span>]))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dynaSpec)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">scrolling_spectro</span>(<span class="at">wave =</span> ngh_wren, <span class="at">wl =</span> <span class="dv">600</span>, <span class="at">t.display =</span> <span class="dv">3</span>, <span class="at">ovlp =</span> <span class="dv">95</span>, <span class="at">pal =</span> custom_pal,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">8</span>), <span class="at">width =</span> <span class="dv">700</span>, <span class="at">height =</span> <span class="dv">250</span>, <span class="at">res =</span> <span class="dv">100</span>, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">40</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span>, <span class="dv">5</span>), <span class="at">file.name =</span> <span class="st">&quot;../nightingale_wren.mp4&quot;</span>, <span class="at">colbg =</span> <span class="st">&quot;#2d2d86&quot;</span>, <span class="at">lcol =</span> <span class="st">&quot;#FFFFFFE6&quot;</span>)</span></code></pre></div>
+<center>
+<iframe width="100%" height="297" src="images/nightingale_wren.mp4" allowtransparency="true" style="background: #000000;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</center>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li><p>Rerun the example code above but this time using a waveform in the bottom panel</p></li>
+<li><p>Slow down the spectrogram (see the argument ‘speed’)</p></li>
+<li><p>Use a <code>viridis</code> color palette</p></li>
+<li><p>Pick up an example acoustic signal from your own data (or from those downloaded from Xeno-Canto) and make a dynamic spectrogram</p></li>
+</ul>
+</div>
+<p> </p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ol style="list-style-type: decimal">
+<li><p>Araya-Salas, Marcelo and Wilkins, Matthew R. (2020), dynaSpec: dynamic spectrogram visualizations in R. R package version 1.0.0.</p></li>
+<li><p>Sueur J, Aubin T, Simonis C. 2008. Equipment review: seewave, a free modular tool for sound analysis and synthesis. Bioacoustics 18(2):213–226.</p></li>
+<li><p>Sueur, J. (2018). Sound Analysis and Synthesis with R.</p></li>
+</ol>
+<hr />
+<p> </p>
+<p><font size="4">Session information</font></p>
+<pre><code>## R version 4.1.0 (2021-05-18)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 20.04.2 LTS
+## 
+## Matrix products: default
+## BLAS:   /usr/lib/x86_64-linux-gnu/atlas/libblas.so.3.10.3
+## LAPACK: /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3
+## 
+## locale:
+##  [1] LC_CTYPE=pt_BR.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=es_CR.UTF-8        LC_COLLATE=pt_BR.UTF-8    
+##  [5] LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=pt_BR.UTF-8   
+##  [7] LC_PAPER=es_CR.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=es_CR.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] seewave_2.2.0 knitr_1.39   
+## 
+## loaded via a namespace (and not attached):
+##  [1] digest_0.6.29   MASS_7.3-54     R6_2.5.1        jsonlite_1.8.0 
+##  [5] signal_0.7-7    formatR_1.11    magrittr_2.0.3  evaluate_0.15  
+##  [9] highr_0.9       stringi_1.7.6   rlang_1.0.2     cli_3.1.0      
+## [13] rstudioapi_0.13 jquerylib_0.1.4 bslib_0.2.5.1   rmarkdown_2.13 
+## [17] tools_4.1.0     tuneR_1.4.0     stringr_1.4.0   xfun_0.31      
+## [21] yaml_2.3.5      fastmap_1.1.0   compiler_4.1.0  monitoR_1.0.7  
+## [25] htmltools_0.5.2 sass_0.4.0</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

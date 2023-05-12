@@ -1,0 +1,27 @@
+<style>
+.logo {
+  background-image: url(logo-transparente.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 29em;
+  right: 3.5em;
+  width: 50px;
+  height: 50px;
+  z-index: 0;
+}
+</style>
+
+<script>
+document
+  .querySelectorAll(
+    '.remark-slide-content' +
+    ':not(.title-slide)' +
+    // add additional classes to exclude here, e.g.
+    // ':not(.inverse)' +
+    ':not(.hide-logo)'
+  )
+  .forEach(el => {
+    el.innerHTML += '<div class="logo"></div>';
+  });
+</script>

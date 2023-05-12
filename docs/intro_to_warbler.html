@@ -1,0 +1,5510 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>intro_to_warbler.knit</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">OTS Bioacoustic Analysis in R 2022</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="program.html">Program</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="r_basics.html">R basics</a>
+    </li>
+    <li>
+      <a href="sound.html">Sound</a>
+    </li>
+    <li>
+      <a href="spectrograms.html">Spectrograms</a>
+    </li>
+    <li>
+      <a href="seewave.html">seewave</a>
+    </li>
+    <li>
+      <a href="annotations.html">Annotations</a>
+    </li>
+    <li>
+      <a href="ohun.html">ohun: automatic detection</a>
+    </li>
+    <li>
+      <a href="intro_to_warbler.html">Intro to warbleR</a>
+    </li>
+    <li>
+      <a href="measure_acoustic_structure.html">Measure acoustic structure</a>
+    </li>
+    <li>
+      <a href="comparing_methods.html">Comparing measuring methods</a>
+    </li>
+    <li>
+      <a href="quality_checks.html">Quality checks</a>
+    </li>
+    <li>
+      <a href="measure_structure_green_hermit.html">Measure structure on XC recordings</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="course_prep.html">Course prep</a>
+</li>
+<li>
+  <a href="instructor.html">Instructor</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><center>
+<font size="7"><b>Introduction to warbleR</b></font>
+</center></h1>
+<h3 class="subtitle"><center>
+<font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
+</center></h3>
+<h4 class="author"><center>
+<font size="3"><a href="http://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></font>
+</center></h4>
+<h4 class="date"><center>
+“2022-05-13”
+</center></h4>
+
+</div>
+
+
+<p> </p>
+<p>The <a href="https://cran.r-project.org/package=warbleR">warbleR</a> package is intended to facilitate the analysis of the structure of animal acoustic signals in R. Users can enter their own data into a workflow that facilitates spectrographic visualization and measurement of acoustic parameters <strong>warbleR</strong> makes use of the fundamental sound analysis tools of the <strong>seewave</strong> package, and offers new tools for acoustic structure analysis. These tools are available for batch analysis of acoustic signals.</p>
+<p> </p>
+<p><font size = "4">The main features of the package are:</font></p>
+<p><font size = "3"></p>
+<ul>
+<li>The use of loops to apply tasks through acoustic signals referenced in a selection table:</li>
+</ul>
+<p> </p>
+<center>
+<img src="images/loop_warbleR_optim.gif" alt = "warbleR measuring loop" width= "500">
+</center>
+<p> </p>
+<ul>
+<li>The production of images files with spectrograms that let users organize data and verify acoustic analyzes: </font></li>
+</ul>
+<p> </p>
+<center>
+<img src="images/loop_warbleR_images_optim.gif" alt = "warbleR image loop" width = "500">
+</center>
+<p> </p>
+<p>The package offers functions for:</p>
+<ul>
+<li>Browse and download recordings of <a href="http://xeno-canto.org/">Xeno ‐ Canto</a></li>
+<li>Explore, organize and manipulate multiple sound files</li>
+<li>Detect signals automatically (in frequency and time)</li>
+<li>Create spectrograms of complete recordings or individual signals</li>
+<li>Run different measures of acoustic signal structure</li>
+<li>Evaluate the performance of measurement methods</li>
+<li>Catalog signals</li>
+<li>Characterize different structural levels in acoustic signals</li>
+<li>Statistical analysis of duet coordination</li>
+<li>Consolidate databases and annotation tables</li>
+</ul>
+<p>Most functions allow the parallelization of tasks, which distributes the tasks among several cores to improve computational efficiency. Tools to evaluate the performance of the analysis at each step are also available. All these tools are provided in a standardized workflow for the analysis of the signal structure, making them accessible to a wide range of users, including those without much knowledge of R.</p>
+<p><strong>warbleR</strong> is a young package (officially published in 2017) currently in a maturation stage:</p>
+<p><img src="images/lifecycle.jpeg" alt = "life cycle"></p>
+<p> </p>
+<div id="selection-tables" class="section level2">
+<h2>Selection tables</h2>
+<p>These objects are created with the <code>selection_table()</code> function. The function takes data frames containing selection data (name of the sound file, selection, start, end …), verifies if the information is consistent (see the function <code>check_sels()</code> for details) and saves the ‘diagnostic’ metadata as an attribute. The selection tables are basically data frames in which the information contained has been corroborated so it can be read by other <strong>warbleR</strong> functions. The selection tables must contain (at least) the following columns:</p>
+<ol style="list-style-type: decimal">
+<li>sound files (sound.files)</li>
+<li>selection (select)</li>
+<li>start</li>
+<li>end</li>
+</ol>
+<p>The sample data “lbh_selec_table” contains these columns:</p>
+<pre class="r"><code>data(&quot;lbh_selec_table&quot;)
+
+lbh_selec_table</code></pre>
+<div style="border: 1px solid #ddd; padding: 1px; overflow-x: scroll; width:740px; ">
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+sound.files
+</th>
+<th style="text-align:center;">
+channel
+</th>
+<th style="text-align:center;">
+selec
+</th>
+<th style="text-align:center;">
+start
+</th>
+<th style="text-align:center;">
+end
+</th>
+<th style="text-align:center;">
+bottom.freq
+</th>
+<th style="text-align:center;">
+top.freq
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1.1693549
+</td>
+<td style="text-align:center;">
+1.3423884
+</td>
+<td style="text-align:center;">
+2.220105
+</td>
+<td style="text-align:center;">
+8.604378
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2.1584085
+</td>
+<td style="text-align:center;">
+2.3214565
+</td>
+<td style="text-align:center;">
+2.169437
+</td>
+<td style="text-align:center;">
+8.807053
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.3433366
+</td>
+<td style="text-align:center;">
+0.5182553
+</td>
+<td style="text-align:center;">
+2.218294
+</td>
+<td style="text-align:center;">
+8.756604
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1595983
+</td>
+<td style="text-align:center;">
+0.2921692
+</td>
+<td style="text-align:center;">
+2.316862
+</td>
+<td style="text-align:center;">
+8.822316
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1.4570585
+</td>
+<td style="text-align:center;">
+1.5832087
+</td>
+<td style="text-align:center;">
+2.284006
+</td>
+<td style="text-align:center;">
+8.888027
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.6265520
+</td>
+<td style="text-align:center;">
+0.7577715
+</td>
+<td style="text-align:center;">
+3.006834
+</td>
+<td style="text-align:center;">
+8.822316
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1.9742132
+</td>
+<td style="text-align:center;">
+2.1043921
+</td>
+<td style="text-align:center;">
+2.776843
+</td>
+<td style="text-align:center;">
+8.888027
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.1233643
+</td>
+<td style="text-align:center;">
+0.2545812
+</td>
+<td style="text-align:center;">
+2.316862
+</td>
+<td style="text-align:center;">
+9.315153
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1.5168116
+</td>
+<td style="text-align:center;">
+1.6622365
+</td>
+<td style="text-align:center;">
+2.513997
+</td>
+<td style="text-align:center;">
+9.216586
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2.9326920
+</td>
+<td style="text-align:center;">
+3.0768784
+</td>
+<td style="text-align:center;">
+2.579708
+</td>
+<td style="text-align:center;">
+10.235116
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.1453977
+</td>
+<td style="text-align:center;">
+0.2904966
+</td>
+<td style="text-align:center;">
+2.579708
+</td>
+<td style="text-align:center;">
+9.742279
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p> </p>
+<p>… and can be converted to the <em>selection_table</em> format like this:</p>
+<pre class="r"><code># global parameters
+warbleR_options(wav.path = &quot;./examples&quot;)
+
+st &lt;- selection_table(X = lbh_selec_table, pb = FALSE)
+
+st</code></pre>
+<pre><code>Object of class &#39;selection_table&#39; 
+* The output of the following call: 
+selection_table(X = lbh_selec_table, pb = FALSE) 
+
+Contains: 
+*  A selection table data frame with 11 rows and 7 columns: 
+|sound.files    | channel| selec|  start|    end| bottom.freq|
+|:--------------|-------:|-----:|------:|------:|-----------:|
+|Phae.long1.wav |       1|     1| 1.1694| 1.3424|      2.2201|
+|Phae.long1.wav |       1|     2| 2.1584| 2.3215|      2.1694|
+|Phae.long1.wav |       1|     3| 0.3433| 0.5183|      2.2183|
+|Phae.long2.wav |       1|     1| 0.1596| 0.2922|      2.3169|
+|Phae.long2.wav |       1|     2| 1.4571| 1.5832|      2.2840|
+|Phae.long3.wav |       1|     1| 0.6266| 0.7578|      3.0068|
+... 1 more column(s) (top.freq) and 5 more row(s) 
+
+ * A data frame (check.results) generated by check_sels() (as attribute) 
+created by warbleR 1.1.27</code></pre>
+<p>Note that the path to the sound files has been provided. This is necessary in order to verify that the data provided conforms to the characteristics of the audio files.</p>
+<p>Selection tables have their own class in R:</p>
+<pre class="r"><code>class(st)</code></pre>
+<pre><code>[1] &quot;selection_table&quot; &quot;data.frame&quot;     </code></pre>
+<p> </p>
+<div id="extended-selection-tables" class="section level3">
+<h3>Extended selection tables</h3>
+<p>When the <code>extended = TRUE</code> argument the function generates an object of the <em>extended_selection_table</em> class that also contains a list of ‘wave’ objects corresponding to each of the selections in the data. Therefore, the function <strong>transforms the selection table into self-contained objects</strong> since the original sound files are no longer needed to perform most of the acoustic analysis in <strong>warbleR</strong>. This can greatly facilitate the storage and exchange of (bio)acoustic data. In addition, it also speeds up analysis, since it is not necessary to read the sound files every time the data is analyzed.</p>
+<p>Now, as mentioned earlier, you need the <code>selection_table()</code> function to create an extended selection table. You must also set the argument <code>extended = TRUE</code> (otherwise, the class would be a selection table). The following code converts the sample data into an extended selection table:</p>
+<pre class="r"><code>#  global parameters
+warbleR_options(wav.path = &quot;./examples&quot;)
+
+ext_st &lt;- selection_table(X = lbh_selec_table, pb = FALSE, 
+          extended = TRUE, confirm.extended = FALSE)</code></pre>
+<p> </p>
+<p>And that is. Now the acoustic data and the selection data (as well as the additional metadata) are all together in a single R object.</p>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p> </p>
+<ul>
+<li><p>Run the example code in the <code>selection_table()</code> function documentation</p></li>
+<li><p>What do the arguments “mar”, “by.song” and “whole.recs” do?</p></li>
+</ul>
+</div>
+<p> </p>
+</div>
+<div id="handling-extended-selection-tables" class="section level3">
+<h3>Handling extended selection tables</h3>
+<p>Several functions can be used to deal with objects of this class. You can test if the object belongs to the <em>extended_selection_table</em>:</p>
+<pre class="r"><code>is_extended_selection_table(ext_st)</code></pre>
+<pre><code>[1] TRUE</code></pre>
+<p> </p>
+<p>You can subset the selection in the same way that any other data frame and it will still keep its attributes:</p>
+<pre class="r"><code>ext_st2 &lt;- ext_st[1:2, ]
+
+is_extended_selection_table(ext_st2)</code></pre>
+<pre><code>[1] TRUE</code></pre>
+<p>There is also a generic version of <code>print()</code> for this class of objects:</p>
+<pre class="r"><code>## print
+print(ext_st)</code></pre>
+<pre><code>Object of class &#39;extended_selection_table&#39; 
+* The output of the following call: 
+selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,  
+ pb = FALSE) 
+
+Contains: 
+*  A selection table data frame with 11 row(s) and 7 columns: 
+|sound.files      | channel| selec| start|    end| bottom.freq|
+|:----------------|-------:|-----:|-----:|------:|-----------:|
+|Phae.long1.wav_1 |       1|     1|   0.1| 0.2730|      2.2201|
+|Phae.long1.wav_2 |       1|     1|   0.1| 0.2630|      2.1694|
+|Phae.long1.wav_3 |       1|     1|   0.1| 0.2749|      2.2183|
+|Phae.long2.wav_1 |       1|     1|   0.1| 0.2326|      2.3169|
+|Phae.long2.wav_2 |       1|     1|   0.1| 0.2262|      2.2840|
+|Phae.long3.wav_1 |       1|     1|   0.1| 0.2312|      3.0068|
+... 1 more column(s) (top.freq) and 5 more row(s) 
+
+* 11 wave object(s) (as attributes): Phae.long1.wav_1 Phae.long1.wav_2 Phae.long1.wav_3 Phae.long2.wav_1 Phae.long2.wav_2 Phae.long3.wav_1... and 5 more
+ 
+* A data frame (check.results) generated by check_sels() (as attribute) 
+
+The selection table was created by element (see &#39;class_extended_selection_table&#39;) 
+* 1 sampling rate(s) (in kHz): 22.5 
+* 1 bit depth(s): 16 
+* Created by warbleR 1.1.27</code></pre>
+<p>… which is equivalent to:</p>
+<pre class="r"><code>ext_st</code></pre>
+<pre><code>Object of class &#39;extended_selection_table&#39; 
+* The output of the following call: 
+selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,  
+ pb = FALSE) 
+
+Contains: 
+*  A selection table data frame with 11 row(s) and 7 columns: 
+|sound.files      | channel| selec| start|    end| bottom.freq|
+|:----------------|-------:|-----:|-----:|------:|-----------:|
+|Phae.long1.wav_1 |       1|     1|   0.1| 0.2730|      2.2201|
+|Phae.long1.wav_2 |       1|     1|   0.1| 0.2630|      2.1694|
+|Phae.long1.wav_3 |       1|     1|   0.1| 0.2749|      2.2183|
+|Phae.long2.wav_1 |       1|     1|   0.1| 0.2326|      2.3169|
+|Phae.long2.wav_2 |       1|     1|   0.1| 0.2262|      2.2840|
+|Phae.long3.wav_1 |       1|     1|   0.1| 0.2312|      3.0068|
+... 1 more column(s) (top.freq) and 5 more row(s) 
+
+* 11 wave object(s) (as attributes): Phae.long1.wav_1 Phae.long1.wav_2 Phae.long1.wav_3 Phae.long2.wav_1 Phae.long2.wav_2 Phae.long3.wav_1... and 5 more
+ 
+* A data frame (check.results) generated by check_sels() (as attribute) 
+
+The selection table was created by element (see &#39;class_extended_selection_table&#39;) 
+* 1 sampling rate(s) (in kHz): 22.5 
+* 1 bit depth(s): 16 
+* Created by warbleR 1.1.27</code></pre>
+<p> </p>
+<p>You can also join them in rows. Here the original <em>extended_selection_table</em> is divided into 2 and bound again using <code>rbind()</code>:</p>
+<pre class="r"><code>ext_st3 &lt;- ext_st[1:5, ]
+
+ext_st4 &lt;- ext_st[6:11, ]
+
+ext_st5 &lt;- rbind(ext_st3, ext_st4)
+
+#print
+ext_st5</code></pre>
+<pre><code>Object of class &#39;extended_selection_table&#39; 
+* The output of the following call: 
+rbind(deparse.level, ..1, ..2) 
+
+Contains: 
+*  A selection table data frame with 11 row(s) and 7 columns: 
+|sound.files      | channel| selec| start|    end| bottom.freq|
+|:----------------|-------:|-----:|-----:|------:|-----------:|
+|Phae.long1.wav_1 |       1|     1|   0.1| 0.2730|      2.2201|
+|Phae.long1.wav_2 |       1|     1|   0.1| 0.2630|      2.1694|
+|Phae.long1.wav_3 |       1|     1|   0.1| 0.2749|      2.2183|
+|Phae.long2.wav_1 |       1|     1|   0.1| 0.2326|      2.3169|
+|Phae.long2.wav_2 |       1|     1|   0.1| 0.2262|      2.2840|
+|Phae.long3.wav_1 |       1|     1|   0.1| 0.2312|      3.0068|
+... 1 more column(s) (top.freq) and 5 more row(s) 
+
+* 11 wave object(s) (as attributes): Phae.long1.wav_1 Phae.long1.wav_2 Phae.long1.wav_3 Phae.long2.wav_1 Phae.long2.wav_2 Phae.long3.wav_1... and 5 more
+ 
+* A data frame (check.results) generated by check_sels() (as attribute) 
+
+The selection table was created by element (see &#39;class_extended_selection_table&#39;) 
+* 1 sampling rate(s) (in kHz): 22.5 
+* 1 bit depth(s): 16 
+* Created by warbleR 1.1.27</code></pre>
+<pre class="r"><code># are they equal?
+all.equal(ext_st, ext_st5)</code></pre>
+<pre><code>[1] &quot;Attributes: &lt; Component \&quot;call\&quot;: target, current do not match when deparsed &gt;&quot;</code></pre>
+<p> </p>
+<p>The ‘wave’ objects can be read individually using <code>read_wave()</code>, a wrapper for the <code>readWave()</code> function of <strong>tuneR</strong>, which can handle extended selection tables:</p>
+<pre class="r"><code>wv1 &lt;- read_wave(X = ext_st, index = 3, from = 0, to = 0.37)</code></pre>
+<p> </p>
+<p>These are regular ‘wave’ objects:</p>
+<pre class="r"><code>class(wv1)</code></pre>
+<pre><code>[1] &quot;Wave&quot;
+attr(,&quot;package&quot;)
+[1] &quot;tuneR&quot;</code></pre>
+<pre class="r"><code>wv1</code></pre>
+<pre><code>
+Wave Object
+    Number of Samples:      8325
+    Duration (seconds):     0.37
+    Samplingrate (Hertz):   22500
+    Channels (Mono/Stereo): Mono
+    PCM (integer format):   TRUE
+    Bit (8/16/24/32/64):    16 </code></pre>
+<pre class="r"><code>spectro(wv1, wl = 150, grid = FALSE, scale = FALSE, ovlp = 90)</code></pre>
+<p><img src="intro_to_warbler_files/figure-html/extn_sel_8.22-1.png" width="750" /></p>
+<p> </p>
+<pre class="r"><code>par(mfrow = c(3, 2), mar = rep(0, 4))
+
+for(i in 1:6){
+  
+  wv &lt;- read_wave(X = ext_st, index = i, from = 0.05, to = 0.32)
+
+  spectro(wv, wl = 150, grid = FALSE, scale = FALSE, axisX = FALSE,
+          axisY = FALSE, ovlp = 90)
+
+}</code></pre>
+<p><img src="intro_to_warbler_files/figure-html/extn_sel_8.23-1.png" width="750" />  </p>
+<p>The <code>read_wave()</code> function requires the selection table, as well as the row index (i.e. the row number) to be able to read the ‘wave’ objects. It can also read a regular ‘wave’ file if the path is provided.</p>
+<p>Note that other functions that modify data frames are likely to delete the attributes in which the ‘wave’ objects and metadata are stored. For example, the merge and the extended selection box will remove its attributes:</p>
+<pre class="r"><code># create new data base
+Y &lt;- data.frame(sound.files = ext_st$sound.files, site = &quot;La Selva&quot;, lek = c(rep(&quot;SUR&quot;, 5), rep(&quot;CCL&quot;, 6)))
+
+# combine
+mrg_ext_st &lt;- merge(ext_st, Y, by = &quot;sound.files&quot;)
+
+# check class
+is_extended_selection_table(mrg_ext_st)</code></pre>
+<pre><code>[1] FALSE</code></pre>
+<p> </p>
+<p>In this case, we can use the <code>fix_extended_selection_table()</code> function to transfer the attributes of the original extended selection table:</p>
+<pre class="r"><code># fix
+mrg_ext_st &lt;- fix_extended_selection_table(X = mrg_ext_st, Y = ext_st)
+
+# check class
+is_extended_selection_table(mrg_ext_st)</code></pre>
+<pre><code>[1] TRUE</code></pre>
+<p> </p>
+<p>This works as long as some of the original sound files are retained and no other selections are added.</p>
+<p>&amp; nbsp;</p>
+</div>
+<div id="selection-table-size" class="section level3">
+<h3>Selection table size</h3>
+<p>The size of the extended selection box will depend on the number of selections, the sampling rate, the duration of the selection and the length of margins (i.e. additional time you want to keep on each side of the selection). In this example, a selection table with 1000 selections is created simply by repeating the sample data frame several times and then is converted to an extended selection table:</p>
+<pre class="r"><code>lng.selec.table &lt;- do.call(rbind, replicate(100, lbh_selec_table, 
+                        simplify = FALSE))[1:1000,]
+
+lng.selec.table$selec &lt;- 1:nrow(lng.selec.table)
+
+nrow(lng.selec.table)
+
+lng_ext_st &lt;- selection_table(X = lng.selec.table, pb = FALSE, 
+                        extended = TRUE, confirm.extended = FALSE)
+
+lng_ext_st</code></pre>
+<pre><code>Object of class &#39;extended_selection_table&#39; 
+* The output of the following call: 
+selection_table(X = lng.selec.table, extended = TRUE, confirm.extended = FALSE,  
+ pb = FALSE) 
+
+Contains: 
+*  A selection table data frame with 1000 row(s) and 7 columns: 
+|sound.files      | channel| selec| start|    end| bottom.freq|
+|:----------------|-------:|-----:|-----:|------:|-----------:|
+|Phae.long1.wav_1 |       1|     1|   0.1| 0.2730|      2.2201|
+|Phae.long1.wav_2 |       1|     1|   0.1| 0.2630|      2.1694|
+|Phae.long1.wav_3 |       1|     1|   0.1| 0.2749|      2.2183|
+|Phae.long2.wav_4 |       1|     1|   0.1| 0.2326|      2.3169|
+|Phae.long2.wav_5 |       1|     1|   0.1| 0.2262|      2.2840|
+|Phae.long3.wav_6 |       1|     1|   0.1| 0.2312|      3.0068|
+... 1 more column(s) (top.freq) and 994 more row(s) 
+
+* 1000 wave object(s) (as attributes): Phae.long1.wav_1 Phae.long1.wav_2 Phae.long1.wav_3 Phae.long2.wav_4 Phae.long2.wav_5 Phae.long3.wav_6... and 994 more
+ 
+* A data frame (check.results) generated by check_sels() (as attribute) 
+
+The selection table was created by element (see &#39;class_extended_selection_table&#39;) 
+* 1 sampling rate(s) (in kHz): 22.5 
+* 1 bit depth(s): 16 
+* Created by warbleR 1.1.27</code></pre>
+<pre class="r"><code>format(object.size(lng_ext_st), units = &quot;auto&quot;)</code></pre>
+<pre><code>[1] &quot;31.4 Mb&quot;</code></pre>
+<p> </p>
+<p>As you can see, the object size is only ~ 31 MB. Then, as a guide, a selection box with 1000 selections similar to those of ‘lbh_selec_table’ (average duration of ~ 0.15 seconds) at a sampling rate of 22.5 kHz and the default margin (mar = 0.1) will generate an extended selection box ~ 31 MB or ~ 310 MB for a selection table of 10,000 rows.</p>
+<p> </p>
+</div>
+<div id="analysis-using-extended-selection-tables" class="section level3">
+<h3>Analysis using extended selection tables</h3>
+<p>These objects can be used as input for most <strong>warbleR</strong> functions. Here are some examples of <strong>warbleR</strong> functions using <em>extended_selection_table</em>:</p>
+<div id="spectral-parameters" class="section level4">
+<h4>Spectral parameters</h4>
+<pre class="r"><code>#  spectrographic parameters
+sp &lt;- spectro_analysis(ext_st)
+
+sp</code></pre>
+<div style="border: 1px solid #ddd; padding: 1px; overflow-x: scroll; width:740px; ">
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+sound.files
+</th>
+<th style="text-align:center;">
+selec
+</th>
+<th style="text-align:center;">
+duration
+</th>
+<th style="text-align:center;">
+meanfreq
+</th>
+<th style="text-align:center;">
+sd
+</th>
+<th style="text-align:center;">
+freq.median
+</th>
+<th style="text-align:center;">
+freq.Q25
+</th>
+<th style="text-align:center;">
+freq.Q75
+</th>
+<th style="text-align:center;">
+freq.IQR
+</th>
+<th style="text-align:center;">
+time.median
+</th>
+<th style="text-align:center;">
+time.Q25
+</th>
+<th style="text-align:center;">
+time.Q75
+</th>
+<th style="text-align:center;">
+time.IQR
+</th>
+<th style="text-align:center;">
+skew
+</th>
+<th style="text-align:center;">
+kurt
+</th>
+<th style="text-align:center;">
+sp.ent
+</th>
+<th style="text-align:center;">
+time.ent
+</th>
+<th style="text-align:center;">
+entropy
+</th>
+<th style="text-align:center;">
+sfm
+</th>
+<th style="text-align:center;">
+meandom
+</th>
+<th style="text-align:center;">
+mindom
+</th>
+<th style="text-align:center;">
+maxdom
+</th>
+<th style="text-align:center;">
+dfrange
+</th>
+<th style="text-align:center;">
+modindx
+</th>
+<th style="text-align:center;">
+startdom
+</th>
+<th style="text-align:center;">
+enddom
+</th>
+<th style="text-align:center;">
+dfslope
+</th>
+<th style="text-align:center;">
+meanpeakf
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1730334
+</td>
+<td style="text-align:center;">
+5.981221
+</td>
+<td style="text-align:center;">
+1.399804
+</td>
+<td style="text-align:center;">
+6.331716
+</td>
+<td style="text-align:center;">
+5.296584
+</td>
+<td style="text-align:center;">
+6.869521
+</td>
+<td style="text-align:center;">
+1.572937
+</td>
+<td style="text-align:center;">
+0.0798564
+</td>
+<td style="text-align:center;">
+0.0532376
+</td>
+<td style="text-align:center;">
+0.1197846
+</td>
+<td style="text-align:center;">
+0.0665470
+</td>
+<td style="text-align:center;">
+2.001382
+</td>
+<td style="text-align:center;">
+7.025606
+</td>
+<td style="text-align:center;">
+0.9434888
+</td>
+<td style="text-align:center;">
+0.9493322
+</td>
+<td style="text-align:center;">
+0.8956843
+</td>
+<td style="text-align:center;">
+0.6518306
+</td>
+<td style="text-align:center;">
+6.663993
+</td>
+<td style="text-align:center;">
+5.251465
+</td>
+<td style="text-align:center;">
+7.360840
+</td>
+<td style="text-align:center;">
+2.109375
+</td>
+<td style="text-align:center;">
+2.895833
+</td>
+<td style="text-align:center;">
+7.316895
+</td>
+<td style="text-align:center;">
+7.185059
+</td>
+<td style="text-align:center;">
+-0.7619101
+</td>
+<td style="text-align:center;">
+7.108806
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1630480
+</td>
+<td style="text-align:center;">
+5.997299
+</td>
+<td style="text-align:center;">
+1.422930
+</td>
+<td style="text-align:center;">
+6.212125
+</td>
+<td style="text-align:center;">
+5.328746
+</td>
+<td style="text-align:center;">
+6.880795
+</td>
+<td style="text-align:center;">
+1.552049
+</td>
+<td style="text-align:center;">
+0.0815333
+</td>
+<td style="text-align:center;">
+0.0407667
+</td>
+<td style="text-align:center;">
+0.1223000
+</td>
+<td style="text-align:center;">
+0.0815333
+</td>
+<td style="text-align:center;">
+1.918356
+</td>
+<td style="text-align:center;">
+7.334323
+</td>
+<td style="text-align:center;">
+0.9468217
+</td>
+<td style="text-align:center;">
+0.9536154
+</td>
+<td style="text-align:center;">
+0.9029038
+</td>
+<td style="text-align:center;">
+0.6678647
+</td>
+<td style="text-align:center;">
+6.830116
+</td>
+<td style="text-align:center;">
+5.295410
+</td>
+<td style="text-align:center;">
+8.283691
+</td>
+<td style="text-align:center;">
+2.988281
+</td>
+<td style="text-align:center;">
+2.661765
+</td>
+<td style="text-align:center;">
+7.185059
+</td>
+<td style="text-align:center;">
+7.229004
+</td>
+<td style="text-align:center;">
+0.2695238
+</td>
+<td style="text-align:center;">
+6.931635
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav_3
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1749187
+</td>
+<td style="text-align:center;">
+6.018300
+</td>
+<td style="text-align:center;">
+1.514853
+</td>
+<td style="text-align:center;">
+6.424759
+</td>
+<td style="text-align:center;">
+5.150246
+</td>
+<td style="text-align:center;">
+6.979144
+</td>
+<td style="text-align:center;">
+1.828898
+</td>
+<td style="text-align:center;">
+0.0941949
+</td>
+<td style="text-align:center;">
+0.0538256
+</td>
+<td style="text-align:center;">
+0.1345641
+</td>
+<td style="text-align:center;">
+0.0807385
+</td>
+<td style="text-align:center;">
+2.496740
+</td>
+<td style="text-align:center;">
+11.147728
+</td>
+<td style="text-align:center;">
+0.9450838
+</td>
+<td style="text-align:center;">
+0.9515916
+</td>
+<td style="text-align:center;">
+0.8993339
+</td>
+<td style="text-align:center;">
+0.6716602
+</td>
+<td style="text-align:center;">
+6.773856
+</td>
+<td style="text-align:center;">
+4.899902
+</td>
+<td style="text-align:center;">
+8.371582
+</td>
+<td style="text-align:center;">
+3.471680
+</td>
+<td style="text-align:center;">
+3.240506
+</td>
+<td style="text-align:center;">
+7.185059
+</td>
+<td style="text-align:center;">
+7.185059
+</td>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+6.798757
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1325709
+</td>
+<td style="text-align:center;">
+6.398304
+</td>
+<td style="text-align:center;">
+1.340412
+</td>
+<td style="text-align:center;">
+6.595971
+</td>
+<td style="text-align:center;">
+5.607323
+</td>
+<td style="text-align:center;">
+7.380852
+</td>
+<td style="text-align:center;">
+1.773529
+</td>
+<td style="text-align:center;">
+0.0736543
+</td>
+<td style="text-align:center;">
+0.0589235
+</td>
+<td style="text-align:center;">
+0.1031160
+</td>
+<td style="text-align:center;">
+0.0441926
+</td>
+<td style="text-align:center;">
+1.568523
+</td>
+<td style="text-align:center;">
+6.016392
+</td>
+<td style="text-align:center;">
+0.9424661
+</td>
+<td style="text-align:center;">
+0.9433998
+</td>
+<td style="text-align:center;">
+0.8891223
+</td>
+<td style="text-align:center;">
+0.6086184
+</td>
+<td style="text-align:center;">
+6.341309
+</td>
+<td style="text-align:center;">
+5.075684
+</td>
+<td style="text-align:center;">
+7.404785
+</td>
+<td style="text-align:center;">
+2.329102
+</td>
+<td style="text-align:center;">
+2.830189
+</td>
+<td style="text-align:center;">
+5.075684
+</td>
+<td style="text-align:center;">
+6.657715
+</td>
+<td style="text-align:center;">
+11.9334722
+</td>
+<td style="text-align:center;">
+7.463147
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1261502
+</td>
+<td style="text-align:center;">
+6.308252
+</td>
+<td style="text-align:center;">
+1.369242
+</td>
+<td style="text-align:center;">
+6.596836
+</td>
+<td style="text-align:center;">
+5.605837
+</td>
+<td style="text-align:center;">
+7.207292
+</td>
+<td style="text-align:center;">
+1.601455
+</td>
+<td style="text-align:center;">
+0.0840889
+</td>
+<td style="text-align:center;">
+0.0560593
+</td>
+<td style="text-align:center;">
+0.0981037
+</td>
+<td style="text-align:center;">
+0.0420444
+</td>
+<td style="text-align:center;">
+2.470897
+</td>
+<td style="text-align:center;">
+10.896039
+</td>
+<td style="text-align:center;">
+0.9357725
+</td>
+<td style="text-align:center;">
+0.9436684
+</td>
+<td style="text-align:center;">
+0.8830589
+</td>
+<td style="text-align:center;">
+0.6152336
+</td>
+<td style="text-align:center;">
+6.411621
+</td>
+<td style="text-align:center;">
+5.075684
+</td>
+<td style="text-align:center;">
+7.580566
+</td>
+<td style="text-align:center;">
+2.504883
+</td>
+<td style="text-align:center;">
+2.087719
+</td>
+<td style="text-align:center;">
+5.075684
+</td>
+<td style="text-align:center;">
+7.580566
+</td>
+<td style="text-align:center;">
+19.8563528
+</td>
+<td style="text-align:center;">
+6.710171
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1312195
+</td>
+<td style="text-align:center;">
+6.605993
+</td>
+<td style="text-align:center;">
+1.090498
+</td>
+<td style="text-align:center;">
+6.665328
+</td>
+<td style="text-align:center;">
+6.063201
+</td>
+<td style="text-align:center;">
+7.336052
+</td>
+<td style="text-align:center;">
+1.272851
+</td>
+<td style="text-align:center;">
+0.0583111
+</td>
+<td style="text-align:center;">
+0.0437333
+</td>
+<td style="text-align:center;">
+0.1020444
+</td>
+<td style="text-align:center;">
+0.0583111
+</td>
+<td style="text-align:center;">
+1.770551
+</td>
+<td style="text-align:center;">
+6.665163
+</td>
+<td style="text-align:center;">
+0.9303558
+</td>
+<td style="text-align:center;">
+0.9460672
+</td>
+<td style="text-align:center;">
+0.8801790
+</td>
+<td style="text-align:center;">
+0.5664857
+</td>
+<td style="text-align:center;">
+6.481934
+</td>
+<td style="text-align:center;">
+4.899902
+</td>
+<td style="text-align:center;">
+7.009277
+</td>
+<td style="text-align:center;">
+2.109375
+</td>
+<td style="text-align:center;">
+1.520833
+</td>
+<td style="text-align:center;">
+4.899902
+</td>
+<td style="text-align:center;">
+6.965332
+</td>
+<td style="text-align:center;">
+15.7402610
+</td>
+<td style="text-align:center;">
+6.710171
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1301789
+</td>
+<td style="text-align:center;">
+6.639859
+</td>
+<td style="text-align:center;">
+1.117356
+</td>
+<td style="text-align:center;">
+6.674164
+</td>
+<td style="text-align:center;">
+6.105325
+</td>
+<td style="text-align:center;">
+7.427493
+</td>
+<td style="text-align:center;">
+1.322168
+</td>
+<td style="text-align:center;">
+0.0723210
+</td>
+<td style="text-align:center;">
+0.0433926
+</td>
+<td style="text-align:center;">
+0.1012494
+</td>
+<td style="text-align:center;">
+0.0578568
+</td>
+<td style="text-align:center;">
+1.545851
+</td>
+<td style="text-align:center;">
+4.969900
+</td>
+<td style="text-align:center;">
+0.9232849
+</td>
+<td style="text-align:center;">
+0.9490351
+</td>
+<td style="text-align:center;">
+0.8762298
+</td>
+<td style="text-align:center;">
+0.5317422
+</td>
+<td style="text-align:center;">
+6.244629
+</td>
+<td style="text-align:center;">
+5.031738
+</td>
+<td style="text-align:center;">
+6.701660
+</td>
+<td style="text-align:center;">
+1.669922
+</td>
+<td style="text-align:center;">
+1.368421
+</td>
+<td style="text-align:center;">
+5.031738
+</td>
+<td style="text-align:center;">
+6.613770
+</td>
+<td style="text-align:center;">
+12.1527447
+</td>
+<td style="text-align:center;">
+6.665879
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav_3
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1312170
+</td>
+<td style="text-align:center;">
+6.580739
+</td>
+<td style="text-align:center;">
+1.253000
+</td>
+<td style="text-align:center;">
+6.646959
+</td>
+<td style="text-align:center;">
+6.029463
+</td>
+<td style="text-align:center;">
+7.394054
+</td>
+<td style="text-align:center;">
+1.364591
+</td>
+<td style="text-align:center;">
+0.0583111
+</td>
+<td style="text-align:center;">
+0.0437333
+</td>
+<td style="text-align:center;">
+0.1020444
+</td>
+<td style="text-align:center;">
+0.0583111
+</td>
+<td style="text-align:center;">
+1.802520
+</td>
+<td style="text-align:center;">
+5.886959
+</td>
+<td style="text-align:center;">
+0.9191879
+</td>
+<td style="text-align:center;">
+0.9533815
+</td>
+<td style="text-align:center;">
+0.8763367
+</td>
+<td style="text-align:center;">
+0.5258369
+</td>
+<td style="text-align:center;">
+6.231445
+</td>
+<td style="text-align:center;">
+5.427246
+</td>
+<td style="text-align:center;">
+6.833496
+</td>
+<td style="text-align:center;">
+1.406250
+</td>
+<td style="text-align:center;">
+1.656250
+</td>
+<td style="text-align:center;">
+5.471191
+</td>
+<td style="text-align:center;">
+6.657715
+</td>
+<td style="text-align:center;">
+9.0424551
+</td>
+<td style="text-align:center;">
+6.710171
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1454249
+</td>
+<td style="text-align:center;">
+6.219479
+</td>
+<td style="text-align:center;">
+1.478869
+</td>
+<td style="text-align:center;">
+6.233074
+</td>
+<td style="text-align:center;">
+5.456261
+</td>
+<td style="text-align:center;">
+7.305488
+</td>
+<td style="text-align:center;">
+1.849227
+</td>
+<td style="text-align:center;">
+0.0872533
+</td>
+<td style="text-align:center;">
+0.0436267
+</td>
+<td style="text-align:center;">
+0.1163378
+</td>
+<td style="text-align:center;">
+0.0727111
+</td>
+<td style="text-align:center;">
+1.274811
+</td>
+<td style="text-align:center;">
+4.458109
+</td>
+<td style="text-align:center;">
+0.9643357
+</td>
+<td style="text-align:center;">
+0.9520564
+</td>
+<td style="text-align:center;">
+0.9181020
+</td>
+<td style="text-align:center;">
+0.7599268
+</td>
+<td style="text-align:center;">
+6.270197
+</td>
+<td style="text-align:center;">
+5.119629
+</td>
+<td style="text-align:center;">
+7.844238
+</td>
+<td style="text-align:center;">
+2.724609
+</td>
+<td style="text-align:center;">
+2.709677
+</td>
+<td style="text-align:center;">
+5.383301
+</td>
+<td style="text-align:center;">
+6.262207
+</td>
+<td style="text-align:center;">
+6.0437118
+</td>
+<td style="text-align:center;">
+6.222951
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1441864
+</td>
+<td style="text-align:center;">
+6.462809
+</td>
+<td style="text-align:center;">
+1.592876
+</td>
+<td style="text-align:center;">
+6.338070
+</td>
+<td style="text-align:center;">
+5.630777
+</td>
+<td style="text-align:center;">
+7.572366
+</td>
+<td style="text-align:center;">
+1.941589
+</td>
+<td style="text-align:center;">
+0.0865067
+</td>
+<td style="text-align:center;">
+0.0432533
+</td>
+<td style="text-align:center;">
+0.1153422
+</td>
+<td style="text-align:center;">
+0.0720889
+</td>
+<td style="text-align:center;">
+1.695847
+</td>
+<td style="text-align:center;">
+6.442755
+</td>
+<td style="text-align:center;">
+0.9585943
+</td>
+<td style="text-align:center;">
+0.9526078
+</td>
+<td style="text-align:center;">
+0.9131645
+</td>
+<td style="text-align:center;">
+0.7199148
+</td>
+<td style="text-align:center;">
+6.294167
+</td>
+<td style="text-align:center;">
+4.108887
+</td>
+<td style="text-align:center;">
+8.151855
+</td>
+<td style="text-align:center;">
+4.042969
+</td>
+<td style="text-align:center;">
+2.478261
+</td>
+<td style="text-align:center;">
+5.427246
+</td>
+<td style="text-align:center;">
+4.108887
+</td>
+<td style="text-align:center;">
+-9.1434347
+</td>
+<td style="text-align:center;">
+6.222951
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav_3
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1450989
+</td>
+<td style="text-align:center;">
+6.122156
+</td>
+<td style="text-align:center;">
+1.541046
+</td>
+<td style="text-align:center;">
+6.081716
+</td>
+<td style="text-align:center;">
+5.178639
+</td>
+<td style="text-align:center;">
+7.239860
+</td>
+<td style="text-align:center;">
+2.061221
+</td>
+<td style="text-align:center;">
+0.0870667
+</td>
+<td style="text-align:center;">
+0.0435333
+</td>
+<td style="text-align:center;">
+0.1160889
+</td>
+<td style="text-align:center;">
+0.0725556
+</td>
+<td style="text-align:center;">
+1.083042
+</td>
+<td style="text-align:center;">
+4.194037
+</td>
+<td style="text-align:center;">
+0.9642064
+</td>
+<td style="text-align:center;">
+0.9536971
+</td>
+<td style="text-align:center;">
+0.9195608
+</td>
+<td style="text-align:center;">
+0.7332565
+</td>
+<td style="text-align:center;">
+6.150346
+</td>
+<td style="text-align:center;">
+4.943848
+</td>
+<td style="text-align:center;">
+7.888184
+</td>
+<td style="text-align:center;">
+2.944336
+</td>
+<td style="text-align:center;">
+3.149254
+</td>
+<td style="text-align:center;">
+5.339355
+</td>
+<td style="text-align:center;">
+5.031738
+</td>
+<td style="text-align:center;">
+-2.1200514
+</td>
+<td style="text-align:center;">
+5.912903
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p> </p>
+</div>
+<div id="signal-to-noise-ratio" class="section level4">
+<h4>Signal-to-noise ratio</h4>
+<pre class="r"><code>snr &lt;- sig2noise(ext_st, mar = 0.05)
+
+snr</code></pre>
+<div style="border: 1px solid #ddd; padding: 1px; overflow-x: scroll; width:740px; ">
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+sound.files
+</th>
+<th style="text-align:center;">
+channel
+</th>
+<th style="text-align:center;">
+selec
+</th>
+<th style="text-align:center;">
+start
+</th>
+<th style="text-align:center;">
+end
+</th>
+<th style="text-align:center;">
+bottom.freq
+</th>
+<th style="text-align:center;">
+top.freq
+</th>
+<th style="text-align:center;">
+SNR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2730334
+</td>
+<td style="text-align:center;">
+2.220105
+</td>
+<td style="text-align:center;">
+8.604378
+</td>
+<td style="text-align:center;">
+21.17229
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2630480
+</td>
+<td style="text-align:center;">
+2.169437
+</td>
+<td style="text-align:center;">
+8.807053
+</td>
+<td style="text-align:center;">
+20.36896
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav_3
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2749187
+</td>
+<td style="text-align:center;">
+2.218294
+</td>
+<td style="text-align:center;">
+8.756604
+</td>
+<td style="text-align:center;">
+19.18211
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2325709
+</td>
+<td style="text-align:center;">
+2.316862
+</td>
+<td style="text-align:center;">
+8.822316
+</td>
+<td style="text-align:center;">
+23.27961
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2261502
+</td>
+<td style="text-align:center;">
+2.284006
+</td>
+<td style="text-align:center;">
+8.888027
+</td>
+<td style="text-align:center;">
+26.21774
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2312195
+</td>
+<td style="text-align:center;">
+3.006834
+</td>
+<td style="text-align:center;">
+8.822316
+</td>
+<td style="text-align:center;">
+25.34264
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2301789
+</td>
+<td style="text-align:center;">
+2.776843
+</td>
+<td style="text-align:center;">
+8.888027
+</td>
+<td style="text-align:center;">
+25.51099
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav_3
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2312170
+</td>
+<td style="text-align:center;">
+2.316862
+</td>
+<td style="text-align:center;">
+9.315153
+</td>
+<td style="text-align:center;">
+24.68619
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2454249
+</td>
+<td style="text-align:center;">
+2.513997
+</td>
+<td style="text-align:center;">
+9.216586
+</td>
+<td style="text-align:center;">
+27.61899
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2441864
+</td>
+<td style="text-align:center;">
+2.579708
+</td>
+<td style="text-align:center;">
+10.235116
+</td>
+<td style="text-align:center;">
+28.87451
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav_3
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.2450989
+</td>
+<td style="text-align:center;">
+2.579708
+</td>
+<td style="text-align:center;">
+9.742279
+</td>
+<td style="text-align:center;">
+24.30149
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p> </p>
+</div>
+<div id="dynamic-time-warping-dtw" class="section level4">
+<h4>Dynamic time warping (DTW)</h4>
+<pre class="r"><code>dtw.dist &lt;- freq_DTW(ext_st, img = FALSE)
+
+dtw.dist</code></pre>
+<pre><code>measuring dominant frequency contours (step 1 of 2):
+Measuring fundamental frequency:calculating DTW distances (step 2 of 2, no progress bar):</code></pre>
+<div style="border: 1px solid #ddd; padding: 1px; overflow-x: scroll; width:740px; ">
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+Phae.long1.wav_1-1
+</th>
+<th style="text-align:center;">
+Phae.long1.wav_2-1
+</th>
+<th style="text-align:center;">
+Phae.long1.wav_3-1
+</th>
+<th style="text-align:center;">
+Phae.long2.wav_1-1
+</th>
+<th style="text-align:center;">
+Phae.long2.wav_2-1
+</th>
+<th style="text-align:center;">
+Phae.long3.wav_1-1
+</th>
+<th style="text-align:center;">
+Phae.long3.wav_2-1
+</th>
+<th style="text-align:center;">
+Phae.long3.wav_3-1
+</th>
+<th style="text-align:center;">
+Phae.long4.wav_1-1
+</th>
+<th style="text-align:center;">
+Phae.long4.wav_2-1
+</th>
+<th style="text-align:center;">
+Phae.long4.wav_3-1
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Phae.long1.wav_1-1
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+8.631
+</td>
+<td style="text-align:center;">
+4.343
+</td>
+<td style="text-align:center;">
+16.633
+</td>
+<td style="text-align:center;">
+16.611
+</td>
+<td style="text-align:center;">
+13.813
+</td>
+<td style="text-align:center;">
+15.675
+</td>
+<td style="text-align:center;">
+15.516
+</td>
+<td style="text-align:center;">
+18.661
+</td>
+<td style="text-align:center;">
+20.886
+</td>
+<td style="text-align:center;">
+21.559
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long1.wav_2-1
+</td>
+<td style="text-align:center;">
+8.631
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+6.981
+</td>
+<td style="text-align:center;">
+22.115
+</td>
+<td style="text-align:center;">
+29.123
+</td>
+<td style="text-align:center;">
+16.735
+</td>
+<td style="text-align:center;">
+22.374
+</td>
+<td style="text-align:center;">
+23.024
+</td>
+<td style="text-align:center;">
+15.824
+</td>
+<td style="text-align:center;">
+16.635
+</td>
+<td style="text-align:center;">
+19.452
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long1.wav_3-1
+</td>
+<td style="text-align:center;">
+4.343
+</td>
+<td style="text-align:center;">
+6.981
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+18.252
+</td>
+<td style="text-align:center;">
+20.535
+</td>
+<td style="text-align:center;">
+15.206
+</td>
+<td style="text-align:center;">
+18.451
+</td>
+<td style="text-align:center;">
+16.468
+</td>
+<td style="text-align:center;">
+17.262
+</td>
+<td style="text-align:center;">
+19.147
+</td>
+<td style="text-align:center;">
+21.154
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long2.wav_1-1
+</td>
+<td style="text-align:center;">
+16.633
+</td>
+<td style="text-align:center;">
+22.115
+</td>
+<td style="text-align:center;">
+18.252
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+12.159
+</td>
+<td style="text-align:center;">
+10.369
+</td>
+<td style="text-align:center;">
+11.213
+</td>
+<td style="text-align:center;">
+12.043
+</td>
+<td style="text-align:center;">
+12.446
+</td>
+<td style="text-align:center;">
+13.535
+</td>
+<td style="text-align:center;">
+15.304
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long2.wav_2-1
+</td>
+<td style="text-align:center;">
+16.611
+</td>
+<td style="text-align:center;">
+29.123
+</td>
+<td style="text-align:center;">
+20.535
+</td>
+<td style="text-align:center;">
+12.159
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+6.762
+</td>
+<td style="text-align:center;">
+5.341
+</td>
+<td style="text-align:center;">
+8.698
+</td>
+<td style="text-align:center;">
+17.521
+</td>
+<td style="text-align:center;">
+20.599
+</td>
+<td style="text-align:center;">
+18.922
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long3.wav_1-1
+</td>
+<td style="text-align:center;">
+13.813
+</td>
+<td style="text-align:center;">
+16.735
+</td>
+<td style="text-align:center;">
+15.206
+</td>
+<td style="text-align:center;">
+10.369
+</td>
+<td style="text-align:center;">
+6.762
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+3.639
+</td>
+<td style="text-align:center;">
+4.422
+</td>
+<td style="text-align:center;">
+13.252
+</td>
+<td style="text-align:center;">
+15.629
+</td>
+<td style="text-align:center;">
+15.669
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long3.wav_2-1
+</td>
+<td style="text-align:center;">
+15.675
+</td>
+<td style="text-align:center;">
+22.374
+</td>
+<td style="text-align:center;">
+18.451
+</td>
+<td style="text-align:center;">
+11.213
+</td>
+<td style="text-align:center;">
+5.341
+</td>
+<td style="text-align:center;">
+3.639
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+3.644
+</td>
+<td style="text-align:center;">
+13.655
+</td>
+<td style="text-align:center;">
+15.946
+</td>
+<td style="text-align:center;">
+14.420
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long3.wav_3-1
+</td>
+<td style="text-align:center;">
+15.516
+</td>
+<td style="text-align:center;">
+23.024
+</td>
+<td style="text-align:center;">
+16.468
+</td>
+<td style="text-align:center;">
+12.043
+</td>
+<td style="text-align:center;">
+8.698
+</td>
+<td style="text-align:center;">
+4.422
+</td>
+<td style="text-align:center;">
+3.644
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+11.029
+</td>
+<td style="text-align:center;">
+13.718
+</td>
+<td style="text-align:center;">
+12.302
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long4.wav_1-1
+</td>
+<td style="text-align:center;">
+18.661
+</td>
+<td style="text-align:center;">
+15.824
+</td>
+<td style="text-align:center;">
+17.262
+</td>
+<td style="text-align:center;">
+12.446
+</td>
+<td style="text-align:center;">
+17.521
+</td>
+<td style="text-align:center;">
+13.252
+</td>
+<td style="text-align:center;">
+13.655
+</td>
+<td style="text-align:center;">
+11.029
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+5.381
+</td>
+<td style="text-align:center;">
+5.880
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long4.wav_2-1
+</td>
+<td style="text-align:center;">
+20.886
+</td>
+<td style="text-align:center;">
+16.635
+</td>
+<td style="text-align:center;">
+19.147
+</td>
+<td style="text-align:center;">
+13.535
+</td>
+<td style="text-align:center;">
+20.599
+</td>
+<td style="text-align:center;">
+15.629
+</td>
+<td style="text-align:center;">
+15.946
+</td>
+<td style="text-align:center;">
+13.718
+</td>
+<td style="text-align:center;">
+5.381
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+6.201
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long4.wav_3-1
+</td>
+<td style="text-align:center;">
+21.559
+</td>
+<td style="text-align:center;">
+19.452
+</td>
+<td style="text-align:center;">
+21.154
+</td>
+<td style="text-align:center;">
+15.304
+</td>
+<td style="text-align:center;">
+18.922
+</td>
+<td style="text-align:center;">
+15.669
+</td>
+<td style="text-align:center;">
+14.420
+</td>
+<td style="text-align:center;">
+12.302
+</td>
+<td style="text-align:center;">
+5.880
+</td>
+<td style="text-align:center;">
+6.201
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p> </p>
+</div>
+</div>
+<div id="performance" class="section level3">
+<h3>Performance</h3>
+<p>The use of <em>extended_selection_table</em> objects can improve performance (in our case, measured as time). Here we use <strong>microbenchmark</strong> to compare the performance of <code>sig2noise()</code> and <strong>ggplot2</strong> to plot the results:</p>
+<pre class="r"><code># load packages
+library(microbenchmark)
+library(ggplot2)
+
+# take first 100 selections
+mbmrk.snr &lt;- microbenchmark(extended = sig2noise(lng_ext_st[1:100, ], 
+      mar = 0.05), regular = sig2noise(lng.selec.table[1:100, ], 
+                    mar = 0.05), times = 50)
+
+autoplot(mbmrk.snr) + ggtitle(&quot;sig2noise&quot;)</code></pre>
+<pre><code>Coordinate system already present. Adding new coordinate system, which will replace the existing one.</code></pre>
+<p><img src="intro_to_warbler_files/figure-html/extn_sel_13-1.png" width="750" />  </p>
+<p>The function runs much faster in the extended selection tables. Performance gain is likely to improve when longer recordings and data sets are used (that is, to compensate for computer overload).</p>
+<p> </p>
+</div>
+<div id="create-selections-by-song" class="section level3">
+<h3>Create selections ‘by song’</h3>
+<p>The extended selection above were made by element. That is, each sound file within the object contains a single selection (that is, a 1: 1 correspondence between the selections and the ‘wave’ objects). However, extended selection tables can also be created using a higher hierarchical level with the argument <code>by.song</code>. In this case, “song” represents a higher level that contains one or more selections and that the user may want to keep together for a particular analysis (for example, the duration of the intervals). The <code>by.song</code> argument takes the name of the column of characters or factors with the IDs of the different" songs "within a sound file (note that the function assumes that a given song can only be found in only one sound file, so the selections with the same song ID, but from different sound files are taken as different ‘songs’).</p>
+<p>To create a selection table by song, let’s add an artificial song column to our example data in which each of the sound files has 2 songs:</p>
+<pre class="r"><code># add column
+lbh_selec_table$song &lt;- c(1, 1, 2, 1, 2, 1, 1, 2, 1, 2, 2)</code></pre>
+<p> </p>
+<p>The data looks like this:</p>
+<div style="border: 1px solid #ddd; padding: 1px; overflow-x: scroll; width:740px; ">
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+sound.files
+</th>
+<th style="text-align:center;">
+channel
+</th>
+<th style="text-align:center;">
+selec
+</th>
+<th style="text-align:center;">
+start
+</th>
+<th style="text-align:center;">
+end
+</th>
+<th style="text-align:center;">
+bottom.freq
+</th>
+<th style="text-align:center;">
+top.freq
+</th>
+<th style="text-align:center;">
+song
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1.1693549
+</td>
+<td style="text-align:center;">
+1.3423884
+</td>
+<td style="text-align:center;">
+2.220105
+</td>
+<td style="text-align:center;">
+8.604378
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2.1584085
+</td>
+<td style="text-align:center;">
+2.3214565
+</td>
+<td style="text-align:center;">
+2.169437
+</td>
+<td style="text-align:center;">
+8.807053
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.3433366
+</td>
+<td style="text-align:center;">
+0.5182553
+</td>
+<td style="text-align:center;">
+2.218294
+</td>
+<td style="text-align:center;">
+8.756604
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1595983
+</td>
+<td style="text-align:center;">
+0.2921692
+</td>
+<td style="text-align:center;">
+2.316862
+</td>
+<td style="text-align:center;">
+8.822316
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1.4570585
+</td>
+<td style="text-align:center;">
+1.5832087
+</td>
+<td style="text-align:center;">
+2.284006
+</td>
+<td style="text-align:center;">
+8.888027
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.6265520
+</td>
+<td style="text-align:center;">
+0.7577715
+</td>
+<td style="text-align:center;">
+3.006834
+</td>
+<td style="text-align:center;">
+8.822316
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1.9742132
+</td>
+<td style="text-align:center;">
+2.1043921
+</td>
+<td style="text-align:center;">
+2.776843
+</td>
+<td style="text-align:center;">
+8.888027
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.1233643
+</td>
+<td style="text-align:center;">
+0.2545812
+</td>
+<td style="text-align:center;">
+2.316862
+</td>
+<td style="text-align:center;">
+9.315153
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1.5168116
+</td>
+<td style="text-align:center;">
+1.6622365
+</td>
+<td style="text-align:center;">
+2.513997
+</td>
+<td style="text-align:center;">
+9.216586
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2.9326920
+</td>
+<td style="text-align:center;">
+3.0768784
+</td>
+<td style="text-align:center;">
+2.579708
+</td>
+<td style="text-align:center;">
+10.235116
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.1453977
+</td>
+<td style="text-align:center;">
+0.2904966
+</td>
+<td style="text-align:center;">
+2.579708
+</td>
+<td style="text-align:center;">
+9.742279
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p> </p>
+<p>Now we can create an extended selection table ‘by song’ using the column name ‘song’ as input for the argument <code>by.song</code>:</p>
+<pre class="r"><code>bs_ext_st &lt;- selection_table(X = lbh_selec_table, extended = TRUE,
+                              confirm.extended = FALSE, by.song = &quot;song&quot;)</code></pre>
+<pre><code>checking selections (step 1 of 2):
+saving wave objects into extended selection table (step 2 of 2):</code></pre>
+<p>In this case, we should only have 8 ‘wave’ objects instead of 11 as when the object was created ‘by selection’:</p>
+<pre class="r"><code># by element
+length(attr(ext_st, &quot;wave.objects&quot;))</code></pre>
+<pre><code>[1] 11</code></pre>
+<pre class="r"><code># by song
+length(attr(bs_ext_st, &quot;wave.objects&quot;))</code></pre>
+<pre><code>[1] 8</code></pre>
+<p>Again, these objects can also be used in any analyzes:</p>
+<pre class="r"><code># signal to noise ratio
+bs_snr &lt;- sig2noise(bs_ext_st, mar = 0.05)</code></pre>
+<div style="border: 1px solid #ddd; padding: 1px; overflow-x: scroll; width:740px; ">
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+sound.files
+</th>
+<th style="text-align:center;">
+channel
+</th>
+<th style="text-align:center;">
+selec
+</th>
+<th style="text-align:center;">
+start
+</th>
+<th style="text-align:center;">
+end
+</th>
+<th style="text-align:center;">
+bottom.freq
+</th>
+<th style="text-align:center;">
+top.freq
+</th>
+<th style="text-align:center;">
+song
+</th>
+<th style="text-align:center;">
+SNR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav-song_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.100000
+</td>
+<td style="text-align:center;">
+0.2730334
+</td>
+<td style="text-align:center;">
+2.220105
+</td>
+<td style="text-align:center;">
+8.604378
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+21.17229
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav-song_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1.089054
+</td>
+<td style="text-align:center;">
+1.2521016
+</td>
+<td style="text-align:center;">
+2.169437
+</td>
+<td style="text-align:center;">
+8.807053
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+20.37064
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long1.wav-song_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.100000
+</td>
+<td style="text-align:center;">
+0.2749187
+</td>
+<td style="text-align:center;">
+2.218294
+</td>
+<td style="text-align:center;">
+8.756604
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+19.18211
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav-song_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.100000
+</td>
+<td style="text-align:center;">
+0.2325709
+</td>
+<td style="text-align:center;">
+2.316862
+</td>
+<td style="text-align:center;">
+8.822316
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+23.27961
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long2.wav-song_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.100000
+</td>
+<td style="text-align:center;">
+0.2261502
+</td>
+<td style="text-align:center;">
+2.284006
+</td>
+<td style="text-align:center;">
+8.888027
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+26.21774
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav-song_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.100000
+</td>
+<td style="text-align:center;">
+0.2312195
+</td>
+<td style="text-align:center;">
+3.006834
+</td>
+<td style="text-align:center;">
+8.822316
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+25.34264
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav-song_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1.447661
+</td>
+<td style="text-align:center;">
+1.5778402
+</td>
+<td style="text-align:center;">
+2.776843
+</td>
+<td style="text-align:center;">
+8.888027
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+25.51089
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long3.wav-song_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.100000
+</td>
+<td style="text-align:center;">
+0.2312170
+</td>
+<td style="text-align:center;">
+2.316862
+</td>
+<td style="text-align:center;">
+9.315153
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+24.68619
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav-song_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.100000
+</td>
+<td style="text-align:center;">
+0.2454249
+</td>
+<td style="text-align:center;">
+2.513997
+</td>
+<td style="text-align:center;">
+9.216586
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+27.61899
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav-song_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2.887294
+</td>
+<td style="text-align:center;">
+3.0314808
+</td>
+<td style="text-align:center;">
+2.579708
+</td>
+<td style="text-align:center;">
+10.235116
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+28.88520
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Phae.long4.wav-song_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.100000
+</td>
+<td style="text-align:center;">
+0.2450989
+</td>
+<td style="text-align:center;">
+2.579708
+</td>
+<td style="text-align:center;">
+9.742279
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+24.30149
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p> </p>
+<ul>
+<li>Compare the size of an extended selection table created by element to that of one created by song using the sample data</li>
+</ul>
+</div>
+<p> </p>
+</div>
+<div id="sharing-acoustic-data" class="section level3">
+<h3>Sharing acoustic data</h3>
+<p>This new object class allows to share complete data sets, including acoustic data. For example, the following code downloads a subset of the data used in <a href="https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/araya-salas_smith-vidaurre___webster_2017._table_s1._recording_metadata.xlsx">Araya-Salas <em>et al</em> (2017)</a> (can also be downloaded from <a href="https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/extended.selection.%20table.araya-salas.et.al.2017.bioacoustics.100.sels.rds">here</a>):</p>
+<pre class="r"><code>URL &lt;- &quot;https://github.com/maRce10/OTS_BIR_2022/raw/master/data/extended.selection.table.araya-salas.et.al.2017.bioacoustics.100.sels.rds&quot;
+
+dat &lt;- readRDS(gzcon(url(URL)))
+
+nrow(dat)</code></pre>
+<pre><code>[1] 100</code></pre>
+<pre class="r"><code>format(object.size(dat), units = &quot;auto&quot;)</code></pre>
+<pre><code>[1] &quot;10.1 Mb&quot;</code></pre>
+<p>The total size of the 100 sound files from which these selections were taken adds up to 1.1 GB. The size of the extended selection table is only 10.1 MB.</p>
+<p>This data is ready to be used:</p>
+<pre class="r"><code>sp &lt;- spectro_analysis(dat, bp = c(2, 10))
+
+head(sp)</code></pre>
+<div style="border: 1px solid #ddd; padding: 1px; overflow-x: scroll; width:740px; ">
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+sound.files
+</th>
+<th style="text-align:center;">
+selec
+</th>
+<th style="text-align:center;">
+duration
+</th>
+<th style="text-align:center;">
+meanfreq
+</th>
+<th style="text-align:center;">
+sd
+</th>
+<th style="text-align:center;">
+freq.median
+</th>
+<th style="text-align:center;">
+freq.Q25
+</th>
+<th style="text-align:center;">
+freq.Q75
+</th>
+<th style="text-align:center;">
+freq.IQR
+</th>
+<th style="text-align:center;">
+time.median
+</th>
+<th style="text-align:center;">
+time.Q25
+</th>
+<th style="text-align:center;">
+time.Q75
+</th>
+<th style="text-align:center;">
+time.IQR
+</th>
+<th style="text-align:center;">
+skew
+</th>
+<th style="text-align:center;">
+kurt
+</th>
+<th style="text-align:center;">
+sp.ent
+</th>
+<th style="text-align:center;">
+time.ent
+</th>
+<th style="text-align:center;">
+entropy
+</th>
+<th style="text-align:center;">
+sfm
+</th>
+<th style="text-align:center;">
+meandom
+</th>
+<th style="text-align:center;">
+mindom
+</th>
+<th style="text-align:center;">
+maxdom
+</th>
+<th style="text-align:center;">
+dfrange
+</th>
+<th style="text-align:center;">
+modindx
+</th>
+<th style="text-align:center;">
+startdom
+</th>
+<th style="text-align:center;">
+enddom
+</th>
+<th style="text-align:center;">
+dfslope
+</th>
+<th style="text-align:center;">
+meanpeakf
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Pyrrhura rupicola Macaulay Library 132 .wav_2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1504762
+</td>
+<td style="text-align:center;">
+4.662762
+</td>
+<td style="text-align:center;">
+1.767083
+</td>
+<td style="text-align:center;">
+4.279070
+</td>
+<td style="text-align:center;">
+3.435216
+</td>
+<td style="text-align:center;">
+5.647841
+</td>
+<td style="text-align:center;">
+2.212625
+</td>
+<td style="text-align:center;">
+0.0654244
+</td>
+<td style="text-align:center;">
+0.0392547
+</td>
+<td style="text-align:center;">
+0.1046791
+</td>
+<td style="text-align:center;">
+0.0654244
+</td>
+<td style="text-align:center;">
+2.619410
+</td>
+<td style="text-align:center;">
+12.031225
+</td>
+<td style="text-align:center;">
+0.9236435
+</td>
+<td style="text-align:center;">
+0.9508231
+</td>
+<td style="text-align:center;">
+0.8782216
+</td>
+<td style="text-align:center;">
+0.5423756
+</td>
+<td style="text-align:center;">
+3.753955
+</td>
+<td style="text-align:center;">
+2.024121
+</td>
+<td style="text-align:center;">
+6.847559
+</td>
+<td style="text-align:center;">
+4.823437
+</td>
+<td style="text-align:center;">
+5.375000
+</td>
+<td style="text-align:center;">
+4.521973
+</td>
+<td style="text-align:center;">
+2.024121
+</td>
+<td style="text-align:center;">
+-16.599644
+</td>
+<td style="text-align:center;">
+4.020775
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.CCE.1971.4.4.ITM70863A-23.wav_1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1655637
+</td>
+<td style="text-align:center;">
+6.254850
+</td>
+<td style="text-align:center;">
+1.648434
+</td>
+<td style="text-align:center;">
+6.350453
+</td>
+<td style="text-align:center;">
+5.601209
+</td>
+<td style="text-align:center;">
+7.202417
+</td>
+<td style="text-align:center;">
+1.601209
+</td>
+<td style="text-align:center;">
+0.0827778
+</td>
+<td style="text-align:center;">
+0.0382051
+</td>
+<td style="text-align:center;">
+0.1209829
+</td>
+<td style="text-align:center;">
+0.0827778
+</td>
+<td style="text-align:center;">
+2.380005
+</td>
+<td style="text-align:center;">
+10.144155
+</td>
+<td style="text-align:center;">
+0.9397550
+</td>
+<td style="text-align:center;">
+0.9410405
+</td>
+<td style="text-align:center;">
+0.8843475
+</td>
+<td style="text-align:center;">
+0.6327902
+</td>
+<td style="text-align:center;">
+6.585970
+</td>
+<td style="text-align:center;">
+3.574512
+</td>
+<td style="text-align:center;">
+8.225684
+</td>
+<td style="text-align:center;">
+4.651172
+</td>
+<td style="text-align:center;">
+3.685185
+</td>
+<td style="text-align:center;">
+8.225684
+</td>
+<td style="text-align:center;">
+6.933691
+</td>
+<td style="text-align:center;">
+-7.803594
+</td>
+<td style="text-align:center;">
+6.096101
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.SAT.1989.6.2.ITM70866A-32.wav_5
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1542514
+</td>
+<td style="text-align:center;">
+6.093311
+</td>
+<td style="text-align:center;">
+1.645878
+</td>
+<td style="text-align:center;">
+5.844408
+</td>
+<td style="text-align:center;">
+4.904376
+</td>
+<td style="text-align:center;">
+7.393841
+</td>
+<td style="text-align:center;">
+2.489465
+</td>
+<td style="text-align:center;">
+0.0835469
+</td>
+<td style="text-align:center;">
+0.0449868
+</td>
+<td style="text-align:center;">
+0.1156803
+</td>
+<td style="text-align:center;">
+0.0706935
+</td>
+<td style="text-align:center;">
+1.970903
+</td>
+<td style="text-align:center;">
+7.268969
+</td>
+<td style="text-align:center;">
+0.9391274
+</td>
+<td style="text-align:center;">
+0.9432334
+</td>
+<td style="text-align:center;">
+0.8858163
+</td>
+<td style="text-align:center;">
+0.6084129
+</td>
+<td style="text-align:center;">
+6.234293
+</td>
+<td style="text-align:center;">
+3.316113
+</td>
+<td style="text-align:center;">
+8.139551
+</td>
+<td style="text-align:center;">
+4.823437
+</td>
+<td style="text-align:center;">
+3.214286
+</td>
+<td style="text-align:center;">
+6.416894
+</td>
+<td style="text-align:center;">
+3.316113
+</td>
+<td style="text-align:center;">
+-20.102130
+</td>
+<td style="text-align:center;">
+7.047292
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+23.CCE.2011.7.21.7.42.wav_6
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1549551
+</td>
+<td style="text-align:center;">
+5.415047
+</td>
+<td style="text-align:center;">
+1.463110
+</td>
+<td style="text-align:center;">
+5.167742
+</td>
+<td style="text-align:center;">
+4.419355
+</td>
+<td style="text-align:center;">
+6.425807
+</td>
+<td style="text-align:center;">
+2.006452
+</td>
+<td style="text-align:center;">
+0.0645692
+</td>
+<td style="text-align:center;">
+0.0387415
+</td>
+<td style="text-align:center;">
+0.1033107
+</td>
+<td style="text-align:center;">
+0.0645692
+</td>
+<td style="text-align:center;">
+2.107408
+</td>
+<td style="text-align:center;">
+8.054270
+</td>
+<td style="text-align:center;">
+0.9227024
+</td>
+<td style="text-align:center;">
+0.9447503
+</td>
+<td style="text-align:center;">
+0.8717234
+</td>
+<td style="text-align:center;">
+0.5060075
+</td>
+<td style="text-align:center;">
+5.028434
+</td>
+<td style="text-align:center;">
+2.368652
+</td>
+<td style="text-align:center;">
+7.795020
+</td>
+<td style="text-align:center;">
+5.426367
+</td>
+<td style="text-align:center;">
+2.158730
+</td>
+<td style="text-align:center;">
+7.364356
+</td>
+<td style="text-align:center;">
+2.368652
+</td>
+<td style="text-align:center;">
+-32.239682
+</td>
+<td style="text-align:center;">
+4.366662
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Cyanoliseus patagonus Macaulay Library 79 .wav_5
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1598866
+</td>
+<td style="text-align:center;">
+3.153826
+</td>
+<td style="text-align:center;">
+1.225681
+</td>
+<td style="text-align:center;">
+2.569195
+</td>
+<td style="text-align:center;">
+2.243941
+</td>
+<td style="text-align:center;">
+3.651290
+</td>
+<td style="text-align:center;">
+1.407350
+</td>
+<td style="text-align:center;">
+0.0639546
+</td>
+<td style="text-align:center;">
+0.0383728
+</td>
+<td style="text-align:center;">
+0.0959320
+</td>
+<td style="text-align:center;">
+0.0575592
+</td>
+<td style="text-align:center;">
+4.547286
+</td>
+<td style="text-align:center;">
+29.491407
+</td>
+<td style="text-align:center;">
+0.8230714
+</td>
+<td style="text-align:center;">
+0.9356593
+</td>
+<td style="text-align:center;">
+0.7701144
+</td>
+<td style="text-align:center;">
+0.1265239
+</td>
+<td style="text-align:center;">
+2.590610
+</td>
+<td style="text-align:center;">
+2.024121
+</td>
+<td style="text-align:center;">
+4.435840
+</td>
+<td style="text-align:center;">
+2.411719
+</td>
+<td style="text-align:center;">
+3.071429
+</td>
+<td style="text-align:center;">
+2.454785
+</td>
+<td style="text-align:center;">
+2.282519
+</td>
+<td style="text-align:center;">
+-1.077424
+</td>
+<td style="text-align:center;">
+2.291336
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.HC1.2011.8.7.9.20.wav_4
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.1537989
+</td>
+<td style="text-align:center;">
+6.029456
+</td>
+<td style="text-align:center;">
+1.757841
+</td>
+<td style="text-align:center;">
+6.416260
+</td>
+<td style="text-align:center;">
+4.920325
+</td>
+<td style="text-align:center;">
+7.183740
+</td>
+<td style="text-align:center;">
+2.263415
+</td>
+<td style="text-align:center;">
+0.0769048
+</td>
+<td style="text-align:center;">
+0.0448611
+</td>
+<td style="text-align:center;">
+0.1089484
+</td>
+<td style="text-align:center;">
+0.0640873
+</td>
+<td style="text-align:center;">
+4.161163
+</td>
+<td style="text-align:center;">
+27.901632
+</td>
+<td style="text-align:center;">
+0.9288549
+</td>
+<td style="text-align:center;">
+0.9459573
+</td>
+<td style="text-align:center;">
+0.8786571
+</td>
+<td style="text-align:center;">
+0.6043575
+</td>
+<td style="text-align:center;">
+6.254965
+</td>
+<td style="text-align:center;">
+4.952637
+</td>
+<td style="text-align:center;">
+8.570215
+</td>
+<td style="text-align:center;">
+3.617578
+</td>
+<td style="text-align:center;">
+4.071429
+</td>
+<td style="text-align:center;">
+5.383301
+</td>
+<td style="text-align:center;">
+4.952637
+</td>
+<td style="text-align:center;">
+-2.800177
+</td>
+<td style="text-align:center;">
+4.971966
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>… and the spectrograms can be visualized as follows:</p>
+<pre class="r"><code>par(mfrow = c(3, 2), mar = rep(0, 4))
+
+for(i in 1:6){
+  
+  wv &lt;- read_wave(X = dat, index = i, from = 0.17, to = 0.4)
+
+  spectro(wv, wl = 250, grid = FALSE, scale = FALSE, axisX = FALSE,
+          axisY = FALSE, ovlp = 90, flim = c(0, 12), 
+          palette = reverse.gray.colors.1)
+}</code></pre>
+<p><img src="intro_to_warbler_files/figure-html/extn.sel_21-1.png" width="750" /></p>
+<p>The <strong>NatureSounds</strong> package contains an extended selection table with long-billed hermit hummingbirds vocalizations from 10 different song types:</p>
+<pre class="r"><code>data(&quot;Phae.long.est&quot;)
+
+Phae.long.est</code></pre>
+<pre><code>Object of class &#39;extended_selection_table&#39; 
+
+Contains: 
+*  A selection table data frame with 50 row(s) and 8 columns: 
+|sound.files | selec| start|    end| bottom.freq| top.freq|
+|:-----------|-----:|-----:|------:|-----------:|--------:|
+|BR2-A1-1    |     1|   0.1| 0.2676|      1.6020|  10.9525|
+|BR2-A1-2    |     1|   0.1| 0.2652|      1.8914|  11.0250|
+|BR2-A1-3    |     1|   0.1| 0.2716|      1.7177|  11.0250|
+|BR2-A1-4    |     1|   0.1| 0.2701|      1.8335|  11.0250|
+|BR2-A1-5    |     1|   0.1| 0.2770|      2.1229|  11.0250|
+|CCE-I3-1    |     1|   0.1| 0.2490|      1.7551|  11.0250|
+... 2 more column(s) (lek, lek.song.type) and 44 more row(s) 
+
+* 50 wave object(s) (as attributes): BR2-A1-1 BR2-A1-2 BR2-A1-3 BR2-A1-4 BR2-A1-5 CCE-I3-1... and 44 more
+ 
+* A data frame (check.results) generated by check_sels() (as attribute) 
+
+The selection table was created by element (see &#39;class_extended_selection_table&#39;) 
+* 1 sampling rate(s) (in kHz): 22.05 
+* 1 bit depth(s): 8 
+* Created by warbleR &lt; 1.1.21</code></pre>
+<pre class="r"><code>table(Phae.long.est$lek.song.type)</code></pre>
+<pre><code>
+BR2-A1 CCE-I3 LOC-D1 SAT-F1 STR-A2 SUR-E1 SUR-K4 TR1-C2 TR1-C5 TR1-D4 
+     5      5      5      5      5      5      5      5      5      5 </code></pre>
+<p>The ability to compress large data sets and the ease of performing analyzes that require a single R object can simplify the exchange of data and the reproducibility of bioacoustic analyzes.</p>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p> </p>
+<ul>
+<li>Download the extended selection tables of bat social calls from the <a href="https://figshare.com/articles/dataset/Supplementary_materials_Ontogeny_of_an_interactive_call-and-response_system_in_Spix_s_disc-winged_bats_PART_1/11651772">this figshare repository</a> (scroll till the end of the file list) and create spectrograms for the first 5 selections of each table (either <code>spectrograms()</code> or <code>spectro()</code> would work)</li>
+</ul>
+</div>
+<p> </p>
+</div>
+</div>
+<div id="warbler-functions-and-the-workflow-of-analysis-in-bioacoustics" class="section level2">
+<h2><strong>warbleR</strong> functions and the workflow of analysis in bioacoustics</h2>
+<p>Bioacoustic analyzes generally follow a specific processing sequence and analysis. This sequence can be represented schematically like this:</p>
+<p><img src="images/analysis-workflow.png" alt="analysis workflow"></p>
+<p> </p>
+<p>We can group <strong>warbleR</strong> functions according to the bioacoustic analysis stages.</p>
+<p> </p>
+<div id="get-and-prepare-recordings" class="section level3">
+<h3>Get and prepare recordings</h3>
+<p>The <code>query_xc()</code> function allows you to search and download sounds from the free access database <a href="http://xeno-canto.org/">Xeno-Canto</a>. You can also convert .mp3 files to .wav, change the sampling rate of the files and correct corrupt files, among other functions.</p>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Description
+</th>
+<th style="text-align:center;">
+Works.on
+</th>
+<th style="text-align:center;">
+Output
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/check_wavs.html" style="     ">check_wavs</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+verify if sound files can be read
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/consolidate.html" style="     ">consolidate</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+consolidate sound files in a single folder
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame and wave files
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/fix_wavs.html" style="     ">fix_wavs</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+fix waves that cannot be read in R
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+wave files
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/mp32wav.html" style="     ">mp32wav</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+convert multiple mp3 files to wav format
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple mp3 files
+</td>
+<td style="text-align:center;font-style: italic;">
+wave files
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/query_xc.html" style="     ">query_xc</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+Search and download mp3 files from Xeno-Canto
+</td>
+<td style="text-align:center;font-style: italic;">
+Scientific names/data frame
+</td>
+<td style="text-align:center;font-style: italic;">
+mp3 files
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/resample_est.html" style="     ">resample_est</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+resample wave objects in ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+extended selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+extended selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/remove_channels.html" style="     ">remove_channels</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+remove channels in multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+wave files
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/remove_silence.html" style="     ">remove_silence</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+remove silences in multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+wave files
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/duration_wavs.html" style="     ">duration_wavs</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures duration in multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/info_wavs.html" style="     ">info_wavs</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+extract recording parameters from multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="annotating-sound" class="section level3">
+<h3>Annotating sound</h3>
+<p>It is recommended to make annotations in other programs and then import them into R (for example in Raven and import them with the <strong>Rraven</strong> package). However, <strong>warbleR</strong> offers some functions to facilitate manual or automatic annotation of sound files, as well as the subsequent manipulation:</p>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Description
+</th>
+<th style="text-align:center;">
+Works.on
+</th>
+<th style="text-align:center;">
+Output
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/auto_detec.html" style="     ">auto_detec</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+automatic annotation of wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame, images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/optimize_auto_detec.html" style="     ">optimize_auto_detec</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+Try different detection settings to optimize auto_detec detections
+</td>
+<td style="text-align:center;font-style: italic;">
+auto_detec output
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/freq_range.html" style="     ">freq_range</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+detect frequency range in selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/tailor_sels.html" style="     ">tailor_sels</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+interactive tailoring of selections
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="automatic-detections" class="section level3">
+<h3>Automatic detections</h3>
+<p>Automatic detection can significantly speed up acoustic analysis. warbleR offers two main methods for automatic signal detection (cross-correlation and amplitude threshold filter) as well as functions to explore detections:</p>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Description
+</th>
+<th style="text-align:center;">
+Works.on
+</th>
+<th style="text-align:center;">
+Output
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/auto_detec.html" style="     ">auto_detec</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+automatic annotation of wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame, images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/optimize_auto_detec.html" style="     ">optimize_auto_detec</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+Try different detection settings to optimize auto_detec detections
+</td>
+<td style="text-align:center;font-style: italic;">
+auto_detec output
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/freq_range.html" style="     ">freq_range</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+detect frequency range in selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/tailor_sels.html" style="     ">tailor_sels</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+interactive tailoring of selections
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="organize-annotations" class="section level3">
+<h3>Organize annotations</h3>
+<p>The annotations (or selection tables) can be manipulated and refined with a variety of functions. Selection tables can also be converted into the compact format <em>extended selection tables</em>:</p>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Description
+</th>
+<th style="text-align:center;">
+Works.on
+</th>
+<th style="text-align:center;">
+Output
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/tailor_sels.html" style="     ">tailor_sels</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+interactive tailoring of selections
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/sort_colms.html" style="     ">sort_colms</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+order columns in an intuitive way
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/cut_sels.html" style="     ">cut_sels</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+save selections as individual wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+wave files
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/filter_sels.html" style="     ">filter_sels</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+subset selection tables based on filtered image files
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables, images
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/fix_extended_selection_table.html" style="     ">fix_extended_selection_table</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+add wave objects to extended selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+extended selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/selection_table.html" style="     ">selection_table</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+create selection tables and extended selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/song_analysis.html" style="     ">song_analysis</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures acoustic parameters at higher structural levels of organization
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame, selection tables
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="measure-acoustic-signal-structure" class="section level3">
+<h3>Measure acoustic signal structure</h3>
+<p>Most <strong>warbleR</strong> functions are dedicated to quantifying the structure of acoustic signals listed in selection tables using batch processing. For this, 4 main measurement methods are offered:</p>
+<ol style="list-style-type: decimal">
+<li>Spectrographic parameters</li>
+<li>Cross correlation</li>
+<li>Dynamic time warping (DTW)</li>
+<li>Statistical descriptors of cepstral coefficients</li>
+</ol>
+<p>Most functions gravitate around these methods, or variations of these methods:</p>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Description
+</th>
+<th style="text-align:center;">
+Works.on
+</th>
+<th style="text-align:center;">
+Output
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/freq_range.html" style="     ">freq_range</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+detect frequency range in selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/song_analysis.html" style="     ">song_analysis</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures acoustic parameters at higher structural levels of organization
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame, selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/compare_methods.html" style="     ">compare_methods</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+compare the performance of methods to measure acoustic structure
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/freq_DTW.html" style="     ">freq_DTW</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures dynamic time warping (DTW) on dominant/fundamental frequency contours
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+(di)similarity matrix, images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/freq_ts.html" style="     ">freq_ts</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+mesaures dominant/fundamental frequency contours
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame with frequency contours
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/inflections.html" style="     ">inflections</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures number of inflections in frequency contours
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame with frequency contours
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/mfcc_stats.html" style="     ">mfcc_stats</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures statistical descriptors of Mel cepstral coefficients
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/multi_DTW.html" style="     ">multi_DTW</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures dynamic time warping (DTW) on multiple contours
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+(di)similarity matrix
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/sig2noise.html" style="     ">sig2noise</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures signal-to-noise ratio
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/spectro_analysis.html" style="     ">spectro_analysis</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures spectrographic parameters
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/cross_correlation.html" style="     ">cross_correlation</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measurec spectrographic cross-correlation
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+(di)similarity matrix
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p> </p>
+<ul>
+<li>Compare the performance of <code>spectro_analysis()</code> on the example ‘lbh_selec_table’ with "the argument ‘fast = TRUE’ vs ‘fast = FALSE’. What does this argument do and which <code>seewave</code> function might be involved?</li>
+</ul>
+</div>
+<p> </p>
+</div>
+<div id="verify-annotations" class="section level3">
+<h3>Verify annotations</h3>
+<p>Functions are provided to detect inconsistencies in the selection tables or modify selection tables. The package also offers several functions to generate spectrograms showing the annotations, which can be organized by annotation categories. This allows you to verify if the annotations match the previously defined categories, which is particularly useful if the annotations were automatically generated.</p>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Description
+</th>
+<th style="text-align:center;">
+Works.on
+</th>
+<th style="text-align:center;">
+Output
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/check_sels.html" style="     ">check_sels</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+double-check selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/overlapping_sels.html" style="     ">overlapping_sels</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+finds (time) overlapping selections
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/catalog.html" style="     ">catalog</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+creates spectrogram catalog
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/catalog2pdf.html" style="     ">catalog2pdf</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+convert catalogs to .pdf
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/spectrograms.html" style="     ">spectrograms</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+create spectrogram images
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/full_spectrograms.html" style="     ">full_spectrograms</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+create spectrograms of whole sound files
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files, selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/full_spectrogram2pdf.html" style="     ">full_spectrogram2pdf</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+convert full spectrograms to .pfg
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="visually-inspection-of-annotations-and-measurements" class="section level3">
+<h3>Visually inspection of annotations and measurements</h3>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Description
+</th>
+<th style="text-align:center;">
+Works.on
+</th>
+<th style="text-align:center;">
+Output
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/snr_spectrograms.html" style="     ">snr_spectrograms</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+plots spectrograms highlighting areas where signal-to-noise ratio is measured
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/spectrograms.html" style="     ">spectrograms</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+create spectrogram images
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/track_freqs.html" style="     ">track_freqs</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+create spectrogram images including frequency contours
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/plot_coordination.html" style="     ">plot_coordination</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+create schematic plots of coordinated signals
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/full_spectrograms.html" style="     ">full_spectrograms</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+create spectrograms of whole sound files
+</td>
+<td style="text-align:center;font-style: italic;">
+multiple wave files, selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="additional-functions" class="section level3">
+<h3>Additional functions</h3>
+<p>Finally, <strong>warbleR</strong> offers functions to simplify the use of extended selection tables, organize large numbers of images with spectrograms and generate elaborated signal visualizations:</p>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Description
+</th>
+<th style="text-align:center;">
+Works.on
+</th>
+<th style="text-align:center;">
+Output
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/is_extended_selection_table.html" style="     ">is_extended_selection_table</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+check if object is extended selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+<td style="text-align:center;font-style: italic;">
+TRUE/FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/is_selection_table.html" style="     ">is_selection_table</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+check if object is selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+<td style="text-align:center;font-style: italic;">
+TRUE/FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/catalog2pdf.html" style="     ">catalog2pdf</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+convert catalogs to .pdf
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/move_imgs.html" style="     ">move_imgs</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+moves images among folders
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/harmonic_track.html" style="     ">harmonic_track</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+measures harmonics with highest energy
+</td>
+<td style="text-align:center;font-style: italic;">
+wave object
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame with frequency contours
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/map_xc.html" style="     ">map_xc</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+created maps from Xeno-Canto recordings
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/test_coordination.html" style="     ">test_coordination</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+test statistical significance of vocal coordination
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/full_spectrogram2pdf.html" style="     ">full_spectrogram2pdf</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+convert full spectrograms to .pfg
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/color_spectro.html" style="     ">color_spectro</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+highlight signals with colors in a spectrogram
+</td>
+<td style="text-align:center;font-style: italic;">
+wave object
+</td>
+<td style="text-align:center;font-style: italic;">
+plot in R
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/freq_range_detec.html" style="     ">freq_range_detec</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+detect frequency range in wave objetcs
+</td>
+<td style="text-align:center;font-style: italic;">
+wave object
+</td>
+<td style="text-align:center;font-style: italic;">
+data frame, plot in R
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/open_wd.html" style="     ">open_wd</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+open working directory
+</td>
+<td style="text-align:center;font-style: italic;">
+</td>
+<td style="text-align:center;font-style: italic;">
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/phylo_spectro.html" style="     ">phylo_spectro</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+plots phylogenetic trees with spectrograms
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+plot in R
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/read_wave.html" style="     ">read_wave</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+read wave files and wave objects
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+wave object
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/sim_songs.html" style="     ">sim_songs</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+simulate songs
+</td>
+<td style="text-align:center;font-style: italic;">
+</td>
+<td style="text-align:center;font-style: italic;">
+wave object, wave file and selection table
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/tweak_spectro.html" style="     ">tweak_spectro</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+creates mosaic plots with spectrograms with different display parameters
+</td>
+<td style="text-align:center;font-style: italic;">
+selection tables, ext. selection tables
+</td>
+<td style="text-align:center;font-style: italic;">
+images
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+<a href="https://marce10.github.io/warbleR/reference/warbleR_options.html" style="     ">warbleR_options</a>
+</td>
+<td style="text-align:center;font-style: italic;">
+define global parameters for warbleR functions
+</td>
+<td style="text-align:center;font-style: italic;">
+</td>
+<td style="text-align:center;font-style: italic;">
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p> </p>
+<ul>
+<li><p>Run the examples of the functions <code>phylo_spectro()</code> and <code>color_spectro()</code></p></li>
+<li><p>Use the <code>query_xc()</code> and <code>map_xc()</code> functions to explore the geographical distribution of the Xeno-Canto recordings of a species (of bird) of your interest (if any!)</p></li>
+</ul>
+</div>
+<p> </p>
+<hr />
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ol style="list-style-type: decimal">
+<li>Araya-Salas M, G Smith-Vidaurre &amp; M Webster. (2017). Assessing the effect of sound file compression and background noise on measures of acoustic signal structure. Bioacoustics 4622, 1–17</li>
+<li>Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal acoustic signals. Methods Ecol Evol 8:184–191.</li>
+</ol>
+<p> </p>
+<hr />
+<p><font size="4">Session information</font></p>
+<pre><code>R version 4.1.0 (2021-05-18)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04.2 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/atlas/libblas.so.3.10.3
+LAPACK: /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3
+
+locale:
+ [1] LC_CTYPE=pt_BR.UTF-8       LC_NUMERIC=C               LC_TIME=es_CR.UTF-8       
+ [4] LC_COLLATE=pt_BR.UTF-8     LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=pt_BR.UTF-8   
+ [7] LC_PAPER=es_CR.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
+[10] LC_TELEPHONE=C             LC_MEASUREMENT=es_CR.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] ggplot2_3.3.5        microbenchmark_1.4-7 kableExtra_1.3.1     warbleR_1.1.27      
+[5] NatureSounds_1.0.4   knitr_1.38           seewave_2.1.8        tuneR_1.3.3.1       
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.1.1  xfun_0.30         bslib_0.2.5.1     purrr_0.3.4       pbapply_1.5-0    
+ [6] generics_0.1.0    vctrs_0.3.8       colorspace_2.0-2  htmltools_0.5.2   viridisLite_0.4.0
+[11] yaml_2.3.5        utf8_1.2.2        rlang_1.0.1       jquerylib_0.1.4   pillar_1.6.4     
+[16] withr_2.4.3       DBI_1.1.1         glue_1.6.2        lifecycle_1.0.1   stringr_1.4.0    
+[21] munsell_0.5.0     gtable_0.3.0      rvest_1.0.0       evaluate_0.15     fastmap_1.1.0    
+[26] fftw_1.0-6.1      parallel_4.1.0    fansi_1.0.0       highr_0.9         Rcpp_1.0.8.3     
+[31] scales_1.1.1      webshot_0.5.2     jsonlite_1.8.0    soundgen_2.1.0    farver_2.1.0     
+[36] rjson_0.2.21      digest_0.6.29     stringi_1.7.6     dplyr_1.0.7       dtw_1.22-3       
+[41] grid_4.1.0        cli_3.1.0         tools_4.1.0       bitops_1.0-7      magrittr_2.0.3   
+[46] sass_0.4.0        RCurl_1.98-1.6    proxy_0.4-26      tibble_3.1.6      pkgconfig_2.0.3  
+[51] crayon_1.5.0      MASS_7.3-54       ellipsis_0.3.2    xml2_1.3.2        shinyBS_0.61     
+[56] assertthat_0.2.1  rmarkdown_2.13    httr_1.4.2        rstudioapi_0.13   R6_2.5.1         
+[61] signal_0.7-7      compiler_4.1.0   </code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

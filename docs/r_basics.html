@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>r_basics.knit</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">OTS Bioacoustic Analysis in R 2022</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="program.html">Program</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="r_basics.html">R basics</a>
+    </li>
+    <li>
+      <a href="sound.html">Sound</a>
+    </li>
+    <li>
+      <a href="spectrograms.html">Spectrograms</a>
+    </li>
+    <li>
+      <a href="seewave.html">seewave</a>
+    </li>
+    <li>
+      <a href="annotations.html">Annotations</a>
+    </li>
+    <li>
+      <a href="ohun.html">ohun: automatic detection</a>
+    </li>
+    <li>
+      <a href="intro_to_warbler.html">Intro to warbleR</a>
+    </li>
+    <li>
+      <a href="measure_acoustic_structure.html">Measure acoustic structure</a>
+    </li>
+    <li>
+      <a href="comparing_methods.html">Comparing measuring methods</a>
+    </li>
+    <li>
+      <a href="quality_checks.html">Quality checks</a>
+    </li>
+    <li>
+      <a href="measure_structure_green_hermit.html">Measure structure on XC recordings</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="course_prep.html">Course prep</a>
+</li>
+<li>
+  <a href="instructor.html">Instructor</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><center>
+<font size="7"><b>R basics</b></font>
+</center></h1>
+<h3 class="subtitle"><center>
+<font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
+</center></h3>
+<h4 class="author"><center>
+<font size="3"><a href="http://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></font>
+</center></h4>
+<h4 class="date"><center>
+“2022-05-13”
+</center></h4>
+
+</div>
+
+
+<hr />
+<div id="what-is-r" class="section level2">
+<h2>What is R?</h2>
+<ul>
+<li>A <strong>free</strong> <a href="https://en.wikipedia.org/wiki/Domain-specific_language">Domain-Specific-Language (DSL)</a> for statistics and data analysis</li>
+<li>A collection of over 18949 (mar-9-2022) libraries</li>
+<li>A large and active community across industry and academia</li>
+<li><strong>A way to talk “directly” to your computer</strong></li>
+</ul>
+<p>Historically:</p>
+<ul>
+<li>Based on the S Programming Language</li>
+<li>Around 20 years old (Lineage dates from 1975 - almost 40 years ago)</li>
+</ul>
+<p><img src="images/Rinterf.jpeg" alt="R" height="600" width="800"></p>
+<p> </p>
+</div>
+<div id="rstudio" class="section level2">
+<h2>Rstudio</h2>
+<p>Integrated development environment (IDE) for R. Includes:</p>
+<ul>
+<li>A console</li>
+<li>Syntax-highlighting editor that supports direct code execution</li>
+<li>Tools for plotting, history, debugging and workspace management</li>
+</ul>
+<p><img src="images/Rstudio.jpeg" alt="R" height="500" width="800"></p>
+<hr />
+</div>
+<div id="elements-of-the-r-language" class="section level2">
+<h2>Elements of the R language</h2>
+<ul>
+<li>Vectors</li>
+<li>Lists</li>
+<li>Matrices</li>
+<li>Data Frames</li>
+<li>Tables</li>
+<li>Functions (including operators)</li>
+<li>Attributes</li>
+<li><del>Arrays</del></li>
+<li><del>Environments</del></li>
+</ul>
+<p><font size="5">Data structure</font></p>
+<p>The basic data structure in R is the vector. There are two basic types of vectors: atomic vectors and lists.</p>
+<p>They have three common properties:</p>
+<ul>
+<li>Type, <code>typeof()</code> (~ class/mode)</li>
+<li>Length, <code>length()</code> (number of elements)</li>
+<li>Attributes, <code>attributes()</code> (metadata)</li>
+</ul>
+<p>They differ in the types of their elements: all elements of an atomic vector must be the same type, whereas the elements of a list can have different types.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 18px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Homogeneous
+</th>
+<th style="text-align:left;">
+Heterogeneous
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1d
+</td>
+<td style="text-align:left;">
+Atomic vector
+</td>
+<td style="text-align:left;">
+List
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2d
+</td>
+<td style="text-align:left;">
+Matrix
+</td>
+<td style="text-align:left;">
+Data frame
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nd
+</td>
+<td style="text-align:left;">
+Array
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>R has no 0-dimensional elements (scalars). Individual numbers or strings are actually vectors of length one.</p>
+<p><font size="5">Atomic vectors</font></p>
+<p>Types of atomic vectors:</p>
+<ul>
+<li>Logical <a href="https://en.wikipedia.org/wiki/Boolean">(boolean)</a></li>
+<li>Integer</li>
+<li>Numeric (double)</li>
+<li>Character</li>
+</ul>
+<p>Vectors are built using <code>c()</code>:</p>
+<pre class="r"><code>
+x &lt;- 1
+x1 &lt;- c(1)
+
+all.equal(x, x1)
+## [1] TRUE
+
+class(x)
+## [1] &quot;numeric&quot;
+
+y &lt;- &quot;something&quot;
+
+class(y)
+## [1] &quot;character&quot;
+
+w &lt;- 1L
+
+class(w)
+## [1] &quot;integer&quot;
+ 
+z &lt;- TRUE
+
+class(z)
+## [1] &quot;logical&quot;
+
+q &lt;- factor(1)
+
+class(q)
+## [1] &quot;factor&quot;</code></pre>
+<p> </p>
+<p>Vectors can only contain entries of the same type. Different types will be coerced to the most flexible type:</p>
+<pre class="r"><code>
+v &lt;- c(10, 11, 12, 13)
+
+class(v)
+## [1] &quot;numeric&quot;
+
+typeof(v)
+## [1] &quot;double&quot;
+
+is.integer(v)
+## [1] FALSE
+
+y &lt;- c(&quot;Amazona&quot;, &quot;Ara&quot;, &quot;Eupsittula&quot;, &quot;Myiopsitta&quot;)
+
+class(y)
+## [1] &quot;character&quot;
+
+is.integer(y)
+## [1] FALSE
+
+x &lt;- c(1,2,3, &quot;Myiopsitta&quot;)
+
+x
+## [1] &quot;1&quot;          &quot;2&quot;          &quot;3&quot;          &quot;Myiopsitta&quot;
+
+class(x)
+## [1] &quot;character&quot;</code></pre>
+<p> </p>
+<p>Missing values are specified with NA, which is a logical vector of length 1. NA will always be coerced to the correct type if used inside <code>c()</code>:</p>
+<pre class="r"><code>
+v &lt;- c(10, 11, 12, 13, NA)
+
+class(v)
+## [1] &quot;numeric&quot;
+
+v &lt;- c(letters[1:3], NA)
+
+class(v)
+## [1] &quot;character&quot;</code></pre>
+<p> </p>
+<p><font size="5">Lists</font></p>
+<p>Can contain objects of different classes and sizes. Lists are built using list():</p>
+<pre class="r"><code>l &lt;- list(ID = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;), size = c(1, 2, 3, 4, 5), observed = c(FALSE, TRUE, FALSE, FALSE, FALSE))
+
+l</code></pre>
+<pre><code>## $ID
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;
+## 
+## $size
+## [1] 1 2 3 4 5
+## 
+## $observed
+## [1] FALSE  TRUE FALSE FALSE FALSE</code></pre>
+<pre class="r"><code>class(l)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>str(l)</code></pre>
+<pre><code>## List of 3
+##  $ ID      : chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##  $ size    : num [1:5] 1 2 3 4 5
+##  $ observed: logi [1:5] FALSE TRUE FALSE FALSE FALSE</code></pre>
+<p>… and dimensions:</p>
+<pre class="r"><code>l &lt;- list(ID = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;), size = c(1, 2, 3, 4, 5, 6), observed = c(FALSE, TRUE, FALSE, FALSE, FALSE), l)
+
+str(l)</code></pre>
+<pre><code>## List of 4
+##  $ ID      : chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##  $ size    : num [1:6] 1 2 3 4 5 6
+##  $ observed: logi [1:5] FALSE TRUE FALSE FALSE FALSE
+##  $         :List of 3
+##   ..$ ID      : chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##   ..$ size    : num [1:5] 1 2 3 4 5
+##   ..$ observed: logi [1:5] FALSE TRUE FALSE FALSE FALSE</code></pre>
+<pre class="r"><code>l2 &lt;- list(l, l)
+
+str(l2)</code></pre>
+<pre><code>## List of 2
+##  $ :List of 4
+##   ..$ ID      : chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##   ..$ size    : num [1:6] 1 2 3 4 5 6
+##   ..$ observed: logi [1:5] FALSE TRUE FALSE FALSE FALSE
+##   ..$         :List of 3
+##   .. ..$ ID      : chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##   .. ..$ size    : num [1:5] 1 2 3 4 5
+##   .. ..$ observed: logi [1:5] FALSE TRUE FALSE FALSE FALSE
+##  $ :List of 4
+##   ..$ ID      : chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##   ..$ size    : num [1:6] 1 2 3 4 5 6
+##   ..$ observed: logi [1:5] FALSE TRUE FALSE FALSE FALSE
+##   ..$         :List of 3
+##   .. ..$ ID      : chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##   .. ..$ size    : num [1:5] 1 2 3 4 5
+##   .. ..$ observed: logi [1:5] FALSE TRUE FALSE FALSE FALSE</code></pre>
+<p> </p>
+<p><font size="5">Attributes</font></p>
+<p>Objects can have attributes. Attributes allow to store metadata about the object. Attributes are kind of named lists. Attributes can be accessed individually with <code>attr()</code> or all at once (as a list) with <code>attributes()</code>:</p>
+<pre class="r"><code>y &lt;- 1:10
+
+mean(y)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+<pre class="r"><code>attr(y, &quot;my_attribute&quot;) &lt;- &quot;This is an attribute&quot;
+
+
+attr(y, &quot;my_attribute&quot;)</code></pre>
+<pre><code>## [1] &quot;This is an attribute&quot;</code></pre>
+<pre class="r"><code>str(y)</code></pre>
+<pre><code>##  int [1:10] 1 2 3 4 5 6 7 8 9 10
+##  - attr(*, &quot;my_attribute&quot;)= chr &quot;This is an attribute&quot;</code></pre>
+<p> </p>
+<p><code>structure()</code> returns a new object with modified attributes:</p>
+<pre class="r"><code>y &lt;- structure(1:10, my_attribute = &quot;This is an attribute&quot;)
+attributes(y)</code></pre>
+<pre><code>## $my_attribute
+## [1] &quot;This is an attribute&quot;</code></pre>
+<p> </p>
+<p>Most attributes are lost when modifying a vector:</p>
+<pre class="r"><code>attributes(y[1])</code></pre>
+<pre><code>## NULL</code></pre>
+<p> </p>
+<p>The only attributes not lost are the three most important:</p>
+<ul>
+<li>Names, a character vector giving each element a name, described in names</li>
+<li>Dimensions</li>
+<li>Class</li>
+</ul>
+<hr />
+<pre class="r"><code>w &lt;- structure(c(a =1, b = 2), my_attribute = &quot;This is not an apple&quot;)
+
+attributes(w)</code></pre>
+<pre><code>## $names
+## [1] &quot;a&quot; &quot;b&quot;
+## 
+## $my_attribute
+## [1] &quot;This is not an apple&quot;</code></pre>
+<pre class="r"><code>attributes(w[1])</code></pre>
+<pre><code>## $names
+## [1] &quot;a&quot;</code></pre>
+<pre class="r"><code>class(w[1])</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p> </p>
+<p><font size="5">Names</font></p>
+<p>Vectors can be named in three ways:</p>
+<ul>
+<li>When creating it: <code>x &lt;- c(a = 1, b = 2, c = 3)</code></li>
+<li>By modifying an existing vector in place: <code>x &lt;- 1:3</code>; <code>names(x) &lt;- c("a", "b", "c")</code> Or: <code>x &lt;- 1:3</code>; <code>names(x)[[1]] &lt;- c("a")</code></li>
+<li>By creating a modified copy of a vector: <code>x &lt;- setNames(1:3, c("a", "b", "c"))</code></li>
+</ul>
+<pre class="r"><code>y &lt;- c(a = 1, 2, 3)
+
+names(y)</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;&quot;  &quot;&quot;</code></pre>
+<pre class="r"><code>v &lt;- c(1, 2, 3)
+
+names(v) &lt;- c(&#39;a&#39;)
+
+names(v)</code></pre>
+<pre><code>## [1] &quot;a&quot; NA  NA</code></pre>
+<pre class="r"><code>z &lt;- setNames(1:3, c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;))
+
+names(z)</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;</code></pre>
+<p> </p>
+<p><font size="5">Factors</font></p>
+<p>Attributes are used to define factors. A factor is a vector that can contain only predefined values, and is used to store categorical data.</p>
+<p>Factors are built on top of integer vectors using two attributes:</p>
+<ul>
+<li>class “factor”: makes them behave differently from regular integer vectors</li>
+<li>levels: defines the set of allowed values</li>
+</ul>
+<pre class="r"><code>x &lt;- factor(c(&quot;a&quot;, &quot;b&quot;, &quot;b&quot;, &quot;a&quot;))
+x</code></pre>
+<pre><code>## [1] a b b a
+## Levels: a b</code></pre>
+<pre class="r"><code>levels(x)</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot;</code></pre>
+<pre class="r"><code>str(x)</code></pre>
+<pre><code>##  Factor w/ 2 levels &quot;a&quot;,&quot;b&quot;: 1 2 2 1</code></pre>
+<p> </p>
+<p>Factors look like character vectors but they are actually integers:</p>
+<pre class="r"><code>x &lt;- factor(c(&quot;a&quot;, &quot;b&quot;, &quot;b&quot;, &quot;a&quot;))
+
+c(x)</code></pre>
+<pre><code>## [1] a b b a
+## Levels: a b</code></pre>
+<p> </p>
+<p><font size="5">Matrices</font></p>
+<p>All entries are of the same type:</p>
+<pre class="r"><code>m &lt;- matrix(c(1, 2, 3, 11, 12, 13), nrow = 2)
+
+dim(m)</code></pre>
+<pre><code>## [1] 2 3</code></pre>
+<pre class="r"><code>m</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    3   12
+## [2,]    2   11   13</code></pre>
+<pre class="r"><code>class(m)</code></pre>
+<pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
+<pre class="r"><code>m &lt;- matrix(c(1, 2, 3, 11, 12,&quot;13&quot;), nrow = 2)
+m</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,] &quot;1&quot;  &quot;3&quot;  &quot;12&quot;
+## [2,] &quot;2&quot;  &quot;11&quot; &quot;13&quot;</code></pre>
+<p> </p>
+<p>Can be created by modifying the dimension attribute:</p>
+<pre class="r"><code>c &lt;- 1:6
+
+is.matrix(c)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>attributes(c)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>dim(c) &lt;- c(3, 2)
+
+c</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    2    5
+## [3,]    3    6</code></pre>
+<pre class="r"><code>is.matrix(c)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>attributes(c)</code></pre>
+<pre><code>## $dim
+## [1] 3 2</code></pre>
+<p> </p>
+<p><font size="5">Data frames</font></p>
+<p>Special case of lists. Can contain entries of different types:</p>
+<pre class="r"><code>m &lt;- data.frame(ID = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;), size = c(1, 2, 3, 4, 5), observed = c(FALSE, TRUE, FALSE, FALSE, FALSE))
+
+dim(m)</code></pre>
+<pre><code>## [1] 5 3</code></pre>
+<pre class="r"><code>m</code></pre>
+<pre><code>##   ID size observed
+## 1  a    1    FALSE
+## 2  b    2     TRUE
+## 3  c    3    FALSE
+## 4  d    4    FALSE
+## 5  e    5    FALSE</code></pre>
+<pre class="r"><code>class(m)</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>is.data.frame(m)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>is.list(m)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>str(m)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    5 obs. of  3 variables:
+##  $ ID      : chr  &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##  $ size    : num  1 2 3 4 5
+##  $ observed: logi  FALSE TRUE FALSE FALSE FALSE</code></pre>
+<p> </p>
+<p>But vectors should have the same length:</p>
+<pre class="r"><code>m &lt;- data.frame(ID = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;), size = c(1, 2, 3, 4, 5, 6), observed = c(FALSE, TRUE, FALSE, FALSE, FALSE))</code></pre>
+<pre><code>## Error in data.frame(ID = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;), size = c(1, 2, 3, : arguments imply differing number of rows: 5, 6</code></pre>
+<p> </p>
+<hr />
+</div>
+<div id="data-subsetting" class="section level2">
+<h2>Data subsetting</h2>
+<p><font size="5">Indexing</font></p>
+<p>Elements within objects can be called by indexing. To subset a vector simply call the object position using square brackets:</p>
+<pre class="r"><code>x &lt;- c(1, 3, 4, 10, 15, 20, 50, 1, 6)
+
+x[1]</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>x[2]</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>x[2:3]</code></pre>
+<pre><code>## [1] 3 4</code></pre>
+<pre class="r"><code>x[c(1,3)]</code></pre>
+<pre><code>## [1] 1 4</code></pre>
+<p> </p>
+<p>Elements can be removed in the same way:</p>
+<pre class="r"><code>x[-1]</code></pre>
+<pre><code>## [1]  3  4 10 15 20 50  1  6</code></pre>
+<pre class="r"><code>x[-c(1,3)]</code></pre>
+<pre><code>## [1]  3 10 15 20 50  1  6</code></pre>
+<p> </p>
+<p>Matrices and data frames required 2 indices <code>[row, column]</code>:</p>
+<pre class="r"><code>m &lt;- matrix(c(1, 2, 3, 11, 12, 13), nrow = 2)
+
+m[1, ]</code></pre>
+<pre><code>## [1]  1  3 12</code></pre>
+<pre class="r"><code>m[, 1]</code></pre>
+<pre><code>## [1] 1 2</code></pre>
+<pre class="r"><code>m[1, 1]</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>m[-1, ]</code></pre>
+<pre><code>## [1]  2 11 13</code></pre>
+<pre class="r"><code>m[, -1]</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    3   12
+## [2,]   11   13</code></pre>
+<pre class="r"><code>m[-1, -1]</code></pre>
+<pre><code>## [1] 11 13</code></pre>
+<pre class="r"><code>df &lt;- data.frame(family = c(&quot;Psittacidae&quot;, &quot;Trochilidae&quot;, 
+                            &quot;Psittacidae&quot;), 
+  genus = c(&quot;Amazona&quot;, &quot;Phaethornis&quot;, &quot;Ara&quot;), 
+    species = c(&quot;aestiva&quot;, &quot;philippii&quot;, &quot;ararauna&quot;))
+
+df</code></pre>
+<pre><code>##        family       genus   species
+## 1 Psittacidae     Amazona   aestiva
+## 2 Trochilidae Phaethornis philippii
+## 3 Psittacidae         Ara  ararauna</code></pre>
+<pre class="r"><code>df[1, ]</code></pre>
+<pre><code>##        family   genus species
+## 1 Psittacidae Amazona aestiva</code></pre>
+<pre class="r"><code>df[, 1]</code></pre>
+<pre><code>## [1] &quot;Psittacidae&quot; &quot;Trochilidae&quot; &quot;Psittacidae&quot;</code></pre>
+<pre class="r"><code>df[1, 1]</code></pre>
+<pre><code>## [1] &quot;Psittacidae&quot;</code></pre>
+<pre class="r"><code>df[-1, ]</code></pre>
+<pre><code>##        family       genus   species
+## 2 Trochilidae Phaethornis philippii
+## 3 Psittacidae         Ara  ararauna</code></pre>
+<pre class="r"><code>df[, -1]</code></pre>
+<pre><code>##         genus   species
+## 1     Amazona   aestiva
+## 2 Phaethornis philippii
+## 3         Ara  ararauna</code></pre>
+<pre class="r"><code>df[-1, -1]</code></pre>
+<pre><code>##         genus   species
+## 2 Phaethornis philippii
+## 3         Ara  ararauna</code></pre>
+<pre class="r"><code>df[,&quot;family&quot;]</code></pre>
+<pre><code>## [1] &quot;Psittacidae&quot; &quot;Trochilidae&quot; &quot;Psittacidae&quot;</code></pre>
+<pre class="r"><code>df[,c(&quot;family&quot;, &quot;genus&quot;)]</code></pre>
+<pre><code>##        family       genus
+## 1 Psittacidae     Amazona
+## 2 Trochilidae Phaethornis
+## 3 Psittacidae         Ara</code></pre>
+<p> </p>
+<p>Lists require 1 index within double square brackets <code>[[index]]</code>:</p>
+<pre class="r"><code>l &lt;- list(ID = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;), size = c(1, 2, 3, 4, 5), observed = c(FALSE, TRUE, FALSE, FALSE, FALSE))
+
+l[[1]]</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;</code></pre>
+<pre class="r"><code>l[[3]]</code></pre>
+<pre><code>## [1] FALSE  TRUE FALSE FALSE FALSE</code></pre>
+<p> </p>
+<p>Elements within lists can also be subset in the same string of code:</p>
+<pre class="r"><code>l[[1]][1:2]</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot;</code></pre>
+<pre class="r"><code>l[[3]][2]</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p> </p>
+<p><font size="5">Exploring objects</font></p>
+<pre class="r"><code>str(df)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    3 obs. of  3 variables:
+##  $ family : chr  &quot;Psittacidae&quot; &quot;Trochilidae&quot; &quot;Psittacidae&quot;
+##  $ genus  : chr  &quot;Amazona&quot; &quot;Phaethornis&quot; &quot;Ara&quot;
+##  $ species: chr  &quot;aestiva&quot; &quot;philippii&quot; &quot;ararauna&quot;</code></pre>
+<pre class="r"><code>names(df)</code></pre>
+<pre><code>## [1] &quot;family&quot;  &quot;genus&quot;   &quot;species&quot;</code></pre>
+<pre class="r"><code>dim(df)</code></pre>
+<pre><code>## [1] 3 3</code></pre>
+<pre class="r"><code>nrow(df)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>ncol(df)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>head(df)</code></pre>
+<pre><code>##        family       genus   species
+## 1 Psittacidae     Amazona   aestiva
+## 2 Trochilidae Phaethornis philippii
+## 3 Psittacidae         Ara  ararauna</code></pre>
+<pre class="r"><code>tail(df)</code></pre>
+<pre><code>##        family       genus   species
+## 1 Psittacidae     Amazona   aestiva
+## 2 Trochilidae Phaethornis philippii
+## 3 Psittacidae         Ara  ararauna</code></pre>
+<pre class="r"><code>table(df$genus)</code></pre>
+<pre><code>## 
+##     Amazona         Ara Phaethornis 
+##           1           1           1</code></pre>
+<pre class="r"><code>typeof(df)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>View(df)</code></pre>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p> </p>
+<ul>
+<li><p>Using the example data <code>iris</code> to create a data subset with only the observations of the species ‘setosa’</p></li>
+<li><p>Now create a data subset containing the observations of both ‘setosa’ and ‘versicolor’</p></li>
+<li><p>Also with <code>iris</code> create a data subset with the observations for which <code>iris$Sepal.length</code> is higher than 6</p></li>
+<li><p>How many observations have a sepal length higher than 6?</p></li>
+</ul>
+</div>
+<p> </p>
+<hr />
+<p> </p>
+</div>
+<div id="functions" class="section level2">
+<h2>Functions</h2>
+<p>All functions are created by the function <code>function()</code> and follow the same structure:</p>
+<p><img src="images/function.png" alt="R" height="350" width="900"></p>
+<p><font size="2">* Modified from <i>Grolemund 2014</i></font>  </p>
+<p>R comes with many functions that you can use to do sophisticated tasks:</p>
+<pre class="r"><code># built in functions
+bi &lt;- builtins()
+
+length(bi)</code></pre>
+<pre><code>## [1] 1368</code></pre>
+<pre class="r"><code>sample(bi, 10)</code></pre>
+<pre><code>##  [1] &quot;environmentIsLocked&quot;  &quot;require&quot;              &quot;print.connection&quot;    
+##  [4] &quot;format.data.frame&quot;    &quot;memDecompress&quot;        &quot;getNamespaceVersion&quot; 
+##  [7] &quot;..getNamespace&quot;       &quot;as.data.frame.factor&quot; &quot;anyDuplicated&quot;       
+## [10] &quot;provideDimnames&quot;</code></pre>
+<p> </p>
+<p>Operators are functions:</p>
+<pre class="r"><code>1 + 1</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>&#39;+&#39;(1, 1)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>2 * 3</code></pre>
+<pre><code>## [1] 6</code></pre>
+<pre class="r"><code>&#39;*&#39;(2, 3)</code></pre>
+<pre><code>## [1] 6</code></pre>
+<p> </p>
+<p><font size="5">Most commonly used R operators</font></p>
+<p>Arithmetic operators:</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 18px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Operator
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
++
+</td>
+<td style="text-align:left;">
+addition
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+-
+</td>
+<td style="text-align:left;">
+subtraction
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+*
+</td>
+<td style="text-align:left;">
+multiplication
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+/
+</td>
+<td style="text-align:left;">
+division
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+^ or **
+</td>
+<td style="text-align:left;">
+exponent
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+x %% y
+</td>
+<td style="text-align:left;">
+modulus (x mod y)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+x %/% y
+</td>
+<td style="text-align:left;">
+integer division
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<pre class="r"><code>1 - 2</code></pre>
+<pre><code>## [1] -1</code></pre>
+<pre class="r"><code>1 + 2</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>2 ^ 2</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>2 ** 2</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>5 %% 2</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>5 %/% 2</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p> </p>
+<p>Logical operators:</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 18px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Operator
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+&lt;
+</td>
+<td style="text-align:left;">
+less than
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;=
+</td>
+<td style="text-align:left;">
+less than or equal to
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&gt;
+</td>
+<td style="text-align:left;">
+greater than
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&gt;=
+</td>
+<td style="text-align:left;">
+greater than or equal to
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+==
+</td>
+<td style="text-align:left;">
+exactly equal to
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+!=
+</td>
+<td style="text-align:left;">
+not equal to
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+!x
+</td>
+<td style="text-align:left;">
+Not x
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+x | y
+</td>
+<td style="text-align:left;">
+x OR y
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+x &amp; y
+</td>
+<td style="text-align:left;">
+x AND y
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+x %in% y
+</td>
+<td style="text-align:left;">
+match
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<pre class="r"><code>1 &lt; 2 </code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>1 &gt; 2 </code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>1 &lt;= 2 </code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>1 == 2</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>1 != 2</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>1 &gt; 2 </code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>5 %in% 1:6</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>5 %in% 1:4</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p> </p>
+<p>Most functions are vectorized:</p>
+<pre class="r"><code>1:6 * 1:6</code></pre>
+<p><img src="images/vectorize.png" alt="R" height="350" width="900"></p>
+<p><font size="2">* Modified from <i>Grolemund &amp; Wickham 2017</i></font></p>
+<p> </p>
+<pre><code>## [1]  1  4  9 16 25 36</code></pre>
+<pre class="r"><code>1:6 - 1:6</code></pre>
+<pre><code>## [1] 0 0 0 0 0 0</code></pre>
+<p>R recycles vectors of unequal length:</p>
+<pre class="r"><code>1:6 * 1:5</code></pre>
+<p><img src="images/recycle.png" alt="R" height="350" width="900"></p>
+<p><font size="2">* Modified from <i>Grolemund &amp; Wickham 2017</i></font></p>
+<p> </p>
+<pre><code>## Warning in 1:6 * 1:5: comprimento do objeto maior não é múltiplo do comprimento
+## do objeto menor</code></pre>
+<pre><code>## [1]  1  4  9 16 25  6</code></pre>
+<pre class="r"><code>1:6 + 1:5</code></pre>
+<pre><code>## Warning in 1:6 + 1:5: comprimento do objeto maior não é múltiplo do comprimento
+## do objeto menor</code></pre>
+<pre><code>## [1]  2  4  6  8 10  7</code></pre>
+<p> </p>
+<hr />
+</div>
+<div id="style-matters" class="section level2">
+<h2>Style matters</h2>
+<p><font size="2"><a href="https://google.github.io/styleguide/Rguide.xml">Based on google’s R Style Guide</a></font></p>
+<p><font size="5">File names</font></p>
+<p>File names should end in .R and, of course, be meaningful:</p>
+<ul>
+<li>GOOD: predict_ad_revenue.R</li>
+<li>BAD: foo.R</li>
+</ul>
+<p><font size="5">Object names</font></p>
+<p>Variables and functions:</p>
+<ul>
+<li>Lowercase</li>
+<li>Use an underscore (_) (HW style)</li>
+<li>Generally, nouns for variables and verbs for functions</li>
+<li>Strive for names that are concise and meaningful (not always easy)</li>
+<li>Avoid using names of existing functions of variables</li>
+</ul>
+<pre class="r"><code>  - GOOD: day_one: day_1, mean.day(),
+  
+  - BAD: dayOne, day1, firstDay_of.month, mean &lt;- function(x) sum(x), c &lt;- 10</code></pre>
+<p> </p>
+<p><font size="5">Syntax</font></p>
+<p>Spacing:</p>
+<ul>
+<li>Use spaces around operators and for argument within a function</li>
+<li>Always put a space after a comma, and never before (just like in regular English)</li>
+<li>Place a space before left parenthesis, except in a function call</li>
+</ul>
+<pre class="r"><code>  - GOOD: 
+          a &lt;- rnorm(n = 10, sd = 10, mean = 1)
+          tab.prior &lt;- table(df[df$days.from.opt &lt; 0, &quot;campaign.id&quot;])
+          total &lt;- sum(x[, 1])
+          total &lt;- sum(x[1, ])
+          if (debug)
+          mean(1:10)
+          
+  - BAD: 
+         a&lt;-rnorm(n=10,sd=10,mean=1)
+         tab.prior &lt;- table(df[df$days.from.opt&lt;0, &quot;campaign.id&quot;])  # Needs spaces around &#39;&lt;&#39;
+         tab.prior &lt;- table(df[df$days.from.opt &lt; 0,&quot;campaign.id&quot;])  # Needs a space after the comma
+         tab.prior&lt;- table(df[df$days.from.opt &lt; 0, &quot;campaign.id&quot;])  # Needs a space before &lt;-
+         tab.prior&lt;-table(df[df$days.from.opt &lt; 0, &quot;campaign.id&quot;])  # Needs spaces around &lt;-
+         total &lt;- sum(x[,1])  # Needs a space after the comma
+         total &lt;- sum(x[ ,1])  # Needs a space after the comma, not before  
+         if(debug) # Needs a space before parenthesis
+         mean (1:10) # ) # Extra space before parenthesis</code></pre>
+<p> </p>
+<p>Curly braces:</p>
+<ul>
+<li>An opening curly brace should never go on its own line</li>
+<li>Closing curly brace should always go on its own line</li>
+<li>You may omit curly braces when a block consists of a single statement</li>
+</ul>
+<pre class="r"><code>  - GOOD:
+              if (is.null(ylim)) {
+              ylim &lt;- c(0, 0.06)
+            }
+                      
+            if (is.null(ylim))
+              ylim &lt;- c(0, 0.06)
+          
+  - BAD:
+            
+         if (is.null(ylim)) ylim &lt;- c(0, 0.06)
+                    
+         if (is.null(ylim)) {ylim &lt;- c(0, 0.06)} 
+
+         if (is.null(ylim)) {
+           ylim &lt;- c(0, 0.06)
+           } </code></pre>
+<p> </p>
+<p>Assigments:</p>
+<ul>
+<li>Use &lt;-, not =</li>
+</ul>
+<pre class="r"><code>  - GOOD:
+         x &lt;- 5 
+          
+  - BAD:
+         x = 5</code></pre>
+<p> </p>
+<p>Commenting guidelines:</p>
+<ul>
+<li>Comment your code</li>
+<li>Entire commented lines should begin with # and one space</li>
+<li>Short comments can be placed after code preceded by two spaces, #, and then one space</li>
+</ul>
+<pre class="r"><code># Create histogram of frequency of campaigns by pct budget spent.
+hist(df$pct.spent,
+     breaks = &quot;scott&quot;,  # method for choosing number of buckets
+     main   = &quot;Histogram: fraction budget spent by campaignid&quot;,
+     xlab   = &quot;Fraction of budget spent&quot;,
+     ylab   = &quot;Frequency (count of campaignids)&quot;)</code></pre>
+<p> </p>
+<p>General Layout and Ordering (google style):</p>
+<ul>
+<li>Copyright statement comment (?)</li>
+<li>Author comment</li>
+<li>File description comment, including purpose of program, inputs, and outputs</li>
+<li>source() and library() statements</li>
+<li>Function definitions</li>
+<li>Executed statements, if applicable (e.g., print, plot)</li>
+</ul>
+<hr />
+<p> </p>
+</div>
+<div id="r-documentation" class="section level2">
+<h2>R documentation</h2>
+<p>Most R resources are extremely well documented. So the first source for help you should go to when writting R code is the R documention itself. All packages are documented in the same standard way. Getting familiar with the format can simplify things a lot.</p>
+<p><font size="5">Package documentation</font></p>
+<p><img src="images/packagepage.png" alt="R" height="900" width="800" style="border:3px solid gray"></p>
+<p> </p>
+<p><font size="5">Reference manuals</font></p>
+<p>Reference manuals are collections of the documentation for all functions in a package (only 1 per package):</p>
+<ul>
+<li><p><a href="https://cloud.r-project.org/web/packages/dynaSpec/dynaSpec.pdf">dynaSpec manual</a></p></li>
+<li><p><a href="https://cran.r-project.org/web/packages/baRulho/baRulho.pdf">baRulho manual</a></p></li>
+</ul>
+<p> </p>
+<p><font size="5">Function documentation</font></p>
+<p>All functions (default or from loaded packages) must have a documentation that follows a standard format:</p>
+<pre class="r"><code>?mean
+
+help(&quot;mean&quot;)</code></pre>
+<p><img src="images/documentation.png" alt="R" height="700" width="800" style="border:3px solid gray">  </p>
+<p>This documentation can also be shown in Rstudio by pressing <code>F1</code> when the cursor is on the function name</p>
+<p> </p>
+<p>If you don’t recall the function name try <code>apropos()</code>:</p>
+<pre class="r"><code>apropos(&quot;mean&quot;)</code></pre>
+<pre><code>##  [1] &quot;.colMeans&quot;     &quot;.rowMeans&quot;     &quot;colMeans&quot;      &quot;kmeans&quot;       
+##  [5] &quot;mean&quot;          &quot;mean.Date&quot;     &quot;mean.default&quot;  &quot;mean.difftime&quot;
+##  [9] &quot;mean.POSIXct&quot;  &quot;mean.POSIXlt&quot;  &quot;rowMeans&quot;      &quot;weighted.mean&quot;</code></pre>
+<p> </p>
+<p><font size="5">Vignettes</font></p>
+<p>Vignettes are illustrative documents or study cases detailing the use of a package (optional, can be several per package).</p>
+<p>Vignettes can be called directly from R:</p>
+<pre class="r"><code>vgn &lt;- browseVignettes() </code></pre>
+<pre class="r"><code>vignette()</code></pre>
+<p>They should also be listed in the package CRAN page.</p>
+<p> </p>
+<p><font size="5">Demonstrations</font></p>
+<p>Packages may also include extended code demonstrations (‘demos’). To list demos in a package run <code>demo("package name")</code>:</p>
+<pre class="r"><code>demo(package=&quot;stats&quot;)
+
+# call demo directly
+demo(&quot;nlm&quot;)</code></pre>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p> </p>
+<ul>
+<li><p>What does the function <code>cut()</code> do?</p></li>
+<li><p>What is the <code>breaks</code> argument in <code>cut()</code> used for?</p></li>
+<li><p>Run the first 4 lines of code in the examples supplied in the <code>cut()</code> documentation</p></li>
+<li><p>How many vignettes does the package warbleR has?</p></li>
+</ul>
+</div>
+<p> </p>
+<hr />
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li><a href="http://adv-r.had.co.nz/Data-structures.html">Advanced R, H Wickham</a></li>
+<li><a href="https://google.github.io/styleguide/Rguide.xml">Google’s R Style Guide</a><br />
+</li>
+<li>Hands-On Programming with R (Grolemund, 2014)</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

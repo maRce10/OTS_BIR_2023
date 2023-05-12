@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>sound.knit</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">OTS Bioacoustic Analysis in R 2022</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="program.html">Program</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="r_basics.html">R basics</a>
+    </li>
+    <li>
+      <a href="sound.html">Sound</a>
+    </li>
+    <li>
+      <a href="spectrograms.html">Spectrograms</a>
+    </li>
+    <li>
+      <a href="seewave.html">seewave</a>
+    </li>
+    <li>
+      <a href="annotations.html">Annotations</a>
+    </li>
+    <li>
+      <a href="ohun.html">ohun: automatic detection</a>
+    </li>
+    <li>
+      <a href="intro_to_warbler.html">Intro to warbleR</a>
+    </li>
+    <li>
+      <a href="measure_acoustic_structure.html">Measure acoustic structure</a>
+    </li>
+    <li>
+      <a href="comparing_methods.html">Comparing measuring methods</a>
+    </li>
+    <li>
+      <a href="quality_checks.html">Quality checks</a>
+    </li>
+    <li>
+      <a href="measure_structure_green_hermit.html">Measure structure on XC recordings</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="course_prep.html">Course prep</a>
+</li>
+<li>
+  <a href="instructor.html">Instructor</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><center>
+<font size="7"><b>Sound</b></font>
+</center></h1>
+<h3 class="subtitle"><center>
+<font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
+</center></h3>
+<h4 class="author"><center>
+<font size="3"><a href="http://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></font>
+</center></h4>
+<h4 class="date"><center>
+“2022-05-17”
+</center></h4>
+
+</div>
+
+
+<p> </p>
+<p>Sound waves are characterized by compression and expansion of the medium as sound energy moves through it. There is also back and forth motion of the particles making up the medium:</p>
+<p><img src="images/wave.gif" alt="wave animation"></p>
+<p><font size="3"> taken from <a href="https://dosits.org" class="uri">https://dosits.org</a></font></p>
+<p> </p>
+<p>The variation in pressure that is perceived at a fixed point in space can be represented by a graph of pressure (amplitude) by time:</p>
+<p><img src="images/amplitude.gif" alt="wave and oscillogram"></p>
+<p> </p>
+<p>Sounds waves are typically quantified by their frequency (number of cycles per second, Hz) and amplitude (relative intensity).</p>
+<p><img src="sound_files/figure-html/unnamed-chunk-2-1.png" width="85%" /></p>
+<p> </p>
+<div class="alert alert-success">
+<center>
+<font size="6"><b>Digitizing sound</b></font>
+</center>
+<p> </p>
+<div id="sampling-frequency" class="section level2">
+<h2>Sampling frequency</h2>
+<p>Digitizing implies discretizing, which requires some sort of regular sampling. Sampling frequency refers to how many samples of the pressure level of the environment are taken per second. A 440 Hz sine wave recorded at 44100 Hz would have around 10 samples per cycle. This plot shows 2 cycles of a 440 Hz sine wave sampled (vertical dotted lines) at 44100 kHz:</p>
+<p><img src="sound_files/figure-html/unnamed-chunk-3-1.png" width="100%" /></p>
+</div>
+<div id="nyquist-frequency" class="section level2">
+<h2>Nyquist frequency</h2>
+<p>Sampling should be good enough so the regularity of the sine wave can be reconstructed from the sampled data. Low sampling frequencies of a high frequency sine wave might not be able to provide enough information. For instance, the same 440 Hz sine wave sampled at 22050 Hz looks like this:</p>
+<p><img src="sound_files/figure-html/unnamed-chunk-4-1.png" width="100%" />  </p>
+<p>As you can see way less samples are taken per unit of time. The threshold at which samples cannot provide a reliable estimate of the regularity of a sine wave is called <strong>Nyquist frequency</strong> and corresponds to half of the frequency of the sine wave. This is how the 2 cycles of the 440 Hz would look like when sampled at its Nyquist frequency:</p>
+<p><img src="sound_files/figure-html/unnamed-chunk-5-1.png" width="100%" /></p>
+<p> </p>
+</div>
+<div id="quantization" class="section level2">
+<h2>Quantization</h2>
+<p>Once we know at which point amplitude samples will be taken we just need to measure it. This process is called <strong>quantization</strong>. The range of amplitude values is discretized in a number of intervals equals to <code>2 ^ bits</code>. Hence, it involves some rounding of the actual amplitude values and some data loss. This is the same 440 Hz sine wave recorded at 44100 kHz quantized at 2 bits (2^2 = 4 intervals):</p>
+<p><img src="sound_files/figure-html/unnamed-chunk-6-1.png" width="100%" /></p>
+<p> </p>
+<p>Rounding and data loss is more obvious if we bind the sampled points with lines:</p>
+<p><img src="sound_files/figure-html/unnamed-chunk-7-1.png" width="100%" />  </p>
+<p>This is the same signal quantized at 3 bits (2^3 = 8 intervals):</p>
+<p><img src="sound_files/figure-html/unnamed-chunk-8-1.png" width="100%" />  </p>
+<p>4 bits (2^4 = 16 intervals):</p>
+<p><img src="sound_files/figure-html/unnamed-chunk-9-1.png" width="100%" />  </p>
+<p>.. and 8 bits (2^8 = 256 intervals):</p>
+<p><img src="sound_files/figure-html/unnamed-chunk-10-1.png" width="100%" />  </p>
+<p>At this point quantization involves very little information loss. 16 bits is probably the most common dynamic range used nowadays. As you can imagine, the high number of intervals (2^16 = 65536) allows for great precision in the quantization of amplitude.</p>
+</div>
+</div>
+<p> </p>
+<div id="sounds-in-r" class="section level1">
+<h1>Sounds in R</h1>
+<p>Sound waves can be represented by 3 kinds of R objects:</p>
+<ul>
+<li>Common classes (numerical vector, numerical matrix)</li>
+<li>Time series classes (ts, mts)</li>
+<li>Specific sound classes (Wave, sound and audioSample)</li>
+</ul>
+<p> </p>
+<div id="non-specific-classes" class="section level2">
+<h2>Non-specific classes</h2>
+<div id="vectors" class="section level3">
+<h3>Vectors</h3>
+<p>Any numerical vector can be treated as a sound if a sampling frequency is provided. For example, a 440 Hz sinusoidal sound sampled at 8000 Hz for one second can be generated like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seewave)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create sinewave at 440 Hz</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>s1 <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="dv">440</span> <span class="sc">*</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length.out =</span> <span class="dv">8000</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">is.vector</span>(s1)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mode</span>(s1)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p> </p>
+<p>These sequences of values only make sense when specifying the sampling rate at which they were created:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(s1, <span class="at">f =</span> <span class="dv">8000</span>, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="fl">0.01</span>)</span></code></pre></div>
+<p><img src="sound_files/figure-html/unnamed-chunk-12-1.png" width="672" />  </p>
+</div>
+<div id="matrices" class="section level3">
+<h3>Matrices</h3>
+<p>You can read any single column matrix:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>s2 <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(s1)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">is.matrix</span>(s2)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(s2)</span></code></pre></div>
+<pre><code>## [1] 8000    1</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(s2, <span class="at">f =</span> <span class="dv">8000</span>, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="fl">0.01</span>)</span></code></pre></div>
+<p><img src="sound_files/figure-html/unnamed-chunk-13-1.png" width="672" />  </p>
+<p>If the matrix has more than one column, only the first column will be considered:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">8000</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>s3 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(s2, x)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">is.matrix</span>(s3)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(s3)</span></code></pre></div>
+<pre><code>## [1] 8000    2</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(s3, <span class="at">f =</span> <span class="dv">8000</span>, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="fl">0.01</span>)</span></code></pre></div>
+<p><img src="sound_files/figure-html/unnamed-chunk-14-1.png" width="672" />  </p>
+</div>
+<div id="time-series" class="section level3">
+<h3>Time series</h3>
+<p>The class <code>ts</code> and related functions <code>ts()</code>, <code>as.ts()</code>, <code>is.ts()</code> can also be used to generate sound objects in R. Here the command to similarly generate a series of time is shown corresponding to a 440 Hz sinusoidal sound sampled at 8000 Hz for one second:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>s4 <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="at">data =</span> s1, <span class="at">start =</span> <span class="dv">0</span>, <span class="at">frequency =</span> <span class="dv">8000</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(s4)</span></code></pre></div>
+<pre><code>##  Time-Series [1:8000] from 0 to 1: 0 0.339 0.637 0.861 0.982 ...</code></pre>
+<p> </p>
+<p>To generate a random noise of 0.5 seconds:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>s4 <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="at">data =</span> <span class="fu">runif</span>(<span class="dv">4000</span>, <span class="at">min =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">max =</span> <span class="dv">1</span>), <span class="at">start =</span> <span class="dv">0</span>, <span class="at">end =</span> <span class="fl">0.5</span>, <span class="at">frequency =</span> <span class="dv">8000</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(s4)</span></code></pre></div>
+<pre><code>##  Time-Series [1:4001] from 0 to 0.5: 0.278 -0.0733 -0.6711 0.749 -0.2918 ...</code></pre>
+<p> </p>
+<p>The <code>frequency()</code> and <code>deltat()</code> functions return the sampling frequency (<span class="math inline">\(f\)</span>) and the time resolution (<span class="math inline">\(Delta t\)</span>) respectively:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">frequency</span>(s4)</span></code></pre></div>
+<pre><code>## [1] 8000</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">deltat</span>(s4)</span></code></pre></div>
+<pre><code>## [1] 0.000125</code></pre>
+<p> </p>
+<p>As the frequency is incorporated into the <code>ts</code> objects, it is not necessary to specify it when used within functions dedicated to audio:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(s4, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="fl">0.01</span>)</span></code></pre></div>
+<p><img src="sound_files/figure-html/unnamed-chunk-18-1.png" width="672" />  </p>
+<p>In the case of multiple time series, <strong>seewave</strong> functions will consider only the first series:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>s5 <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="at">data =</span> s3, <span class="at">f =</span> <span class="dv">8000</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(s5)</span></code></pre></div>
+<pre><code>## [1] &quot;mts&quot;    &quot;ts&quot;     &quot;matrix&quot;</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(s5, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="fl">0.01</span>)</span></code></pre></div>
+<p><img src="sound_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+</div>
+<div id="dedicated-r-classes-for-sound" class="section level2">
+<h2>Dedicated R classes for sound</h2>
+<p>There are 3 kinds of objects corresponding to the <code>wav</code> binary format or the<code>mp3</code> compressed format:</p>
+<ul>
+<li><code>Wave</code> class of the package <strong>tuneR</strong></li>
+<li><code>sound</code> class of the package <strong>phonTools</strong></li>
+<li><code>AudioSample</code> class of the package <strong>audio</strong></li>
+</ul>
+<p> </p>
+<div id="wave-class-tuner" class="section level3">
+<h3><code>Wave</code> class (<strong>tuneR</strong>)</h3>
+<p>The <code>Wave</code> class comes with the <strong>tuneR</strong> package. This S4 class includes different “slots” with the amplitude data (left or right channel), the sampling frequency (or frequency), the number of bits (8/16/24/32) and the type of sound (mono/stereo). High sampling rates (&gt; 44100 Hz) can be read on these types of objects.</p>
+<p>The function to import <code>.wav</code> files from the hard drive is <code>readWave</code>:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tuneR)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>s6 <span class="ot">&lt;-</span> <span class="fu">readWave</span>(<span class="st">&quot;./examples/Phae.long1.wav&quot;</span>)</span></code></pre></div>
+<p> </p>
+<p>We can verify the class of the object like this:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># object class</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(s6)</span></code></pre></div>
+<pre><code>## [1] &quot;Wave&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;tuneR&quot;</code></pre>
+<p> </p>
+<p>S4 objects have a structure similar to lists but use ‘@’ to access each position (slot):</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># structure</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(s6)</span></code></pre></div>
+<pre><code>## Formal class &#39;Wave&#39; [package &quot;tuneR&quot;] with 6 slots
+##   ..@ left     : int [1:56251] 162 -869 833 626 103 -2 43 19 47 227 ...
+##   ..@ right    : num(0) 
+##   ..@ stereo   : logi FALSE
+##   ..@ samp.rate: int 22500
+##   ..@ bit      : int 16
+##   ..@ pcm      : logi TRUE</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract 1 position</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>s6<span class="sc">@</span>samp.rate</span></code></pre></div>
+<pre><code>## [1] 22500</code></pre>
+<p> </p>
+<div class="alert alert-warning">
+<p>“Pulse-code modulation (PCM) is a method used to digitally represent sampled analog signals. It is the standard form of digital audio. In a PCM stream, the amplitude of the analog signal is sampled regularly at uniform intervals, and each sample is quantized to the nearest value within a range of digital steps” (<a href="https://en.wikipedia.org/wiki/Pulse-code_modulation">Wikipedia</a>).</p>
+</div>
+<p> </p>
+<p>The samples come in the slot ‘<span class="citation">@left</span>’:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># samples</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>s6<span class="sc">@</span>left[<span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>]</span></code></pre></div>
+<pre><code>##  [1]  162 -869  833  626  103   -2   43   19   47  227   -4  205  564  171  457
+## [16]  838 -216   60   76 -623 -213  168 -746 -248  175 -512  -58  651  -85 -213
+## [31]  586   40 -407  371  -51 -587  -92   94 -527   40</code></pre>
+<p> </p>
+<p>The number of samples is given by the duration and the sampling rate.</p>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li>How can we calculate the duration of the <code>wave</code> object using the information in the object?</li>
+</ul>
+<p> </p>
+<ul>
+<li>Extract the first second of audio from the object <code>s6</code> using indexing (and squared brackets)</li>
+</ul>
+</div>
+<p> </p>
+<p>An advantage of using <code>readWave()</code> is the ability to read specific segments of sound files, especially useful with long files. This is done using the <code>from</code> and<code>to</code> arguments and specifying the units of time with the <code>units</code> arguments. The units can be converted into “samples”, “minutes” or “hours”. For example, to read only the section that begins in 1s and ends in 2s of the file “Phae.long1.wav”:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>s7 <span class="ot">&lt;-</span> <span class="fu">readWave</span>(<span class="st">&quot;./examples/Phae.long1.wav&quot;</span>, <span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> <span class="dv">2</span>, <span class="at">units =</span> <span class="st">&quot;seconds&quot;</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>s7</span></code></pre></div>
+<pre><code>## 
+## Wave Object
+##  Number of Samples:      22500
+##  Duration (seconds):     1
+##  Samplingrate (Hertz):   22500
+##  Channels (Mono/Stereo): Mono
+##  PCM (integer format):   TRUE
+##  Bit (8/16/24/32/64):    16</code></pre>
+<p> </p>
+<p>The <code>.mp3</code> files can be imported to R although they are imported in<code>Wave</code> format. This is done using the <code>readMP3()</code> function:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>s7 <span class="ot">&lt;-</span> <span class="fu">readMP3</span>(<span class="st">&quot;./examples/Phae.long1.mp3&quot;</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>s7</span></code></pre></div>
+<pre><code>## 
+## Wave Object
+##  Number of Samples:      56448
+##  Duration (seconds):     2.56
+##  Samplingrate (Hertz):   22050
+##  Channels (Mono/Stereo): Mono
+##  PCM (integer format):   TRUE
+##  Bit (8/16/24/32/64):    16</code></pre>
+<p> </p>
+<p>To obtain information about the object (sampling frequency, number of bits, mono/stereo), it is necessary to use the indexing of S4 class objects:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>s7<span class="sc">@</span>samp.rate</span></code></pre></div>
+<pre><code>## [1] 22050</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>s7<span class="sc">@</span>bit</span></code></pre></div>
+<pre><code>## [1] 16</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>s7<span class="sc">@</span>stereo</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<p> </p>
+<p>A property that does not appear in these calls is that <code>readWave</code> does not normalize the sound. The values that describe the sound will be included between <span class="math inline">\(\pm2^{bit} - 1\)</span>:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(s7<span class="sc">@</span>left)</span></code></pre></div>
+<pre><code>## [1] -32768  32767</code></pre>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p>The function <code>Wave</code> can be used to create wave objects.</p>
+<p> </p>
+<ul>
+<li><p>Run the example code in the function documentation</p></li>
+<li><p>Plot the oscillogram for the first 0.01 s of ‘Wobj’</p></li>
+<li><p>Note that the function <code>sine</code> provides a shortcut that can be used to create wave object with a sine wave. Check out other similar functions described in the <code>sine</code> function documentation. Try 4 of these alternative functions and plot the oscillogram of the first 0.01 s for each of them.</p></li>
+</ul>
+</div>
+<p> </p>
+<p>The function <code>read_sound_files</code> from warbleR is a wrapper over several sound file reading functions, that can read files in ‘wav’, ‘mp3’, ‘flac’ and ‘wac’ format:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(warbleR)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># wave</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>rsf1 <span class="ot">&lt;-</span> <span class="fu">read_sound_file</span>(<span class="st">&quot;Phaethornis-eurynome-15607.wav&quot;</span>, <span class="at">path =</span> <span class="st">&quot;./examples&quot;</span>)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(rsf1)</span></code></pre></div>
+<pre><code>## [1] &quot;Wave&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;tuneR&quot;</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mp3</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>rsf2 <span class="ot">&lt;-</span> <span class="fu">read_sound_file</span>(<span class="st">&quot;Phaethornis-striigularis-154074.mp3&quot;</span>, <span class="at">path =</span> <span class="st">&quot;./examples&quot;</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(rsf2)</span></code></pre></div>
+<pre><code>## [1] &quot;Wave&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;tuneR&quot;</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flac</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>rsf3 <span class="ot">&lt;-</span> <span class="fu">read_sound_file</span>(<span class="st">&quot;Phae.long1.flac&quot;</span>, <span class="at">path =</span> <span class="st">&quot;./examples&quot;</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(rsf3)</span></code></pre></div>
+<pre><code>## [1] &quot;Wave&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;tuneR&quot;</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># wac</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>rsf4 <span class="ot">&lt;-</span> <span class="fu">read_sound_file</span>(<span class="st">&quot;recording_20170716_230503.wac&quot;</span>, <span class="at">path =</span> <span class="st">&quot;./examples&quot;</span>)</span></code></pre></div>
+<pre><code>## WAC with trigger(s), converting individual segment(s) to WAV file(s).</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(rsf4)</span></code></pre></div>
+<pre><code>## [1] &quot;Wave&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;tuneR&quot;</code></pre>
+<p> </p>
+<p>The function can also read recordings hosted in an online repository:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>rsf5 <span class="ot">&lt;-</span> <span class="fu">read_sound_file</span>(<span class="at">X =</span> <span class="st">&quot;https://xeno-canto.org/35340/download&quot;</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(rsf5)</span></code></pre></div>
+<pre><code>## [1] &quot;Wave&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;tuneR&quot;</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>rsf6 <span class="ot">&lt;-</span> <span class="fu">read_sound_file</span>(<span class="at">X =</span> <span class="st">&quot;https://github.com/maRce10/OTS_BIR_2022/raw/master/examples/Phae.long1.flac&quot;</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(rsf6)</span></code></pre></div>
+<pre><code>## [1] &quot;Wave&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;tuneR&quot;</code></pre>
+<p> </p>
+</div>
+</div>
+<div id="class-sound-phontools" class="section level2">
+<h2>Class <code>sound</code> (<strong>phonTools</strong>)</h2>
+<p>The <code>loadsound()</code> function of <em>phonTools</em> also imports ‘wave’ sound files into R, in this case as objects of class <code>sound</code>:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phonTools)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>s8 <span class="ot">&lt;-</span> <span class="fu">loadsound</span>(<span class="st">&quot;./examples/Phae.long1.wav&quot;</span>)</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>s8</span></code></pre></div>
+<pre><code>## 
+##       Sound Object
+## 
+##    Read from file:         ./examples/Phae.long1.wav
+##    Sampling frequency:     22500  Hz
+##    Duration:               2500.044  ms
+##    Number of Samples:      56251</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(s8)</span></code></pre></div>
+<pre><code>## List of 5
+##  $ filename  : chr &quot;./examples/Phae.long1.wav&quot;
+##  $ fs        : int 22500
+##  $ numSamples: num 56251
+##  $ duration  : num 2500
+##  $ sound     : Time-Series [1:56251] from 0 to 2.5: 0.00494 -0.02652 0.02542 0.0191 0.00314 ...
+##  - attr(*, &quot;class&quot;)= chr &quot;sound&quot;</code></pre>
+<p> </p>
+<p>This function only imports files with a dynamic range of 8 or 16 bits.</p>
+<p> </p>
+</div>
+<div id="class-audiosample-audio" class="section level2">
+<h2>Class <code>audioSample</code> (<strong>audio</strong>)</h2>
+<p>The <strong>audio</strong> package is another option to handle <code>.wav</code> files. The sound can be imported using the <code>load.wave()</code> function. The class of the resulting object is <code>audioSample</code> which is essentially a numerical vector (for mono) or a numerical matrix with two rows (for stereo). The sampling frequency and resolution are saved as attributes:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(audio)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>s10 <span class="ot">&lt;-</span> <span class="fu">load.wave</span>(<span class="st">&quot;./examples/Phae.long1.wav&quot;</span>)</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(s10)</span></code></pre></div>
+<pre><code>## sample rate: 22500Hz, mono, 16-bits
+## [1]  4.943848e-03 -2.652058e-02  2.542114e-02  1.910400e-02  3.143311e-03
+## [6] -6.103702e-05</code></pre>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>s10<span class="sc">$</span>rate</span></code></pre></div>
+<pre><code>## [1] 22500</code></pre>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>s10<span class="sc">$</span>bits</span></code></pre></div>
+<pre><code>## [1] 16</code></pre>
+<p> </p>
+<p>The main advantage of the <strong>audio</strong> package is that the sound can be acquired directly within an R session. This is achieved first by preparing a <code>NAs</code> vector and then using the<code>record()</code> function. For example, to obtain a mono sound of 5 seconds sampled at 16 kHz:</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>s11 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA_real_</span>, <span class="dv">16000</span> <span class="sc">*</span> <span class="dv">5</span>)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="fu">record</span>(s11, <span class="dv">16000</span>, <span class="dv">1</span>)</span></code></pre></div>
+<p> </p>
+<p>A recording session can be controlled by three complementary functions: <code>pause()</code>, <code>rewind()</code>, and <code>resume()</code>.</p>
+<p> </p>
+</div>
+<div id="export-sounds-from-r" class="section level2">
+<h2>Export sounds from R</h2>
+<p>For maximum compatibility with other sound programs, it may be useful to save a sound as a simple <code>.txt</code> file. The following commands will write a “tico.txt” file:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(tico)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">export</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>)</span></code></pre></div>
+<p> </p>
+</div>
+<div id="format-.wav" class="section level2">
+<h2>Format ‘.wav’</h2>
+<p><strong>tuneR</strong> and <strong>audio</strong> have a function to write <code>.wav</code> files: <code>writeWave()</code> and <code>save.wave()</code> respectively. Within <strong>seewave</strong>, the <code>savewav()</code> function, which is based on <code>writeWave()</code>, can be used to save data in <code>.wav</code> format. By default, the object name will be used for the name of the <code>.wav</code> file:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">savewav</span>(tico)</span></code></pre></div>
+<p> </p>
+</div>
+<div id="format-.flac" class="section level2">
+<h2>Format ‘.flac’</h2>
+<p>Free Lossless Audio Codec (FLAC) is a file format for lossless audio data compression. FLAC reduces bandwidth and storage requirements without sacrificing the integrity of the audio source. Audio sources encoded in FLAC are generally reduced in size from 40 to 50 percent. See the flac website for more details (<a href="http://flac.sourceforge.net">flac.sourceforge.net</a>).</p>
+<p>The <code>.flac</code> format cannot be used as such with R. However, the <code>wav2flac()</code>function allows you to call the FLAC software directly from the console. Therefore, FLAC must be installed on your operating system. If you have a <code>.wav</code> file that you want to compress in <code>.flac</code>, call:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wav2flac</span>(<span class="at">file =</span> <span class="st">&quot;./examples/Phae.long1.wav&quot;</span>, <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p> </p>
+<p>To compress a <code>.wav</code> file to a <code>.flac</code> format, the argument <code>reverse = TRUE</code> must be used:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wav2flac</span>(<span class="st">&quot;Phae.long1.flac&quot;</span>, <span class="at">reverse =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p> </p>
+<p>This table, taken from Sueur (2018), summarizes the functions available to import and export sound files in R. The table is incomplete since it does not mention the functions of the <code>phonTools</code> package:</p>
+<p><img src="images/tabla-waves.png" alt="tabla imp exp waves"></p>
+<hr />
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li><p>How does the sampling rate affect the size of an audio file? (hint: create 2 sounds files with the same data but different sampling rates; use <code>sine()</code>)</p></li>
+<li><p>How does the dynamic range affect the size of an audio file?</p></li>
+<li><p>Use the <code>system.time()</code> function to compare the performance of the different functions to import audio files in R. For this use the file “LBH.374.SUR.wav” (Long-billed hermit songs) which lasts about 2 min</p></li>
+</ul>
+<p>The following code creates a plot similar to <code>oscillo</code> but using dots instead of lines:</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>wav <span class="ot">&lt;-</span> <span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">500</span>, <span class="at">xunit =</span> <span class="st">&quot;samples&quot;</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wav<span class="sc">@</span>left)</span></code></pre></div>
+<p><img src="sound_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p> </p>
+<ul>
+<li>Use the function <code>downsample()</code> to reduce the sampling rate of ‘wav’ (below 44100) and plot the output object. Decrease the sampling rate until you cannot recognize the wave pattern from the original wave object. Try several values so you get a sense at which sampling rate this happens.</li>
+</ul>
+</div>
+<p> </p>
+<hr />
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ol style="list-style-type: decimal">
+<li><p>Sueur J, Aubin T, Simonis C. 2008. Equipment review: seewave, a free modular tool for sound analysis and synthesis. Bioacoustics 18(2):213–226.</p></li>
+<li><p>Sueur, J. (2018). Sound Analysis and Synthesis with R.</p></li>
+<li><p>Sueur J. (2018). I/O of sound with R. seewave package vignette. url: <a href="https://cran.r-project.org/web/packages/seewave/vignettes/seewave_IO.pdf" class="uri">https://cran.r-project.org/web/packages/seewave/vignettes/seewave_IO.pdf</a></p></li>
+</ol>
+<hr />
+<p><font size="4">Session information</font></p>
+<pre><code>## R version 4.1.0 (2021-05-18)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 20.04.2 LTS
+## 
+## Matrix products: default
+## BLAS:   /usr/lib/x86_64-linux-gnu/atlas/libblas.so.3.10.3
+## LAPACK: /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3
+## 
+## locale:
+##  [1] LC_CTYPE=pt_BR.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=es_CR.UTF-8        LC_COLLATE=pt_BR.UTF-8    
+##  [5] LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=pt_BR.UTF-8   
+##  [7] LC_PAPER=es_CR.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=es_CR.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] audio_0.1-10       phonTools_0.2-2.1  warbleR_1.1.27     NatureSounds_1.0.4
+## [5] tuneR_1.4.0        seewave_2.2.0      knitr_1.39        
+## 
+## loaded via a namespace (and not attached):
+##  [1] tidyselect_1.1.1   xfun_0.31          bslib_0.2.5.1      pbapply_1.5-0     
+##  [5] purrr_0.3.4        colorspace_2.0-2   vctrs_0.3.8        generics_0.1.0    
+##  [9] htmltools_0.5.2    viridisLite_0.4.0  yaml_2.3.5         utf8_1.2.2        
+## [13] rlang_1.0.2        jquerylib_0.1.4    pillar_1.6.4       glue_1.6.2        
+## [17] DBI_1.1.1          lifecycle_1.0.1    stringr_1.4.0      munsell_0.5.0     
+## [21] gtable_0.3.0       moments_0.14.1     evaluate_0.15      fastmap_1.1.0     
+## [25] fftw_1.0-7         parallel_4.1.0     fansi_1.0.0        highr_0.9         
+## [29] Rcpp_1.0.8.3       scales_1.1.1       formatR_1.11       jsonlite_1.8.0    
+## [33] gridExtra_2.3      rjson_0.2.21       ggplot2_3.3.5      digest_0.6.29     
+## [37] stringi_1.7.6      dplyr_1.0.7        bioacoustics_0.2.8 dtw_1.22-3        
+## [41] grid_4.1.0         cli_3.1.0          tools_4.1.0        bitops_1.0-7      
+## [45] magrittr_2.0.3     sass_0.4.0         proxy_0.4-26       RCurl_1.98-1.6    
+## [49] tibble_3.1.6       crayon_1.5.1       pkgconfig_2.0.3    MASS_7.3-54       
+## [53] ellipsis_0.3.2     assertthat_0.2.1   rmarkdown_2.13     rstudioapi_0.13   
+## [57] viridis_0.6.2      R6_2.5.1           signal_0.7-7       compiler_4.1.0</code></pre>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

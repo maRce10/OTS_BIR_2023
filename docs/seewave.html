@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>seewave.knit</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">OTS Bioacoustic Analysis in R 2022</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="program.html">Program</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="r_basics.html">R basics</a>
+    </li>
+    <li>
+      <a href="sound.html">Sound</a>
+    </li>
+    <li>
+      <a href="spectrograms.html">Spectrograms</a>
+    </li>
+    <li>
+      <a href="seewave.html">seewave</a>
+    </li>
+    <li>
+      <a href="annotations.html">Annotations</a>
+    </li>
+    <li>
+      <a href="ohun.html">ohun: automatic detection</a>
+    </li>
+    <li>
+      <a href="intro_to_warbler.html">Intro to warbleR</a>
+    </li>
+    <li>
+      <a href="measure_acoustic_structure.html">Measure acoustic structure</a>
+    </li>
+    <li>
+      <a href="comparing_methods.html">Comparing measuring methods</a>
+    </li>
+    <li>
+      <a href="quality_checks.html">Quality checks</a>
+    </li>
+    <li>
+      <a href="measure_structure_green_hermit.html">Measure structure on XC recordings</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="course_prep.html">Course prep</a>
+</li>
+<li>
+  <a href="instructor.html">Instructor</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><center>
+<font size="7"><b>Seewave</b></font>
+</center></h1>
+<h3 class="subtitle"><center>
+<font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
+</center></h3>
+<h4 class="author"><center>
+<font size="3"><a href="http://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></font>
+</center></h4>
+<h4 class="date"><center>
+“2022-05-19”
+</center></h4>
+
+</div>
+
+
+<p> </p>
+<p><strong>seewave</strong> provides a wide variety of tools to accurately assess sound properties in the R environment. It is an extensive package with lots of features. The package allows to visualize and measure characteristics of time, frequency and amplitude of sounds. The tools are arranged in a modular way (each analysis in its own function) which allows combining them to generate more elaborate analyzes.</p>
+<p>The majority of the functions of <strong>seewave</strong> work on wave objects (but not on audio files in folders). Here we will see examples of some of these tools, focusing on those that are potentially more useful for the study of vocal behavior in animals.</p>
+<p>First we must load the package:</p>
+<pre class="r"><code>library(seewave)</code></pre>
+<p>We can see the description of the package <strong>seewave</strong> in this way:</p>
+<pre class="r"><code>?seewave</code></pre>
+<div id="example-data-in-seewave" class="section level3">
+<h3>Example data in seewave</h3>
+<p><strong>seewave</strong> brings several objects that we can use as an example to explore its functions. We can call them with the <code>data ()</code> function:</p>
+<pre class="r"><code># cargar ejemplos
+data(tico)
+
+data(orni)
+
+data(sheep)</code></pre>
+<p> </p>
+<div class="alert alert-warning">
+<p>⚠ <code>data()</code> only works to load examples that come with the packages by default, not to load your own audio files!!</p>
+</div>
+<p> </p>
+<p>We can see the information of each of them using <code>?</code>:</p>
+<pre class="r"><code>?tico</code></pre>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p>What kind of object is <code>tico</code>?</p>
+<p>What is the sampling rate and duration?</p>
+</div>
+<p> </p>
+</div>
+<div id="oscillograms" class="section level2">
+<h2>Oscillograms</h2>
+<p>You can create the oscillogram of the entire “wave” object like this:</p>
+<pre class="r"><code>oscillo(tico) </code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>We can also generate it for a segment:</p>
+<pre class="r"><code>oscillo(tico, from = 0, to = 1)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>The visualizations in <strong>seewave</strong> allow a high degree of customization. For example change the color:</p>
+<pre class="r"><code>oscillo(tico, from = 0, to = 1, colwave = &quot;blue&quot;)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>As with most <strong>seewave</strong> functions many other components of the chart can be modified, for example:</p>
+<pre class="r"><code># grey background
+op &lt;- par(bg = &quot;grey&quot;)
+
+oscillo(tico, f = 22050, k = 4 , j = 1,
+        title = TRUE,
+        colwave = &quot;black&quot;, 
+        coltitle = &quot;yellow&quot;,
+        collab = &quot;red&quot;,
+        colline = &quot;white&quot;,
+        colaxis = &quot;blue&quot;,
+        coly0 = &quot;grey50&quot;)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p> </p>
+<p>We can also generate other representations of “amplitude vs. time”, such as “amplitude envelopes”:</p>
+<pre class="r"><code>env(tico, f = 22050, colwave = &quot;blue&quot;)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>We can superimpose it on the oscillogram to facilitate comparison:</p>
+<pre class="r"><code>oscillo(tico, f = 22050)
+
+par(new=TRUE)
+
+env(tico, f = 22050, colwave = &quot;blue&quot;)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p> </p>
+<div class="alert alert-success">
+<center>
+<font size="3"><b>Sliding window for time series</b></font>
+</center>
+<p> </p>
+<p>Sliding windows allow you to smooth out the contours of a time series by calculating an average value around the “neighborhood” of values for a given value. In the case of amplitude envelope the size of the “neighborhood” is given by the length of the window (“wl”). The larger the window length, the greater the smoothing of the curve:</p>
+<p> </p>
+<center>
+<img src="images/env_sliding_window_ENG.gif" alt="Sliding window">
+</center>
+<p> </p>
+<p>This animation shows how the amplitude envelope of the “tico” object is smoothed with a 512-point window:</p>
+<p> </p>
+<center>
+<img src="images/env_sliding_window_scheme_ENG512.gif" alt="Sliding window">
+</center>
+<p> </p>
+<p>… or a 1024 point window:</p>
+<p> </p>
+<center>
+<img src="images/env_sliding_window_scheme_ENG1024.gif" alt="Sliding window">
+</center>
+<p> </p>
+</div>
+<p> </p>
+<p>We can use these amplitude “hills” to define segments in the “wave” object using the <code>timer()</code> function. The “ssmooth” argument allows us to use a sliding window:</p>
+<pre class="r"><code>tmr &lt;- timer(orni, f = 22050, threshold = 5, ssmooth = 40, 
+             bty = &quot;l&quot;, colval = &quot;blue&quot;)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code>tmr</code></pre>
+<pre><code>## $s
+## [1] 6.013985e-02 5.918741e-02 5.134111e-02 4.535434e-05 5.728253e-02
+## [6] 4.535434e-05 6.667088e-03 4.535434e-05 4.966300e-02
+## 
+## $p
+##  [1] 2.208756e-02 1.004599e-01 8.272631e-02 2.267717e-04 8.594647e-02
+##  [6] 4.535434e-05 8.132033e-02 4.988977e-04 4.535434e-05 6.068410e-02
+## 
+## $r
+## [1] 0.6552769
+## 
+## $s.start
+## [1] 0.02208756 0.18268727 0.32460099 0.37616887 0.46216069 0.51948857 0.60085425
+## [8] 0.60802024 0.60811095
+## 
+## $s.end
+## [1] 0.08222741 0.24187468 0.37594210 0.37621422 0.51944322 0.51953393 0.60752134
+## [8] 0.60806559 0.65777395
+## 
+## $first
+## [1] &quot;pause&quot;</code></pre>
+<p> </p>
+<p>The output is a list with the following elements:</p>
+<ul>
+<li><strong>s</strong>: duration of detected signals (in s)</li>
+<li><strong>p</strong>: duration of pauses (i.e. gaps) between signals</li>
+<li><strong>r</strong>: ratio of <strong>s</strong> to <strong>r</strong></li>
+<li><strong>s.start</strong>: start of signals</li>
+<li><strong>end</strong>: end of signals</li>
+</ul>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li>In the previous example using <code>timer()</code> the last pulse is divided into 2 detections, one very small at the beginning and another containing the rest of the pulse. Change the “ssmooth” argument until this section is detected as a single pulse.</li>
+</ul>
+</div>
+<p> </p>
+</div>
+<div id="power-spectra" class="section level2">
+<h2>Power Spectra</h2>
+<p>We can visualize the amplitude in the frequency domain using power spectra. The <code>meanspec()</code> function calculates the average distribution of energy in the frequency range (the average power spectrum):</p>
+<pre class="r"><code>mspc &lt;- meanspec(orni, f = 22050, wl = 512, col = &quot;red&quot;)
+
+polygon(rbind(c(0, 0), mspc), col = &quot;red&quot;)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre class="r"><code>nrow(mspc)</code></pre>
+<pre><code>## [1] 256</code></pre>
+<p>The <code>spec()</code> function, on the other hand, calculates the spectrum for the entire signal:</p>
+<pre class="r"><code>spc &lt;- spec(orni, f=22050, wl=512, col = &quot;red&quot;)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>nrow(spc)</code></pre>
+<pre><code>## [1] 7921</code></pre>
+<p>The result of <code>spec()</code> or <code>meanspec()</code> can be input into the <code>fpeaks()</code> function to calculate amplitude peaks:</p>
+<pre class="r"><code>pks &lt;- fpeaks(spc, nmax = 1)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>pks</code></pre>
+<pre><code>##          [,1] [,2]
+## [1,] 4.860409    1</code></pre>
+<p> </p>
+</div>
+<div id="wave-manipulation" class="section level2">
+<h2>Wave manipulation</h2>
+<p>We can cut segments of a “wave” object:</p>
+<pre class="r"><code>tico2 &lt;- cutw(tico, to = 1, output = &quot;Wave&quot;)
+
+oscillo(tico2)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Add segments:</p>
+<pre class="r"><code>tico3 &lt;- pastew(tico, tico2, output = &quot;Wave&quot;)
+
+oscillo(tico3)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre><code>## This took quite a lot of time to display this graphic, you may set &#39;fastdisp=TRUE&#39; for a faster, but less accurate, display</code></pre>
+<p>Remove segments:</p>
+<pre class="r"><code>tico4 &lt;- deletew(tico3, output = &quot;Wave&quot;, from = duration(tico), to = duration(tico3))
+
+oscillo(tico4)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Add segments of silence:</p>
+<pre class="r"><code>tico5 &lt;- addsilw(tico, at = &quot;end&quot;, d = 1, output = &quot;Wave&quot;)
+
+duration(tico)</code></pre>
+<pre><code>## [1] 1.794921</code></pre>
+<pre class="r"><code>duration(tico5)</code></pre>
+<pre><code>## [1] 2.794921</code></pre>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li>The function <code>rev()</code> can reverse te order of a vector:</li>
+</ul>
+<pre class="r"><code>v1 &lt;- c(1, 2, 3)
+
+rev(v1)</code></pre>
+<pre><code>## [1] 3 2 1</code></pre>
+<ul>
+<li>Reverse the amplitude vector of ‘tico’ and generate a spectrogram of the reversed wave object</li>
+</ul>
+</div>
+<p> </p>
+<p>Filter out frequency bands:</p>
+<pre class="r"><code># original
+spectro(tico, scale = FALSE, grid = FALSE, flim = c(2, 6))</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<pre class="r"><code># filtered
+spectro(ffilter(tico, from = 4000, to = 6500, output = &quot;Wave&quot;), scale = FALSE, grid = FALSE, flim = c(2, 6))</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
+<p>Change frequency (pitch):</p>
+<pre class="r"><code># cut the first
+tico6 &lt;- cutw(tico, from = 0, to = 0.5, output = &quot;Wave&quot;)
+
+# increase frec
+tico.lfs &lt;- lfs(tico6, shift = 1000, output = &quot;Wave&quot;)
+
+# decrease frec
+tico.lfs.neg &lt;- lfs(tico6, shift = -1000, output = &quot;Wave&quot;)
+
+# 3 column graph
+opar &lt;- par()
+par(mfrow = c(1, 3))
+
+# original
+spectro(tico6, scale = FALSE, grid = FALSE, flim = c(1, 8), main = &quot;original&quot;)
+
+# modified
+spectro(tico.lfs, scale = FALSE, grid = FALSE, flim = c(1, 8), main = &quot;1 kHz up&quot;)
+
+spectro(tico.lfs.neg, scale = FALSE, grid = FALSE, flim = c(1, 8), main = &quot;1 kHz down&quot;)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<pre class="r"><code>par(opar)</code></pre>
+</div>
+<div id="measurements" class="section level2">
+<h2>Measurements</h2>
+<p> </p>
+<p>Apart from the measurements of peak frequency (<code>fpeaks()</code>) and duration (<code>timer()</code>), we can measure many other aspects of the acoustic signals using <strong>seewave</strong>. For example, we can estimate the fundamental frequency (which refers to the lowest frequency harmonic in the harmonic stack), with the <code>fund()</code> function:</p>
+<pre class="r"><code>spectro(sheep, scale = FALSE, grid = FALSE)
+
+par(new=TRUE)
+
+ff &lt;- fund(sheep, fmax = 300, ann = FALSE, threshold=6, col = &quot;green&quot;)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<pre class="r"><code>head(ff)</code></pre>
+<pre><code>##               x          y
+## [1,] 0.00000000         NA
+## [2,] 0.06677027         NA
+## [3,] 0.13354054         NA
+## [4,] 0.20031081         NA
+## [5,] 0.26708108 0.10000000
+## [6,] 0.33385135 0.07142857</code></pre>
+<p> </p>
+<p>This function uses cepstral transformation to detect the dominant frequency. The <code>autoc()</code> function also measures the fundamental frequency, only using autocorrelation.</p>
+<p>Similarly we can measure the dominant frequency (the harmonic with the highest energy):</p>
+<pre class="r"><code>par(new=TRUE)
+
+df &lt;- dfreq(sheep, f = 8000, fmax = 300, type = &quot;p&quot;, pch = 24, ann = FALSE, threshold = 6, col = &quot;red&quot;)
+
+head(df)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<pre><code>##               x        y
+## [1,] 0.00000000       NA
+## [2,] 0.06677027       NA
+## [3,] 0.13354054       NA
+## [4,] 0.20031081       NA
+## [5,] 0.26708108 0.484375
+## [6,] 0.33385135 0.625000</code></pre>
+<p> </p>
+<p>Measure statistical descriptors of the amplitude distribution in frequency and time:</p>
+<pre class="r"><code># cut
+note2 &lt;- cutw(tico, from=0.6, to=0.9, output=&quot;Wave&quot;)
+
+n2.as &lt;- acoustat(note2)</code></pre>
+<p><img src="seewave_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<pre class="r"><code>as.data.frame(n2.as[3:8])</code></pre>
+<pre><code>##      time.P1    time.M   time.P2  time.IPR  freq.P1   freq.M
+## 1 0.02727273 0.1090909 0.2181818 0.1909091 3.445312 4.263574</code></pre>
+<p> </p>
+<p>Measure statistical descriptors of frequency spectra:</p>
+<pre class="r"><code># measure power spectrum
+n2.sp &lt;- meanspec(note2, plot = FALSE)
+
+n2.spcp &lt;- specprop(n2.sp, f = note2@samp.rate)
+
+as.data.frame(n2.spcp)</code></pre>
+<pre><code>##       mean       sd   median      sem     mode      Q25      Q75      IQR
+## 1 4346.889 694.2615 4306.641 43.39134 4349.707 3789.844 4780.371 990.5273
+##       cent skewness kurtosis      sfm        sh     prec
+## 1 4346.889 2.224789 6.645413 0.023993 0.6968186 43.06641</code></pre>
+<p> </p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li>Measure the statistical descriptors of the frequency spectra (function <code>specprop()</code>) on the 3 notes (hint: you must cut each note first)</li>
+</ul>
+</div>
+<p> </p>
+<hr />
+<p><font size="4">Session information</font></p>
+<pre><code>## R version 4.1.1 (2021-08-10)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 20.04.2 LTS
+## 
+## Matrix products: default
+## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+## 
+## locale:
+##  [1] LC_CTYPE=es_ES.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=es_CR.UTF-8        LC_COLLATE=es_ES.UTF-8    
+##  [5] LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=es_ES.UTF-8   
+##  [7] LC_PAPER=es_CR.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=es_CR.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] seewave_2.2.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] digest_0.6.29   MASS_7.3-54     R6_2.5.1        jsonlite_1.7.2 
+##  [5] signal_0.7-7    magrittr_2.0.2  evaluate_0.15   highr_0.9      
+##  [9] stringi_1.7.6   rlang_1.0.2     cli_3.2.0       rstudioapi_0.13
+## [13] jquerylib_0.1.4 bslib_0.2.5.1   rmarkdown_2.10  tools_4.1.1    
+## [17] tuneR_1.3.3.1   stringr_1.4.0   xfun_0.30       yaml_2.3.5     
+## [21] fastmap_1.1.0   compiler_4.1.1  htmltools_0.5.2 knitr_1.37     
+## [25] sass_0.4.0</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
