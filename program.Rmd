@@ -1,6 +1,8 @@
 ---
 output:
   html_document:
+    highlight: pygments    
+    css: rmd.css
     toc: yes
     toc_depth: 3
     toc_float:

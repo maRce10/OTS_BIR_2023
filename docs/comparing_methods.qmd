@@ -1,0 +1,138 @@
+---
+title: <font size="7"><b>Comparing the performance of methods for measuring acoustic structure</b></font>
+subtitle: <font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
+author: <font size="3"><a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a></font>
+date: "`r Sys.Date()`"
+toc: true
+toc-depth: 2
+toc-location: left
+number-sections: true
+highlight-style: pygments
+format:
+  html:
+    df-print: kable
+    code-fold: show
+    code-tools: true
+    css: qmd.css
+---
+
+Bioacoustic research is based on quantifying the structure of acoustic signals and comparing that structure between different behavioral / social / ecological contexts, groups or species. However, measuring the signal structure in a way that takes into account the most relevant variation in signal structure could be a difficult task. Some of the differences that are evident by visual inspection of spectrograms may not be detected by some analyzes. Therefore, choosing the most appropriate analytical approach is a critical step.
+
+The `compare_methods()` function from **warbleR** attempts to facilitate the selection of the method. This function produces graphics (such as image files in the working directory) with spectrograms of 4 signals at a time, which allow visual inspection of the performance of acoustic analysis methods when comparing those signals. The signals are chosen randomly from the data frame or selection table provided (argument 'X'). The function compares 2 methods at a time. The available methods are:
+
+- Spectrographic cross correlation (using the `cross_correlation()` function)
+- Dynamic time warping (DTW) in time series of dominant (using `freq_DTW()`) and fundamental frequency (using `freq_DTW()`)
+- Spectral parameters (using `spectro_analysis()`)
+- Descriptors of ceptrals coefficients (using `mfcc_stats()`)
+
+The graphs also contain 2 scatter plots (1 for each method) of the acoustic space of all the signals in the input data frame 'X'. The position of the 4 signals in the spectrograms is highlighted in the acoustic space plots. In this way, users can directly assess whether the distances between the signals in the acoustic space accurately represent the spectrographic similarity (i.e. how similar its structure looks on the spectrograms).
+
+## Compare methods in warbleR
+
+This is a brief example of how to use the function using the data files included in the package (and in the examples folder). Simply execute the function by selecting the 2 methods you want to compare. The following code compares spectrographic cross correlation (`XCORR`) and dynamic time warping in the dominant frequency contours (` freq_DTW`). The compared selections are randomly selected from the set of selections in the input data frame. The argument 'n' defines the number of comparisons (that is, graphs) that must be created:
+
+```{r, echo=FALSE}
+
+warbleR::warbleR_options(wav.path = "./examples", flim = c(0, 10), bp = c(0, 10), wl = 300, n = 5)
+
+```
+
+
+```{r, eval = F}
+
+library(warbleR)
+
+data("lbh_selec_table")
+
+# global parameters
+warbleR_options(wav.path = "./examples", flim = c(0, 10), bp = c(0, 10), wl = 300, n = 12)
+
+compare_methods(X = lbh_selec_table, methods = c("XCORR", "dfDTW"))
+
+```
+&nbsp; 
+
+It must produce 12 image files (in the working directory) that look like this one:
+
+![](images/comp.meth1.png)
+
+&nbsp;
+
+Looking at several iterations of the comparison, you can have a better idea of which method works best for the signals being analyzed:
+
+&nbsp;
+
+![](images/compare.methods.1.gif)
+
+&nbsp;
+
+The distance of the acoustic pair between the signals is shown next to the arrows that link them. The font color of a distance value corresponds to the font color of the method that generated it, as shown in the scatter diagrams (in this case, the black font represents the XCORR distances). The distances are standardized, being 0 the distance of a signal to itself and 1 the distance in pairs farthest in the set of signals. The principal component analysis (function `prcomp()`) is applied to calculate distances when spectral parameters (SP) are used. In that case the first 2 components are used. Classic multidimensional scaling, also known as principal coordinate analysis, function `cmdscale()`) is used for all other methods. The file name contains the methods that are compared and the row number of the selections. This function internally uses a modified version of the `spectro()` function of the **seewave** package to create spectrograms. Note that all spectrograms are plotted with the same frequency and time scale.
+
+```{r, eval = F}
+
+compare_methods(X = lbh_selec_table, methods = c("XCORR", "SP"))
+
+```
+
+![](images/comp.meth3.png)
+
+&nbsp;
+
+<div class = "alert alert-info">
+
+<font size="5">Exercise</font> 
+
+&nbsp;
+
+- Use the `compare_methods()` function to compare the following methods:
+    
+    - descriptors of cepstral coefficients ("MFCC") vs cross-correlation ("XCORR")
+    - dynamic time warping on dominant frequency contours ("dfDTW"), spectrographic parameters ("SP")
+    
+&nbsp;
+
+- Which method better represents the variation in signal structure for each comparison?
+
+- Compare the best methods from the two comparison above
+
+</div>
+
+&nbsp;
+
+## Compare custom measurements
+
+Alternatively, you can provide your own data. This could be useful to eliminate unwanted parameters or to enter parameters obtained with other programs (for example, from Raven). To do this, enter your data with the argument `custom1`. The following example 1) calculate the spectral parameters with the `spectro_analysis()` function, 2) select only the first 7 columns of the output, and 3) enter this data in `compare_methods()`:
+
+```{r, eval = F}
+
+# measure parameters
+Y <- spectro_analysis(lbh_selec_table)
+
+# selec a subset
+Y <- Y[, 1:7]
+
+# PCA
+Y <- prcomp(Y[, 3:ncol(Y)])$x
+
+# add sound files and selec columns
+Y <- data.frame(lbh_selec_table[, c(1, 3)], Y[, 1:2])
+
+compare_methods(X = lbh_selec_table, methods = c("dfDTW"), custom1 = Y)
+
+```
+
+![](images/comp.meth4.png)
+
+&nbsp; 
+
+Note that there is also a `custom2` argument for entering another custom data. The function has many other arguments for specifying methods (for example bandpass, overlap) and spectrogram settings (margin, grid, frequency limits, etc).
+
+---
+
+<font size="4">Session information</font>
+
+```{r session info, echo=F}
+
+sessionInfo()
+
+```

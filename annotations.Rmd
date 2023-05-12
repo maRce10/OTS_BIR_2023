@@ -1,7 +1,7 @@
 ---
 title: <center><font size="7"><b>Import annotations into R</b></font></center>
 subtitle: <center><font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font></center>
-author: <center><font size="3"><a href="http://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></font></center>
+author: <center><font size="3"><a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a></font></center>
 date: <center>"`r Sys.Date()`"</center>
 output:
   html_document:

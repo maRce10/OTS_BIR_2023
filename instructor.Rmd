@@ -1,5 +1,8 @@
 ---
-title: <center>Marcelo Araya-Salas</center>
+title: Marcelo Araya-Salas
+output:
+  html_document:
+    css: rmd.css
 ---
 
 <center><img src="images/me.png" alt = "me" width="700" height="100%"></center>

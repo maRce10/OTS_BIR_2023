@@ -1,3 +1,11 @@
+---
+output:
+  html_document:
+    highlight: pygments    
+    css: rmd.css
+---
+
+
 &nbsp; 
 
 ```{r, echo= FALSE}
@@ -91,9 +99,10 @@ http://sox.sourceforge.net/
 
   - Set aside a physical space, hopefully as isolated as possible from external stimuli
   - Use headphones/earphones to avoid any interference from echoes or external noises
+  - Ideally, read the materials ahead of time (I know! it's time comsuming)
   - Make sure you have anything you need before the start of the class
   - Be ready a few minutes before the start of the class
-  - Try to focus as much as possible in the course, close other programs or unnecessary internet browser tabs (i.e. facebook, twitter, etc). This will also make the computer more efficient (less likely to get slow)
+  - Try to focus as much as possible in the course, close other programs or unnecessary internet browser tabs (i.e. instagram, twitter, etc). This will also make the computer more efficient (less likely to get slow)
   - Comment your code
 
 </div>

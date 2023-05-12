@@ -1,8 +1,8 @@
 ---
 title: <font size="7"><b>Quality checks for recordings and annotations</b></font>
-subtitle: <center><font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font></center>
-author: <center><font size="3"><a href="http://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></font></center>
-date: <center>"`r Sys.Date()`"</center>
+subtitle: <font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
+author: <font size="3"><a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a></font>
+date: "`r Sys.Date()`"
 output:
   html_document:
     toc: yes
@@ -50,7 +50,7 @@ warbleR_options(wav.path = "./examples", ovlp = 90)
 
 list.files(path = "./examples/mp3")
 
-mp32wav(path = "./examples/mp3")
+mp32wav(path = "./examples/mp3",  dest.path = "./examples/mp3")
 
 list.files(path = "./examples/mp3")
 
@@ -63,7 +63,7 @@ unlink(list.files(path = "./examples/mp3", pattern = "\\.wav$", ignore.case = TR
   
 list.files(path = "./examples/mp3")
 
-mp32wav(path = "./examples/mp3")
+mp32wav(path = "./examples/mp3", overwrite = TRUE, dest.path = "./examples/mp3")
 
 list.files(path = "./examples/mp3")
 
@@ -74,7 +74,7 @@ We can also modify the sampling rate and/or dynamic range with `mp32wav()`:
 
 ```{r , eval = FALSE}
 
-mp32wav(path = "./examples/mp3", samp.rate = 48, bit.depth = 24, overwrite = TRUE)
+mp32wav(path = "./examples/mp3", samp.rate = 48, bit.depth = 24, overwrite = TRUE, dest.path = "./examples/mp3")
 
 list.files(path = "./examples/mp3")
 
@@ -109,7 +109,7 @@ Alternatively, we can use the `fix_wavs()` function to homogenize the sampling r
 
 ```{r, eval = F}
 
-mp32wav(path = "./examples/mp3", overwrite = TRUE)
+mp32wav(path = "./examples/mp3", overwrite = TRUE, dest.path = "./examples/mp3"
 
 info_sound_files(path = "./examples/mp3")
 
@@ -117,7 +117,7 @@ info_sound_files(path = "./examples/mp3")
 
 ```{r, echo = F}
 
-mp32wav(path = "./examples/mp3", overwrite = TRUE)
+mp32wav(path = "./examples/mp3", overwrite = TRUE, dest.path = "./examples/mp3")
 
 wi <- info_sound_files(path = "./examples/mp3")
 

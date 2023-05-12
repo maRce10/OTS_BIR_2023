@@ -1,0 +1,563 @@
+---
+title: <font size="7"><b>Quality checks for recordings and annotations</b></font>
+subtitle: <font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
+author: <font size="3"><a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a></font>
+date: "`r Sys.Date()`"
+toc: true
+toc-depth: 2
+toc-location: left
+number-sections: true
+highlight-style: pygments
+format:
+  html:
+    df-print: kable
+    code-fold: show
+    code-tools: true
+    css: qmd.css
+---
+
+
+```{r, echo = FALSE}
+library(knitr)
+# options to customize chunk outputs
+knitr::opts_chunk$set(
+  class.source = "numberLines lineAnchors", # for code line numbers
+  tidy.opts = list(width.cutoff = 65), 
+  tidy = TRUE,
+  message = FALSE,
+  warning = FALSE
+ )
+
+```
+
+&nbsp; 
+
+When working with sound files obtained from various sources it is common to have variation in recording formats and parameters or even find corrupt files. Similarly, when a large number of annotations are used, it is normal to find errors in some of them. These problems may prevent the use of acoustic analysis in **warbleR**. Luckily, the package also offers functions to facilitate the detection and correction of errors in sound files and annotations.
+
+## Convert .mp3 to .wav
+
+The `mp32wav()` function allows you to convert files in '.mp3' format to '.wav' format. This function converts all the 'mp3' files in the working directory. Let's use the files in the './examples/mp3' folder as an example:
+
+```{r clean session, echo=F, warning=FALSE, message=FALSE}
+
+# rm(list = ls())
+
+# unload all non-based packages
+out <- sapply(paste('package:', names(sessionInfo()$otherPkgs), sep = ""), function(x) try(detach(x, unload = FALSE, character.only = TRUE), silent = T))
+
+knitr::opts_chunk$set(dpi = 60)
+
+library(warbleR)
+
+library(kableExtra)
+
+mp3.pth <- "./examples/mp3/"
+
+warbleR_options(wav.path = "./examples", flim = c(1, 10), wl = 220, ovlp = 90, pb = FALSE)
+
+```
+
+
+```{r , eval = FALSE}
+
+warbleR_options(wav.path = "./examples", ovlp = 90)
+
+list.files(path = "./examples/mp3", pattern = "mp3$")
+
+mp32wav(path = "./examples/mp3",  dest.path = "./examples/mp3")
+
+list.files(path = "./examples/mp3", pattern = "mp3$|wav$")
+
+```
+
+
+```{r, echo = FALSE}
+
+unlink(list.files(path = "./examples/mp3", pattern = "\\.wav$", ignore.case = TRUE, full.names = TRUE))
+  
+list.files(path = "./examples/mp3",  pattern = "mp3$")
+
+mp32wav(path = "./examples/mp3", overwrite = TRUE, dest.path = "./examples/mp3")
+
+list.files(path = "./examples/mp3",  pattern = "mp3$|wav$")
+
+```
+&nbsp; 
+
+We can also modify the sampling rate and/or dynamic range with `mp32wav()`:
+
+```{r , eval = FALSE}
+
+mp32wav(path = "./examples/mp3", samp.rate = 48, bit.depth = 24, overwrite = TRUE, dest.path = "./examples/mp3")
+
+list.files(path = "./examples/mp3")
+
+```
+&nbsp; 
+
+We can check the properties of the '.wav' sound files using the `info_sound_files()` function:
+
+```{r, eval = FALSE}
+
+info_sound_files(path = "./examples/mp3")
+
+```
+
+```{r, echo = FALSE, message=FALSE}
+
+wi <- info_sound_files(path = mp3.pth)
+
+kbl <- kable(wi, align = "c", row.names = F,  format = "html", escape = F)
+
+kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+
+kbl
+
+```
+&nbsp; 
+
+
+## Homogenize recordings
+
+Alternatively, we can use the `fix_wavs()` function to homogenize the sampling rate, the dynamic interval and the number of channels. It is adviced that all sound files should have the same recording parameters before any acoustic analysis. In the example '.mp3' files, not all of them have been recorded with the same parameters. We can see this if we convert them back to '.wav' and see their properties:
+
+```{r, eval = F}
+
+mp32wav(path = "./examples/mp3", overwrite = TRUE, dest.path = "./examples/mp3"
+
+info_sound_files(path = "./examples/mp3")
+
+```
+
+```{r, echo = F}
+
+mp32wav(path = "./examples/mp3", overwrite = TRUE, dest.path = "./examples/mp3")
+
+wi <- info_sound_files(path = "./examples/mp3")
+
+kbl <- kable(wi, align = "c", row.names = F,  format = "html", escape = F)
+
+kbl <-  column_spec(kbl, 3, background = "#ccebff")
+
+kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+
+kbl
+
+```
+&nbsp; 
+
+The `fix_wavs()` function will convert all files to the same sampling rate and dynamic range:
+
+```{r ,eval = FALSE}
+
+fix_wavs(path = mp3.pth, samp.rate = 44.1, bit.depth = 24)
+
+info_sound_files(path = "./examples/mp3/converted_sound_files")
+
+```
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, eval = FALSE}
+fix_wavs(samp.rate = 44.1, bit.depth = 24, path = "./examples/mp3")
+
+wi <- info_sound_files(path = "./examples/mp3/converted_sound_files/")
+
+# unlink(list.files(path = "./examples/mp3", pattern = "\\.wav$", ignore.case = TRUE))
+```
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+kbl <- kable(wi, align = "c", row.names = F,  format = "html", escape = F)
+
+kbl <-  column_spec(kbl, c(3, 5), background = "#ccebff")
+
+kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+
+kbl
+
+
+```
+
+Another useful function to check file properties is `wav_dur()`. This function returns the duration in seconds of each '.wav' file.
+
+&nbsp;
+
+## Check recordings
+
+`check_sound_files()` should be the first function that should be used before running any **warbleR** analysis. The function simply checks if the sound files in '.wav' format in the working directory can be read in R. For example, the following code checks all the files in the 'examples' folder, which should detect the 'corrupted_file.wav':
+
+```{r, eval = FALSE}
+
+check_sound_files()
+
+```
+
+```{r, echo = FALSE}
+
+check_sound_files()
+
+```
+
+If we remove that file from the folder, the function returns the following message:
+
+```{r, eval = FALSE}
+
+check_sound_files()
+
+```
+
+```{r, echo = FALSE}
+
+#cortar 
+a <- file.copy(file.path(.Options$warbleR$path, "corrupted_file.wav"), file.path(tempdir(), "corrupted_file.wav"))
+
+unlink(file.path(.Options$warbleR$path, "corrupted_file.wav"))
+
+#check
+check_sound_files()
+
+# cortar
+a <- file.copy(file.path(tempdir(), "corrupted_file.wav"), file.path(.Options$warbleR$path, "corrupted_file.wav"))
+
+```
+
+&nbsp;
+
+
+## Spectrograph settings
+
+The parameters that determine the appearance of spectrograms (and power spectra and periodgrams) also have an effect on the measurements taken on them. Therefore it is necessary to use the same parameters to analyze all the signals in a project (except with some exceptions) so that the measurements are comparable. The visualization of spectrograms generated with different spectrographic parameters is a useful way of defining the combination of parameters with which the structure of the signals is distinguished in more detail. The function `tweak_spectro()` aims to simplify the selection of parameters through the display of spectrograms. The function plots, for a single selection, a mosaic of spectrograms with different display parameters. For numerical arguments, the upper and lower limits of a range can be provided. The following parameters may have variable values:
+
+- **wl**: window length (numerical range)
+- **ovlp**: overlap (numerical range)
+- **collev.min**: minimum amplitude value for color levels (numerical range)
+- **wn**: window function name (character)
+- **pal**: palette (character)
+
+The following code generates an image with spectrograms that vary in window size and window function (the rest of the parameters are passed to the `catalog ()` function internally to create the mosaic):
+
+```{r, eval = FALSE}
+
+tweak_spectro(X = lbh_selec_table,  wl = c(100, 1000),  wn = c("hanning", "hamming", "rectangle"), 
+           length.out = 16, nrow = 8, ncol = 6, width = 15, height = 20,
+           rm.axes = TRUE, cex = 1, box = F)
+
+```
+
+<img src="images/spec_param1.jpeg" alt="viewSpec" width="780">
+
+&nbsp; 
+
+
+Note that the `length.out` argument defines the number of values to interpolate within the numerical ranges. `wl = 220` seems to produce clearer spectrograms.
+
+We can add a color palette to differentiate the levels of one of the parameters, for example 'wn':
+
+```{r, eval = FALSE}
+
+#install.packages("RColorBrewer")
+
+library(RColorBrewer)
+
+# crear paleta
+cmc <- function(n) if(n > 5) rep(adjustcolor(brewer.pal(5, "Spectral"), alpha.f = 0.6), ceiling(n/4))[1:n] else adjustcolor(brewer.pal(n, "Spectral"), alpha.f = 0.6)
+
+tweak_spectro(X = lbh_selec_table,  wl = c(100, 1000),  wn = c("hanning", "hamming", "rectangle"), 
+           length.out = 16, nrow = 8, ncol = 6, width = 15, height = 20, 
+           rm.axes = TRUE, cex = 1, box = F,  group.tag = "wn",  
+           tag.pal = list(cmc))
+
+```
+
+<img src="images/spec_param3.jpeg" alt="viewSpec" width="780">
+
+&nbsp; 
+
+We can also use it to choose the color palette and the minimum amplitude for plotting ('collev.min'):
+
+```{r, eval = FALSE}
+
+tweak_spectro(X = lbh_selec_table,  wl = 220,  collev.min = c(-20, -100), pal = c("reverse.gray.colors.2", "reverse.topo.colors",  "reverse.terrain.colors"), length.out = 16, nrow = 8, ncol = 6, width = 15, height = 20, rm.axes = TRUE, cex = 1, box = F,  group.tag = "pal",  tag.pal = list(cmc))
+
+```
+
+<img src="images/spec_param2.jpeg" alt="viewSpec" width="780">
+
+&nbsp; 
+
+## Double-check selections
+
+The main function to double-check selection tables is `check_sels()`. This function checks a large number of possible errors in the selection information:
+
+- 'X' is an object of the class 'data.frame' or 'selection_table' (see selection_table) and contains the columns required to be used in any warbleR function ('sound.files', 'selec', 'start' , 'end', if it does not return an error)
+- 'sound.files' in 'X' corresponds to the .wav files in the working directory or in the provided 'path' (if no file is found it returns an error, if some files are not found it returns error information in the output data frame)
+- the time limit parameters ('start', 'end') and frequency ('bottom.freq', 'top.freq', if provided) are numeric and do not contain NA (if they do not return an error)
+- There are no duplicate selection tags ('selec') within a sound file (if it does not return an error)
+- sound files can be read (error information in the output data frame)
+- The start and end time of the selections is within the duration of the sound files (error information in the output data frame)
+- Sound files can be read (error information in the output data frame)
+- The header (header) of the sound files is not damaged (only if the header = TRUE, error information in the selection table with results)
+- 'top.freq' is less than half of the sampling frequency (nyquist frequency, error information in the data table with results)
+- Negative values are not found in the time or frequency limit parameters (error information in the data table with results)
+- 'start' higher than 'end' or 'bottom.freq' higher than 'top.freq' (error information in the output data frame)
+- The value of 'channel' is not greater than the number of channels in the sound files (error information in the output data frame)
+
+```{r}
+
+cs <- check_sels(lbh_selec_table)
+
+```
+&nbsp; 
+
+The function returns a data frame that includes the information in 'X' plus additional columns about the format of the sound files, as well as the result of the checks (column 'check.res'):
+
+```{r, eval = FALSE}
+
+cs
+
+```
+
+```{r, echo = FALSE}
+
+kbl <- kable(cs, align = "c", row.names = F,  format = "html", escape = F)
+
+kbl <-  column_spec(kbl, 10, background = "#ccebff")
+
+kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+
+scroll_box(kbl, width = "808px",
+box_css = "border: 1px solid #ddd; padding: 5px; ", extra_css = NULL)
+
+
+```
+&nbsp; 
+
+
+Let's modified a selection table to see how the function works:
+
+```{r, eval = FALSE}
+
+# copiar las primeras 6 filas
+st2 <- lbh_selec_table[1:6, ]
+
+# hacer caracter 
+st2$sound.files <- as.character(st2$sound.files)
+
+# cambiar nombre de archivo de sonido en sel 1
+st2$sound.files[1] <- "aaa.wav"
+
+# modificar fin en sel 3
+st2$end[3] <- 100
+
+# hacer top.freq igual q bottom freq en sel 3
+st2$top.freq[3] <- st2$bottom.freq[3]
+
+# modificar top freq en sel 5
+st2$top.freq[5] <- 200
+
+# modificar channes en sel 6
+st2$channel[6] <- 3
+
+#revisar
+cs <- check_sels(st2)
+
+cs[, c(1:7, 10)]
+```
+
+```{r, echo = FALSE}
+
+# copiar las primeras 6 filas
+st2 <- lbh_selec_table[1:6, ]
+
+# hacer caracter 
+st2$sound.files <- as.character(st2$sound.files)
+
+# cambiar nombre de archivo de sonido en sel 1
+st2$sound.files[1] <- "aaa.wav"
+
+# modificar fin en sel 3
+st2$end[3] <- 100
+
+# hacer top.freq igual q bottom freq en sel 3
+st2$top.freq[3] <- st2$bottom.freq[3]
+
+# modificar top freq en sel 5
+st2$top.freq[5] <- 200
+
+# modificar channes en sel 6
+st2$channel[6] <- 3
+
+#revisar
+cs <- check_sels(st2)
+
+
+```
+
+```{r, echo = FALSE}
+
+kbl <- kable(cs[, c(1:7, 10)], align = "c", row.names = F,  format = "html", escape = F)
+
+kbl <-  column_spec(kbl, 8, background = "#ccebff")
+
+kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+
+kbl
+
+```
+&nbsp; 
+
+`check_sels()` is used internally when creating selection tables and extended selection tables.
+
+&nbsp;
+
+### Visual inspection of spectrograms
+
+Once the information in the selections has been verified, the next step is to ensure that the selections contain accurate information about the location of the signals of interest. This can be done by creating spectrograms of all selections. For this we have several options. The first is `spectrograms()` (previously called `specreator()`) which generates (by default) a spectrogram for each selection. We can run it on the sample data like this:
+
+```{r, eval = FALSE}
+
+# using default parameters tweak_spectro()
+warbleR_options(wav.path = "./examples", wl = 220, wn = "hanning", ovlp = 90, pal = reverse.topo.colors)
+
+spectrograms(lbh_selec_table, collevels = seq(-100, 0, 5))
+
+```
+
+```{r, eval = FALSE, echo = FALSE}
+
+# using default parameters tweak_spectro()
+warbleR_options(wav.path = "~/Dropbox/Workshops/Bioacoustics/Taller Bioacoustics Arequipa 2019/Taller 2/ejemplos", wl = 220, wn = "hanning", ovlp = 90, pal = reverse.topo.colors)
+
+spectrograms(lbh_selec_table, collevels = seq(-100, 0, 5))
+
+```
+&nbsp; 
+
+The images it produces are saved in the working directory and look like this:
+
+<img src="images/spectrograms2.gif" alt="viewSpec" width="400">
+
+&nbsp; 
+
+<div class="alert alert-info">
+
+<font size="5">Exercise</font> 
+
+&nbsp;
+
+- Have the label shown on the selection display the data in the 'sel.comment' column of the sample selection box using the `sel.labels` argument
+
+</div>
+
+&nbsp;
+ 
+### Full spectrograms
+
+We can create spectrograms for the whole sound files using `full_spectrograms()`. If the `X` argument is not given, the function will create the spectrograms for all the files in the working directory. Otherwise, the function generates spectrograms for sound files in `X` and highlights selections with transparent rectangles similar to those of` spectrograms()`. In this example we download a recording from a striped-throated hermit (*Phaethornis striigularis*) from Xeno-Canto:
+
+
+```{r, eval = FALSE}
+
+# load package with color palettes
+library(viridis)
+
+# create directory
+dir.create("./examples/hermit")
+
+# download sound file
+phae.stri <- query_xc(qword = "nr:154074", download = TRUE, path = "./examples/hermit")
+
+# Convert mp3 to wav format
+mp32wav(path = "./examples/hermit/", pb = FALSE)
+
+# plot full spec
+full_spectrograms(sxrow = 1, rows = 10, pal = magma,  wl = 200, flim = c(3, 10),
+          collevels = seq(-140, 0, 5), path = "./examples/hermit/")
+
+```
+
+<img src="images/fullspec_hermit.gif" alt="hermit" width="700">
+
+&nbsp;
+
+## Catalogs
+
+Catalogs allow you to inspect selections of many recordings in the same image and group them by categories. This makes it easier to verify the consistency of the categories. Many of the arguments are shared with `tweak_spectro()` (`catalog()` is used internally in `tweak_spectro()`). We can generate a catalog with color tags to identify selections from the same sound file as follows:
+
+```{r, eval = FALSE}
+
+# read bat inquiry data
+inq <- readRDS(file = "ext_sel_tab_inquiry.RDS")
+
+catalog(X = inq[1:100, ], flim = c(10, 50), nrow = 10, ncol = 10, 
+        same.time.scale = T, mar = 0.01, gr = FALSE, img.suffix = "inquiry",
+        labels = c("sound.files", "selec"), legend = 0, rm.axes = TRUE, 
+        box = F,  group.tag = "sound.files",  tag.pal = list(magma), 
+        width = 20, height = 20, pal = viridis, collevels = seq(-100, 0, 5))
+
+```
+
+<img src="images/Catalog_p1-inquiry.jpeg" alt="viewSpec" width="680">
+
+&nbsp; 
+
+<div class="alert alert-info">
+
+<font size="5">Exercise</font> 
+
+&nbsp;
+
+- Using the 'lbh_selec_table' data, create a catalog with selections color-tagged by song type
+
+</div>
+
+&nbsp;
+
+
+## Tailoring selections
+
+The position of the selections in the sound file (i.e. its 'coordinates' of time and frequency) can be modified interactively from R using the `sel_tailor()` function. This function produces a graphic window showing spectrograms and a series of 'buttons' that allow you to modify the view and move forward in the selection table:
+
+```{r, eval=F}
+
+tailor_sels(X = lbh_selec_table[1:4, ], auto.next = TRUE)
+
+```
+
+<img src = "images/seltailor.contour.gif" alt = "expraven1" width = "820">
+
+&nbsp; 
+
+The function returns the corrected data as a data frame in R and also saves a '.csv' file in the directory where the sound files are located.
+
+`sel_tailor()` can also be used to modify frequency contours such as those produced by the `dfDTW()` or `ffDTW()` function:
+
+```{r, eval=FALSE}
+
+cntours <- freq_ts(X = lbh_selec_table[1:5, ])
+
+tail.cntours <-tailor_sels(X = lbh_selec_table[1:5, ], ts.df = cntours, 
+                auto.contour = TRUE)
+```
+
+<img src = "images/seltailor.contour.gif" alt = "expraven1" width = "820">
+
+&nbsp;
+
+---
+
+
+## References
+
+1. Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal acoustic signals. Methods Ecol Evol 8:184–191.
+
+&nbsp; 
+
+---
+
+<font size="4">Session information</font>
+
+```{r session info, echo=F}
+
+sessionInfo()
+
+```
