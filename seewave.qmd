@@ -1,8 +1,5 @@
 ---
 title: <font size="7"><b>Seewave</b></font>
-subtitle: <font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
-author: <font size="3"><a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a></font>
-date: "`r Sys.Date()`"
 toc: true
 toc-depth: 2
 toc-location: left
@@ -14,14 +11,18 @@ format:
     code-fold: show
     code-tools: true
     css: qmd.css
+    link-external-icon: true
+    link-external-newwindow: true  
 ---
 
+ 
 
 **seewave** provides a wide variety of tools to accurately assess sound properties in the R environment. It is an extensive package with lots of features. The package allows to visualize and measure characteristics of time, frequency and amplitude of sounds. The tools are arranged in a modular way (each analysis in its own function) which allows combining them to generate more elaborate analyzes.
 
 The majority of the functions of **seewave** work on wave objects (but not on audio files in folders). Here we will see examples of some of these tools, focusing on those that are potentially more useful for the study of vocal behavior in animals.
 
 First we must load the package:
+
 ```{r}
 
 library(seewave)
@@ -29,16 +30,17 @@ library(seewave)
 ```
 
 We can see the description of the package **seewave** in this way:
+
 ```{r, eval = FALSE}
 
 ?seewave
 
 ```
 
-
 ### Example data in seewave
 
 **seewave** brings several objects that we can use as an example to explore its functions. We can call them with the `data ()` function:
+
 ```{r, echo=TRUE}
 
 # cargar ejemplos
@@ -49,14 +51,13 @@ data(orni)
 data(sheep)
 ```
 
-&nbsp; 
+ 
 
-<div class="alert alert-warning">
+::: {.alert .alert-warning}
+⚠ `data()` only works to load examples that come with the packages by default, not to load your own audio files!!
+:::
 
-&#9888; `data()` only works to load examples that come with the packages by default, not to load your own audio files!!
-</div>
-
-&nbsp; 
+ 
 
 We can see the information of each of them using `?`:
 
@@ -66,25 +67,22 @@ We can see the information of each of them using `?`:
 
 ```
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
-
-<font size="5">Exercise</font> 
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
 What kind of object is `tico`?
 
 What is the sampling rate and duration?
+:::
 
-
-</div>
-
-&nbsp; 
-
+ 
 
 ## Oscillograms
 
 You can create the oscillogram of the entire "wave" object like this:
+
 ```{r}
 
 oscillo(tico) 
@@ -92,14 +90,15 @@ oscillo(tico)
 ```
 
 We can also generate it for a segment:
+
 ```{r}
 
 oscillo(tico, from = 0, to = 1)
 
 ```
 
-
 The visualizations in **seewave** allow a high degree of customization. For example change the color:
+
 ```{r}
 
 oscillo(tico, from = 0, to = 1, colwave = "blue")
@@ -107,6 +106,7 @@ oscillo(tico, from = 0, to = 1, colwave = "blue")
 ```
 
 As with most **seewave** functions many other components of the chart can be modified, for example:
+
 ```{r}
 
 # grey background
@@ -123,7 +123,7 @@ oscillo(tico, f = 22050, k = 4 , j = 1,
 
 ```
 
-&nbsp; 
+ 
 
 We can also generate other representations of "amplitude vs. time", such as "amplitude envelopes":
 
@@ -144,7 +144,6 @@ par(new=TRUE)
 env(tico, f = 22050, colwave = "blue")
 
 ```
-
 
 ```{r animation sliding window, eval = F, echo = FALSE}
 
@@ -194,42 +193,39 @@ movie.name =  paste0("env_sliding_window_scheme_ENG", wl, ".gif"), interval = 0.
 
 ```
 
-&nbsp; 
+ 
 
-<div class="alert alert-success">
-
+::: {.alert .alert-success}
 <font size="3"><b>Sliding window for time series</b></font>
 
-&nbsp; 
+ 
 
 Sliding windows allow you to smooth out the contours of a time series by calculating an average value around the "neighborhood" of values for a given value. In the case of amplitude envelope the size of the "neighborhood" is given by the length of the window ("wl"). The larger the window length, the greater the smoothing of the curve:
 
-&nbsp; 
+ 
 
- <img src="images/env_sliding_window_ENG.gif" alt="Sliding window"> 
+<img src="images/env_sliding_window_ENG.gif" alt="Sliding window"/>
 
-&nbsp; 
+ 
 
 This animation shows how the amplitude envelope of the "tico" object is smoothed with a 512-point window:
 
-&nbsp; 
+ 
 
- <img src="images/env_sliding_window_scheme_ENG512.gif" alt="Sliding window"> 
+<img src="images/env_sliding_window_scheme_ENG512.gif" alt="Sliding window"/>
 
-&nbsp; 
+ 
 
 ... or a 1024 point window:
 
-&nbsp; 
+ 
 
- <img src="images/env_sliding_window_scheme_ENG1024.gif" alt="Sliding window"> 
+<img src="images/env_sliding_window_scheme_ENG1024.gif" alt="Sliding window"/>
 
-&nbsp; 
+ 
+:::
 
-</div>
-
-
-&nbsp; 
+ 
 
 We can use these amplitude "hills" to define segments in the "wave" object using the `timer()` function. The "ssmooth" argument allows us to use a sliding window:
 
@@ -241,29 +237,25 @@ tmr <- timer(orni, f = 22050, threshold = 5, ssmooth = 40,
 tmr
 ```
 
-&nbsp; 
+ 
 
 The output is a list with the following elements:
 
-- **s**: duration of detected signals (in s)
-- **p**: duration of pauses (i.e. gaps) between signals
-- **r**: ratio of **s** to **r** 
-- **s.start**: start of signals
-- **end**: end of signals 
+-   **s**: duration of detected signals (in s)
+-   **p**: duration of pauses (i.e. gaps) between signals
+-   **r**: ratio of **s** to **r**
+-   **s.start**: start of signals
+-   **end**: end of signals
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+-   In the previous example using `timer()` the last pulse is divided into 2 detections, one very small at the beginning and another containing the rest of the pulse. Change the "ssmooth" argument until this section is detected as a single pulse.
+:::
 
-- In the previous example using `timer()` the last pulse is divided into 2 detections, one very small at the beginning and another containing the rest of the pulse. Change the "ssmooth" argument until this section is detected as a single pulse.
-
-
-</div>
-
-&nbsp; 
-
+ 
 
 ## Power Spectra
 
@@ -279,7 +271,6 @@ nrow(mspc)
 
 ```
 
-
 The `spec()` function, on the other hand, calculates the spectrum for the entire signal:
 
 ```{r, eval = TRUE, echo = TRUE}
@@ -289,7 +280,6 @@ spc <- spec(orni, f=22050, wl=512, col = "red")
 nrow(spc)
 
 ```
-
 
 The result of `spec()` or `meanspec()` can be input into the `fpeaks()` function to calculate amplitude peaks:
 
@@ -301,8 +291,7 @@ pks
 
 ```
 
-&nbsp; 
-
+ 
 
 ## Wave manipulation
 
@@ -326,7 +315,6 @@ oscillo(tico3)
 
 ```
 
-
 Remove segments:
 
 ```{r, eval = TRUE, echo = TRUE, warning = FALSE}
@@ -336,7 +324,6 @@ tico4 <- deletew(tico3, output = "Wave", from = duration(tico), to = duration(ti
 oscillo(tico4)
 
 ```
-
 
 Add segments of silence:
 
@@ -349,14 +336,12 @@ duration(tico5)
 
 ```
 
+ 
 
-&nbsp; 
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<div class="alert alert-info">
-
-<font size="5">Exercise</font> 
-
-- The function `rev()` can reverse te order of a vector:
+-   The function `rev()` can reverse te order of a vector:
 
 ```{r}
 
@@ -366,13 +351,10 @@ rev(v1)
 
 ```
 
-- Reverse the amplitude vector of 'tico' and generate a spectrogram of the reversed wave object 
+-   Reverse the amplitude vector of 'tico' and generate a spectrogram of the reversed wave object
+:::
 
-</div>
-
-&nbsp; 
-
-
+ 
 
 Filter out frequency bands:
 
@@ -415,10 +397,9 @@ par(opar)
 
 ```
 
-
 ## Measurements
 
-&nbsp; 
+ 
 
 Apart from the measurements of peak frequency (`fpeaks()`) and duration (`timer()`), we can measure many other aspects of the acoustic signals using **seewave**. For example, we can estimate the fundamental frequency (which refers to the lowest frequency harmonic in the harmonic stack), with the `fund()` function:
 
@@ -434,7 +415,7 @@ head(ff)
 
 ```
 
-&nbsp; 
+ 
 
 This function uses cepstral transformation to detect the dominant frequency. The `autoc()` function also measures the fundamental frequency, only using autocorrelation.
 
@@ -465,7 +446,7 @@ df <- dfreq(sheep, fmax = 300, type = "p", pch = 24, ann = FALSE, threshold = 6,
 head(df)
 ```
 
-&nbsp; 
+ 
 
 Measure statistical descriptors of the amplitude distribution in frequency and time:
 
@@ -480,7 +461,7 @@ as.data.frame(n2.as[3:8])
 
 ```
 
-&nbsp; 
+ 
 
 Measure statistical descriptors of frequency spectra:
 
@@ -495,21 +476,17 @@ as.data.frame(n2.spcp)
 
 ```
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+-   Measure the statistical descriptors of the frequency spectra (function `specprop()`) on the 3 notes (hint: you must cut each note first)
+:::
 
+ 
 
-- Measure the statistical descriptors of the frequency spectra (function `specprop()`) on the 3 notes (hint: you must cut each note first)        
-
-</div>
-
-&nbsp; 
-
-
----
+------------------------------------------------------------------------
 
 <font size="4">Session information</font>
 

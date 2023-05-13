@@ -1,8 +1,5 @@
 ---
 title: <font size="7"><b>Introduction to warbleR</b></font>
-subtitle: <font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
-author: <font size="3"><a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a></font>
-date: "`r Sys.Date()`"
 toc: true
 toc-depth: 2
 toc-location: left
@@ -14,67 +11,68 @@ format:
     code-fold: show
     code-tools: true
     css: qmd.css
+    link-external-icon: true
+    link-external-newwindow: true  
 ---
 
-&nbsp; 
+ 
 
 The [warbleR](https://cran.r-project.org/package=warbleR) package is intended to facilitate the analysis of the structure of animal acoustic signals in R. Users can enter their own data into a workflow that facilitates spectrographic visualization and measurement of acoustic parameters **warbleR** makes use of the fundamental sound analysis tools of the **seewave** package, and offers new tools for acoustic structure analysis. These tools are available for batch analysis of acoustic signals.
 
-&nbsp;
+ 
 
-<font size = "4">The main features of the package are:</font> 
+<font size = "4">The main features of the package are:</font>
 
 <font size = "3">
 
- - The use of loops to apply tasks through acoustic signals referenced in a selection table:
+-   The use of loops to apply tasks through acoustic signals referenced in a selection table:
 
-&nbsp;
+ 
 
-<img src="images/loop_warbleR_optim.gif" alt = "warbleR measuring loop" width= "500">
+<img src="images/loop_warbleR_optim.gif" alt="warbleR measuring loop" width="500"/>
 
-&nbsp;
+ 
 
- - The production of images files with spectrograms that let users organize data and verify acoustic analyzes: </font>
+-   The production of images files with spectrograms that let users organize data and verify acoustic analyzes: </font>
 
-&nbsp;
+ 
 
-<img src="images/loop_warbleR_images_optim.gif" alt = "warbleR image loop" width = "500">
+<img src="images/loop_warbleR_images_optim.gif" alt="warbleR image loop" width="500"/>
 
-&nbsp;
+ 
 
 The package offers functions for:
 
-- Browse and download recordings of [Xeno ‐ Canto](http://xeno-canto.org/)
-- Explore, organize and manipulate multiple sound files
-- Detect signals automatically (in frequency and time)
-- Create spectrograms of complete recordings or individual signals
-- Run different measures of acoustic signal structure
-- Evaluate the performance of measurement methods
-- Catalog signals
-- Characterize different structural levels in acoustic signals
-- Statistical analysis of duet coordination
-- Consolidate databases and annotation tables
+-   Browse and download recordings of [Xeno ‐ Canto](http://xeno-canto.org/)
+-   Explore, organize and manipulate multiple sound files
+-   Detect signals automatically (in frequency and time)
+-   Create spectrograms of complete recordings or individual signals
+-   Run different measures of acoustic signal structure
+-   Evaluate the performance of measurement methods
+-   Catalog signals
+-   Characterize different structural levels in acoustic signals
+-   Statistical analysis of duet coordination
+-   Consolidate databases and annotation tables
 
-
-Most functions allow the parallelization of tasks, which distributes the tasks among several cores to improve computational efficiency. Tools to evaluate the performance of the analysis at each step are also available. All these tools are provided in a standardized workflow for the analysis of the signal structure, making them accessible to a wide range of users, including those without much knowledge of R. 
+Most functions allow the parallelization of tasks, which distributes the tasks among several cores to improve computational efficiency. Tools to evaluate the performance of the analysis at each step are also available. All these tools are provided in a standardized workflow for the analysis of the signal structure, making them accessible to a wide range of users, including those without much knowledge of R.
 
 **warbleR** is a young package (officially published in 2017) currently in a maturation stage:
 
- <img src="images/lifecycle.jpeg" alt = "life cycle">
+<img src="images/lifecycle.jpeg" alt="life cycle"/>
 
-
-&nbsp;
+ 
 
 ## Selection tables
 
 These objects are created with the `selection_table()` function. The function takes data frames containing selection data (name of the sound file, selection, start, end ...), verifies if the information is consistent (see the function `check_sels()` for details) and saves the 'diagnostic' metadata as an attribute. The selection tables are basically data frames in which the information contained has been corroborated so it can be read by other **warbleR** functions. The selection tables must contain (at least) the following columns:
 
-1. sound files (sound.files)
-1. selection (select)
-1. start
-1. end
+1.  sound files (sound.files)
+2.  selection (select)
+3.  start
+4.  end
 
 The sample data "lbh_selec_table" contains these columns:
+
 ```{r extn_sel_2, echo = FALSE, message = FALSE}
 
 rm(list = ls())
@@ -119,8 +117,9 @@ box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
 kbl
 
 ```
-&nbsp;
- 
+
+ 
+
 ... and can be converted to the *selection_table* format like this:
 
 ```{r extn_sel_4.32, eval = FALSE}
@@ -140,7 +139,6 @@ st <- selection_table(X = lbh_selec_table, pb = FALSE)
 st
 ```
 
-
 Note that the path to the sound files has been provided. This is necessary in order to verify that the data provided conforms to the characteristics of the audio files.
 
 Selection tables have their own class in R:
@@ -150,8 +148,8 @@ Selection tables have their own class in R:
 class(st)
 
 ```
-&nbsp;
 
+ 
 
 ### Extended selection tables
 
@@ -177,29 +175,25 @@ ext_st <- selection_table(X = lbh_selec_table, pb = FALSE,
 
 
 ```
-&nbsp;
+
+ 
 
 And that is. Now the acoustic data and the selection data (as well as the additional metadata) are all together in a single R object.
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+ 
 
-&nbsp;
+-   Run the example code in the `selection_table()` function documentation
 
-- Run the example code in the `selection_table()` function documentation
+-   What do the arguments "mar", "by.song" and "whole.recs" do?
+:::
 
-- What do the arguments "mar", "by.song" and "whole.recs" do?
+ 
 
-</div>
-
-&nbsp;
-
- 
- 
- 
 ### Handling extended selection tables
 
 Several functions can be used to deal with objects of this class. You can test if the object belongs to the *extended_selection_table*:
@@ -209,7 +203,8 @@ Several functions can be used to deal with objects of this class. You can test i
 is_extended_selection_table(ext_st)
 
 ```
-&nbsp;
+
+ 
 
 You can subset the selection in the same way that any other data frame and it will still keep its attributes:
 
@@ -243,7 +238,8 @@ ext_st
 print(ext_st)
 
 ```
-&nbsp;
+
+ 
 
 You can also join them in rows. Here the original *extended_selection_table* is divided into 2 and bound again using `rbind()`:
 
@@ -279,7 +275,8 @@ print(ext_st5)
 all.equal(ext_st, ext_st5)
 
 ```
-&nbsp;
+
+ 
 
 The 'wave' objects can be read individually using `read_wave()`, a wrapper for the `readWave()` function of **tuneR**, which can handle extended selection tables:
 
@@ -288,7 +285,8 @@ The 'wave' objects can be read individually using `read_wave()`, a wrapper for t
 wv1 <- read_wave(X = ext_st, index = 3, from = 0, to = 0.37)
 
 ```
-&nbsp;
+
+ 
 
 These are regular 'wave' objects:
 
@@ -301,7 +299,7 @@ wv1
 spectro(wv1, wl = 150, grid = FALSE, scale = FALSE, ovlp = 90)
 ```
 
-&nbsp; 
+ 
 
 ```{r extn_sel_8.23, out.width= 750}
 par(mfrow = c(3, 2), mar = rep(0, 4))
@@ -316,7 +314,8 @@ for(i in 1:6){
 }
 
 ```
-&nbsp;
+
+ 
 
 The `read_wave()` function requires the selection table, as well as the row index (i.e. the row number) to be able to read the 'wave' objects. It can also read a regular 'wave' file if the path is provided.
 
@@ -334,7 +333,8 @@ mrg_ext_st <- merge(ext_st, Y, by = "sound.files")
 is_extended_selection_table(mrg_ext_st)
 
 ```
-&nbsp;
+
+ 
 
 In this case, we can use the `fix_extended_selection_table()` function to transfer the attributes of the original extended selection table:
 
@@ -347,7 +347,8 @@ mrg_ext_st <- fix_extended_selection_table(X = mrg_ext_st, Y = ext_st)
 is_extended_selection_table(mrg_ext_st)
 
 ```
-&nbsp;
+
+ 
 
 This works as long as some of the original sound files are retained and no other selections are added.
 
@@ -356,7 +357,6 @@ This works as long as some of the original sound files are retained and no other
 ### Selection table size
 
 The size of the extended selection box will depend on the number of selections, the sampling rate, the duration of the selection and the length of margins (i.e. additional time you want to keep on each side of the selection). In this example, a selection table with 1000 selections is created simply by repeating the sample data frame several times and then is converted to an extended selection table:
-
 
 ```{r extn_sel_9, eval=FALSE}
 
@@ -373,7 +373,6 @@ lng_ext_st <- selection_table(X = lng.selec.table, pb = FALSE,
 lng_ext_st
 
 ```
-
 
 ```{r extn_sel_9.2, echo=FALSE}
 
@@ -395,12 +394,13 @@ print(lng_ext_st)
 format(object.size(lng_ext_st), units = "auto")
 
 ```
-&nbsp;
 
-As you can see, the object size is only ~ 31 MB. Then, as a guide, a selection box with 1000 selections similar to those of 'lbh_selec_table' (average duration of ~ 0.15 seconds) at a sampling rate of 22.5 kHz and the default margin (mar = 0.1) will generate an extended selection box ~ 31 MB or ~ 310 MB for a selection table of 10,000 rows.
+ 
 
-&nbsp;
- 
+As you can see, the object size is only \~ 31 MB. Then, as a guide, a selection box with 1000 selections similar to those of 'lbh_selec_table' (average duration of \~ 0.15 seconds) at a sampling rate of 22.5 kHz and the default margin (mar = 0.1) will generate an extended selection box \~ 31 MB or \~ 310 MB for a selection table of 10,000 rows.
+
+ 
+
 ### Analysis using extended selection tables
 
 These objects can be used as input for most **warbleR** functions. Here are some examples of **warbleR** functions using *extended_selection_table*:
@@ -414,7 +414,6 @@ sp <- spectro_analysis(ext_st)
 
 sp
 ```
-
 
 ```{r, extn_sel_12.2, echo= FALSE}
 
@@ -431,8 +430,8 @@ kbl
 
 
 ```
-&nbsp; 
 
+ 
 
 #### Signal-to-noise ratio
 
@@ -442,7 +441,6 @@ snr <- sig2noise(ext_st, mar = 0.05)
 
 snr
 ```
-
 
 ```{r, extn_sel_12.6, echo= FALSE}
 
@@ -458,7 +456,8 @@ box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
 kbl
 
 ```
-&nbsp; 
+
+ 
 
 #### Dynamic time warping (DTW)
 
@@ -469,7 +468,6 @@ dtw.dist <- freq_DTW(ext_st, img = FALSE)
 dtw.dist
 
 ```
-
 
 ```{r, extn_sel_12.8, echo= FALSE}
 
@@ -485,10 +483,8 @@ box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
 kbl
 
 ```
-&nbsp; 
 
-
-
+ 
 
 ### Performance
 
@@ -508,11 +504,12 @@ mbmrk.snr <- microbenchmark(extended = sig2noise(lng_ext_st[1:100, ],
 autoplot(mbmrk.snr) + ggtitle("sig2noise")
 
 ```
-&nbsp;
+
+ 
 
 The function runs much faster in the extended selection tables. Performance gain is likely to improve when longer recordings and data sets are used (that is, to compensate for computer overload).
 
-&nbsp;
+ 
 
 ### Create selections 'by song'
 
@@ -526,7 +523,8 @@ To create a selection table by song, let's add an artificial song column to our 
 lbh_selec_table$song <- c(1, 1, 2, 1, 2, 1, 1, 2, 1, 2, 2)
 
 ```
-&nbsp;
+
+ 
 
 The data looks like this:
 
@@ -542,7 +540,8 @@ box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
 kbl
 
 ```
-&nbsp;
+
+ 
 
 Now we can create an extended selection table 'by song' using the column name 'song' as input for the argument `by.song`:
 
@@ -587,24 +586,21 @@ kbl
 
 ```
 
+ 
 
-&nbsp; 
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<div class="alert alert-info">
+ 
 
-<font size="5">Exercise</font> 
+-   Compare the size of an extended selection table created by element to that of one created by song using the sample data
+:::
 
-&nbsp;
-
-- Compare the size of an extended selection table created by element to that of one created by song using the sample data
-
-</div>
-
-&nbsp;
+ 
 
 ### Sharing acoustic data
 
-This new object class allows to share complete data sets, including acoustic data. For example, the following code downloads a subset of the data used in [Araya-Salas *et al* (2017)](https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/araya-salas_smith-vidaurre___webster_2017._table_s1._recording_metadata.xlsx) (can also be downloaded from [here](https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/extended.selection. table.araya-salas.et.al.2017.bioacoustics.100.sels.rds)):
+This new object class allows to share complete data sets, including acoustic data. For example, the following code downloads a subset of the data used in [Araya-Salas *et al* (2017)](https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/araya-salas_smith-vidaurre___webster_2017._table_s1._recording_metadata.xlsx) (can also be downloaded from [here](https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/extended.selection.%20table.araya-salas.et.al.2017.bioacoustics.100.sels.rds)):
 
 ```{r extn.sel_19}
 
@@ -674,21 +670,17 @@ table(Phae.long.est$lek.song.type)
 
 The ability to compress large data sets and the ease of performing analyzes that require a single R object can simplify the exchange of data and the reproducibility of bioacoustic analyzes.
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+ 
 
-&nbsp;
+-   Download the extended selection tables of bat social calls from the [this figshare repository](https://figshare.com/articles/dataset/Supplementary_materials_Ontogeny_of_an_interactive_call-and-response_system_in_Spix_s_disc-winged_bats_PART_1/11651772) (scroll till the end of the file list) and create spectrograms for the first 5 selections of each table (either `spectrograms()` or `spectro()` would work)
+:::
 
-- Download the extended selection tables of bat social calls from the [this figshare repository](https://figshare.com/articles/dataset/Supplementary_materials_Ontogeny_of_an_interactive_call-and-response_system_in_Spix_s_disc-winged_bats_PART_1/11651772) (scroll till the end of the file list) and create spectrograms for the first 5 selections of each table (either `spectrograms()` or `spectro()` would work)
-
-</div>
-
-&nbsp;
-
-
+ 
 
 ## **warbleR** functions and the workflow of analysis in bioacoustics
 
@@ -731,13 +723,13 @@ df4 <- df4[c(5, 8, 18, 29, 34, 35, 37, 38, 39, 55, 56, 26, 1, 19, 40, 46, 4, 11,
 
 ```
 
- <img src="images/analysis-workflow.png" alt="analysis workflow">
+<img src="images/analysis-workflow.png" alt="analysis workflow"/>
 
-&nbsp; 
+ 
 
 We can group **warbleR** functions according to the bioacoustic analysis stages.
 
-&nbsp;
+ 
 
 ### Get and prepare recordings
 
@@ -765,9 +757,7 @@ kbl
 
 ```
 
-&nbsp; 
-
-
+ 
 
 ### Annotating sound
 
@@ -791,8 +781,7 @@ kbl
 
 ```
 
-&nbsp; 
-
+ 
 
 ### Automatic detections
 
@@ -816,8 +805,7 @@ kbl
 
 ```
 
-&nbsp; 
-
+ 
 
 ### Organize annotations
 
@@ -841,16 +829,16 @@ kbl
 
 ```
 
-&nbsp; 
+ 
 
 ### Measure acoustic signal structure
 
 Most **warbleR** functions are dedicated to quantifying the structure of acoustic signals listed in selection tables using batch processing. For this, 4 main measurement methods are offered:
 
-1. Spectrographic parameters
-1. Cross correlation
-1. Dynamic time warping (DTW)
-1. Statistical descriptors of cepstral coefficients
+1.  Spectrographic parameters
+2.  Cross correlation
+3.  Dynamic time warping (DTW)
+4.  Statistical descriptors of cepstral coefficients
 
 Most functions gravitate around these methods, or variations of these methods:
 
@@ -872,22 +860,17 @@ kbl
 
 ```
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+ 
 
-&nbsp;
+-   Compare the performance of `spectro_analysis()` on the example 'lbh_selec_table' with "the argument 'fast = TRUE' vs 'fast = FALSE'. What does this argument do and which `seewave` function might be involved?
+:::
 
-- Compare the performance of `spectro_analysis()` on the example 'lbh_selec_table' with "the argument 'fast = TRUE' vs 'fast = FALSE'. What does this argument do and which `seewave` function might be involved?
-
-</div>
-
-&nbsp;
-
-
-
+ 
 
 ### Verify annotations
 
@@ -911,7 +894,7 @@ kbl
 
 ```
 
-&nbsp; 
+ 
 
 ### Visually inspection of annotations and measurements
 
@@ -933,7 +916,7 @@ kbl
 
 ```
 
-&nbsp; 
+ 
 
 ### Additional functions
 
@@ -957,32 +940,30 @@ kbl
 
 ```
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+ 
 
-&nbsp;
+-   Run the examples of the functions `phylo_spectro()` and `color_spectro()`
 
-- Run the examples of the functions `phylo_spectro()` and `color_spectro()`
+-   Use the `query_xc()` and `map_xc()` functions to explore the geographical distribution of the Xeno-Canto recordings of a species (of bird) of your interest (if any!)
+:::
 
-- Use the `query_xc()` and `map_xc()` functions to explore the geographical distribution of the Xeno-Canto recordings of a species (of bird) of your interest (if any!)
-</div>
+ 
 
-&nbsp;
-
----
-
+------------------------------------------------------------------------
 
 ## References
 
-1. Araya-Salas M, G Smith-Vidaurre & M Webster. (2017). Assessing the effect of sound file compression and background noise on measures of acoustic signal structure. Bioacoustics 4622, 1–17
-1. Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal acoustic signals. Methods Ecol Evol 8:184–191.
+1.  Araya-Salas M, G Smith-Vidaurre & M Webster. (2017). Assessing the effect of sound file compression and background noise on measures of acoustic signal structure. Bioacoustics 4622, 1--17
+2.  Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal acoustic signals. Methods Ecol Evol 8:184--191.
 
-&nbsp; 
+ 
 
----
+------------------------------------------------------------------------
 
 <font size="4">Session information</font>
 

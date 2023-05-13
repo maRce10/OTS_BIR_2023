@@ -1,8 +1,5 @@
 ---
 title: <font size="6"><b>Case study</b></font>
-subtitle: <font size="5"><b>How to analyze animal acoustic signal structure from Xeno-Canto recordings</b></font>
-author: <font size="3"><a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a></font>
-date: "`r Sys.Date()`"
 toc: true
 toc-depth: 2
 toc-location: left
@@ -16,11 +13,11 @@ format:
     css: qmd.css
 ---
 
-&nbsp;
+ 
 
 ## Download Xeno-Canto data
 
-The warbleR function [`query_xc()`](https://marce10.github.io/warbleR/reference/query_xc.html) queries for avian vocalization recordings in the open-access online repository [Xeno-Canto](https://xeno-canto.org). It can return recordings metadata or download the associated sound files. 
+The warbleR function [`query_xc()`](https://marce10.github.io/warbleR/reference/query_xc.html) queries for avian vocalization recordings in the open-access online repository [Xeno-Canto](https://xeno-canto.org). It can return recordings metadata or download the associated sound files.
 
 Get recording metadata for green hermits (*Phaethornis guy*):
 
@@ -36,9 +33,10 @@ pg <- query_xc(qword = 'Phaethornis guy', download = FALSE)
 
 ```
 
-&nbsp;
+ 
 
-Keep only song vocalizations of high quality: 
+Keep only song vocalizations of high quality:
+
 ```{r, eval = FALSE}
 
 song_pg <- pg[grepl("song", ignore.case = TRUE, pg$Vocalization_type) & pg$Quality == "A", ]
@@ -48,22 +46,24 @@ song_pg <- song_pg[song_pg$Locality != "Suaita, Santander", ]
 
 ```
 
-&nbsp;
+ 
 
 ```{r, echo=FALSE}
 song_pg <- read.csv("./examples/p_guy/metadata_p_guy_XC.csv")
 ```
 
-
 Map locations using [`map_xc()`](https://marce10.github.io/warbleR/reference/map_xc.html):
+
 ```{r, results = 'asis', fig.width=9}
 
 map_xc(song_pg, leaflet.map = TRUE)
 
 ```
-&nbsp;
+
+ 
 
 Once you feel fine with the subset of data you can go ahead and download the sound files and save the metadata as a .csv file:
+
 ```{r, eval = FALSE, fig.width=10}
 
 query_xc(X = song_pg, path = "./examples/p_guy", parallel = 3)
@@ -71,7 +71,8 @@ query_xc(X = song_pg, path = "./examples/p_guy", parallel = 3)
 write.csv(song_pg, file = "./examples/p_guy/metadata_p_guy_XC.csv", row.names = FALSE)
 
 ```
-&nbsp;
+
+ 
 
 ## Preparing sound files for analysis (optional)
 
@@ -85,13 +86,13 @@ fix_wavs(path =  "./examples/p_guy", samp.rate = 44.1, bit.depth = 16)
 
 ```
 
-&nbsp;
+ 
 
 ## Annotating sound files in Raven
 
-Now songs should be manually annotated and all the selection in the .txt files should be pooled together in a single spreadsheet. 
+Now songs should be manually annotated and all the selection in the .txt files should be pooled together in a single spreadsheet.
 
-&nbsp;
+ 
 
 ## Importing annotations into R
 
@@ -122,7 +123,6 @@ annotations <- read_excel(path = "./examples/p_guy/annotations_p_guy.xlsx")
 head(annotations)
 ```
 
-
 ```{r, echo=FALSE}
 
 # load package
@@ -137,7 +137,6 @@ kable(annotations[1:6, -7])
 
 Note that the column names should be: "start", "end", "bottom.freq", "top.freq" and "sound.files". In addition frequency columns ("bottom.freq" and "top.freq") must be in kHz, not in Hz. We can check if the annotations are in the right format using warbleR's `check_sels()`:
 
-
 ```{r}
 
 sound_file_path <- "./examples/p_guy/converted_sound_files/"
@@ -145,13 +144,12 @@ sound_file_path <- "./examples/p_guy/converted_sound_files/"
 cs <- check_sels(annotations, path = sound_file_path)
 
 ```
-  
-&nbsp;
+
+ 
 
 ## Measure acoustic structure
 
 We can measured several parameters of acoustic structure with the warbleR function `spectro_analysis()`:
-
 
 ```{r, warning=FALSE, message=FALSE}
 
@@ -159,7 +157,7 @@ sp <- spectro_analysis(X = annotations, path = sound_file_path)
 
 ```
 
-&nbsp;
+ 
 
 Then we summarize those parameters with a Principal Component Analysis (PCA):
 
@@ -174,7 +172,7 @@ pca_data <- cbind(sp[, c(1, 2)], pca$x[, 1:2])
 
 ```
 
-&nbsp;
+ 
 
 At this point should should get someting like this:
 
@@ -187,12 +185,11 @@ kable(pca_data[1:6, ])
 
 ```
 
-&nbsp;
+ 
 
 'PC1' and 'PC2' are the 2 new dimensions that will be used to represent the acoustic space.
 
-&nbsp;
-
+ 
 
 ## Adding metadata
 
@@ -211,7 +208,7 @@ pca_data_md <- merge(pca_data, song_pg[, c("sound.files", "Country", "Latitude",
 
 ```
 
-&nbsp;
+ 
 
 ## Assessing geographic patterns of variation
 
@@ -232,7 +229,7 @@ ggplot(data = pca_data_md, aes(x = PC1, y = PC2, color = Country, shape = Countr
 
 ```
 
-&nbsp;
+ 
 
 You can also add information about their geographic location (in this case longitude) to the plot as follows:
 
@@ -245,9 +242,10 @@ ggplot(data = pca_data_md, aes(x = PC1, y = PC2, color = Longitude, shape = Coun
 
 ```
 
-&nbsp;
+ 
 
-We can even test if geographic distance is associated to acoustic distance (i.e. if individuals geographically closer produce more similar songs) using a [mantel test](https://en.wikipedia.org/wiki/Mantel_test) (`mantel` function from the package vegan): 
+We can even test if geographic distance is associated to acoustic distance (i.e. if individuals geographically closer produce more similar songs) using a [mantel test](https://en.wikipedia.org/wiki/Mantel_test) (`mantel` function from the package vegan):
+
 ```{r, warning=FALSE, message=FALSE}
 
 # create geographic and acoustic distance matrices
@@ -262,11 +260,11 @@ mantel(geo_dist, acoust_dist)
 
 ```
 
-&nbsp;
+ 
 
-In this example no association between geographic and acoustic distance was detected (p value > 0.05).
+In this example no association between geographic and acoustic distance was detected (p value \> 0.05).
 
----
+------------------------------------------------------------------------
 
 <font size="4">Session information</font>
 

@@ -1,0 +1,23 @@
+---
+toc: true
+toc-depth: 3
+toc-location: left
+number-sections: true
+highlight-style: pygments
+format:
+  html:
+    df-print: kable
+    code-fold: show
+    code-tools: true
+    css: qmd.css
+    link-external-icon: true
+    link-external-newwindow: true  
+---
+
+<center><font size="6">Marcelo Araya-Salas</font></center>
+
+<center><img src="images/me.png" alt="me" width="700" height="100%"/></center>
+
+<font size="4">
+
+I am just another behavioral ecologists that ended up doing a lot of coding just to get data analysis done. So now I'm deeply involved in the development of computational tools for (non-genetic) biological data analysis, mostly related to animal behavior and bioacoustics. I am the developer and maintainer of the R packages [warbleR](https://marce10.github.io/warbleR/index.html) and [Rraven](https://marce10.github.io/Rraven/index.html) that provide functions to streamline high-throughput acoustic analysis of animal sounds, aiming to simplify the use of R for bioacoustic research. More recently I released the R packages [baRulho](https://marce10.github.io/baRulho/index.html), to quantify acoustic signal transmission and degradation, [ohun](https://marce10.github.io/ohun/index.html), to optimize automatic detection and [PhenotypeSpace](https://marce10.github.io/PhenotypeSpace/index.html) for quantifying multidimensional trait spaces. Also check out the new R package [sketchy](https://marce10.github.io/sketchy/index.html) for organizing research compendiums. New functions as well as other more elaborated analyses are detailed in my blog [Bioacoustics in R](https://marce10.github.io/).

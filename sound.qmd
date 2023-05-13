@@ -1,8 +1,5 @@
 ---
 title: <font size="7"><b>Sound</b></font>
-subtitle: <font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
-author: <font size="3"><a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a></font>
-date: "`r Sys.Date()`"
 toc: true
 toc-depth: 2
 toc-location: left
@@ -14,6 +11,8 @@ format:
     code-fold: show
     code-tools: true
     css: qmd.css
+    link-external-icon: true
+    link-external-newwindow: true  
 ---
 
 ```{r, echo = FALSE}
@@ -24,21 +23,21 @@ opts_chunk$set(tidy = TRUE, warning = FALSE, message = FALSE)
 
 ```
 
-&nbsp; 
+ 
 
 Sound waves are characterized by compression and expansion of the medium as sound energy moves through it. There is also back and forth motion of the particles making up the medium:
 
-<img src="images/wave.gif" alt="wave animation">
+<img src="images/wave.gif" alt="wave animation" width="700"/>
 
-<font size="3"> taken from https://dosits.org</font> 
+<font size="3"> taken from https://dosits.org</font>
 
-&nbsp; 
+ 
 
 The variation in pressure that is perceived at a fixed point in space can be represented by a graph of pressure (amplitude) by time:
 
-<img src="images/amplitude.gif" alt="wave and oscillogram">
+![wave and oscillogram](images/amplitude.gif){alt="wave and oscillogram" width="700" height="400"}
 
-&nbsp; 
+ 
 
 Sounds waves are typically quantified by their frequency (number of cycles per second, Hz) and amplitude (relative intensity).
 
@@ -114,15 +113,14 @@ par(opar)
 
 ```
 
-&nbsp; 
+ 
 
-<div class="alert alert-success">
-
+::: {.alert .alert-success}
 <font size="6"><b>Digitizing sound</b></font>
 
-&nbsp; 
+ 
 
-## Sampling frequency 
+## Sampling frequency
 
 Digitizing implies discretizing, which requires some sort of regular sampling. Sampling frequency refers to how many samples of the pressure level of the environment are taken per second. A 440 Hz sine wave recorded at 44100 Hz would have around 10 samples per cycle. This plot shows 2 cycles of a 440 Hz sine wave sampled (vertical dotted lines) at 44100 kHz:
 
@@ -170,7 +168,8 @@ rect(xleft=0, xright= duration(sn.wv)/ 2, ybottom=-2, ytop=2, col = adjustcolor(
 points(y = sn.wv@left[seq(0, length(sn.wv), 10)], x = seq(0, duration(sn.wv), length.out = length(sn.wv))[seq(0, length(sn.wv), 10)], col = "orange", pch = 20, cex = 2)
 
 ```
-&nbsp; 
+
+ 
 
 As you can see way less samples are taken per unit of time. The threshold at which samples cannot provide a reliable estimate of the regularity of a sine wave is called **Nyquist frequency** and corresponds to half of the frequency of the sine wave. This is how the 2 cycles of the 440 Hz would look like when sampled at its Nyquist frequency:
 
@@ -200,11 +199,11 @@ points(y = sn.wv@left[round(sq * length(sn.wv@left))+ 1], x = seq(0, duration(sn
 
 ```
 
-&nbsp; 
+ 
 
 ## Quantization
 
-Once we know at which point amplitude samples will be taken we just need to measure it. This process is called **quantization**. The range of amplitude values is discretized in a number of intervals equals to `2 ^ bits`. Hence, it involves some rounding of the actual amplitude values and some data loss. This is the same 440 Hz sine wave recorded at 44100 kHz quantized at 2 bits (2^2 = 4 intervals): 
+Once we know at which point amplitude samples will be taken we just need to measure it. This process is called **quantization**. The range of amplitude values is discretized in a number of intervals equals to `2 ^ bits`. Hence, it involves some rounding of the actual amplitude values and some data loss. This is the same 440 Hz sine wave recorded at 44100 kHz quantized at 2 bits (2\^2 = 4 intervals):
 
 ```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}
 
@@ -236,7 +235,7 @@ points(y = quant[seq(0, length(sn.wv), 10)], x = seq(0, duration(sn.wv), length.
 
 ```
 
-&nbsp; 
+ 
 
 Rounding and data loss is more obvious if we bind the sampled points with lines:
 
@@ -270,9 +269,10 @@ abline(h = unique(quant), lwd = 0.5, lty = 2)
 points(y = quant[seq(0, length(sn.wv), 10)], x = seq(0, duration(sn.wv), length.out = length(sn.wv))[seq(0, length(sn.wv), 10)], col = "orange", pch = 20, cex = 2)
 
 ```
-&nbsp; 
 
-This is the same signal quantized at 3 bits (2^3 = 8 intervals):
+ 
+
+This is the same signal quantized at 3 bits (2\^3 = 8 intervals):
 
 ```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}
 
@@ -303,9 +303,10 @@ abline(h = unique(quant), lwd = 0.5, lty = 2)
 points(y = quant[seq(0, length(sn.wv), 10)], x = seq(0, duration(sn.wv), length.out = length(sn.wv))[seq(0, length(sn.wv), 10)], col = "orange", pch = 20, cex = 2)
 
 ```
-&nbsp;
 
-4 bits (2^4 = 16 intervals):
+ 
+
+4 bits (2\^4 = 16 intervals):
 
 ```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}
 
@@ -336,9 +337,10 @@ abline(h = unique(quant), lwd = 0.5, lty = 2)
 points(y = quant[seq(0, length(sn.wv), 10)], x = seq(0, duration(sn.wv), length.out = length(sn.wv))[seq(0, length(sn.wv), 10)], col = "orange", pch = 20, cex = 2)
 
 ```
-&nbsp;
 
-.. and 8 bits (2^8 = 256 intervals):
+ 
+
+.. and 8 bits (2\^8 = 256 intervals):
 
 ```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}
 
@@ -369,31 +371,29 @@ abline(h = unique(quant), lwd = 0.5, lty = 2)
 points(y = quant[seq(0, length(sn.wv), 10)], x = seq(0, duration(sn.wv), length.out = length(sn.wv))[seq(0, length(sn.wv), 10)], col = "orange", pch = 20, cex = 2)
 
 ```
-&nbsp;
 
-At this point quantization involves very little information loss. 16 bits is probably the most common dynamic range used nowadays. As you can imagine, the high number of intervals (2^16 = 65536) allows for great precision in the quantization of amplitude. 
+ 
 
-</div>
+At this point quantization involves very little information loss. 16 bits is probably the most common dynamic range used nowadays. As you can imagine, the high number of intervals (2\^16 = 65536) allows for great precision in the quantization of amplitude.
+:::
 
-&nbsp;
+ 
 
 # Sounds in R
 
 Sound waves can be represented by 3 kinds of R objects:
 
-- Common classes (numerical vector, numerical matrix)
-- Time series classes (ts, mts)
-- Specific sound classes (Wave, sound and audioSample)
+-   Common classes (numerical vector, numerical matrix)
+-   Time series classes (ts, mts)
+-   Specific sound classes (Wave, sound and audioSample)
 
-&nbsp; 
-
+ 
 
 ## Non-specific classes
 
 ### Vectors
 
 Any numerical vector can be treated as a sound if a sampling frequency is provided. For example, a 440 Hz sinusoidal sound sampled at 8000 Hz for one second can be generated like this:
-
 
 ```{r, eval = TRUE}
 
@@ -408,7 +408,8 @@ is.vector(s1)
 mode(s1)
 
 ```
-&nbsp; 
+
+ 
 
 These sequences of values only make sense when specifying the sampling rate at which they were created:
 
@@ -417,7 +418,8 @@ These sequences of values only make sense when specifying the sampling rate at w
 oscillo(s1, f = 8000, from = 0, to = 0.01)
 
 ```
-&nbsp; 
+
+ 
 
 ### Matrices
 
@@ -434,7 +436,8 @@ dim(s2)
 oscillo(s2, f = 8000, from = 0, to = 0.01)
 
 ```
-&nbsp; 
+
+ 
 
 If the matrix has more than one column, only the first column will be considered:
 
@@ -451,7 +454,8 @@ dim(s3)
 oscillo(s3, f = 8000, from = 0, to = 0.01)
 
 ```
-&nbsp; 
+
+ 
 
 ### Time series
 
@@ -464,7 +468,8 @@ s4 <- ts(data = s1, start = 0, frequency = 8000)
 str(s4)
 
 ```
-&nbsp; 
+
+ 
 
 To generate a random noise of 0.5 seconds:
 
@@ -475,7 +480,8 @@ s4 <- ts(data = runif(4000, min = -1, max = 1), start = 0, end = 0.5, frequency 
 str(s4)
 
 ```
-&nbsp; 
+
+ 
 
 The `frequency()` and `deltat()` functions return the sampling frequency ($f$) and the time resolution ($Delta t$) respectively:
 
@@ -486,7 +492,8 @@ frequency(s4)
 deltat(s4)
 
 ```
-&nbsp; 
+
+ 
 
 As the frequency is incorporated into the `ts` objects, it is not necessary to specify it when used within functions dedicated to audio:
 
@@ -495,7 +502,8 @@ As the frequency is incorporated into the `ts` objects, it is not necessary to s
 oscillo(s4, from = 0, to = 0.01)
 
 ```
-&nbsp; 
+
+ 
 
 In the case of multiple time series, **seewave** functions will consider only the first series:
 
@@ -511,17 +519,17 @@ oscillo(s5, from = 0, to = 0.01)
 
 ## Dedicated R classes for sound
 
-There are 3 kinds of objects corresponding to the `wav` binary format or the` mp3` compressed format:
+There are 3 kinds of objects corresponding to the `wav` binary format or the`mp3` compressed format:
 
-- `Wave` class of the package **tuneR**
-- `sound` class of the package **phonTools**
-- `AudioSample` class of the package **audio**
+-   `Wave` class of the package **tuneR**
+-   `sound` class of the package **phonTools**
+-   `AudioSample` class of the package **audio**
 
-&nbsp;
+ 
 
 ### `Wave` class (**tuneR**)
 
-The `Wave` class comes with the **tuneR** package. This S4 class includes different "slots" with the amplitude data (left or right channel), the sampling frequency (or frequency), the number of bits (8/16/24/32) and the type of sound (mono/stereo). High sampling rates (> 44100 Hz) can be read on these types of objects.
+The `Wave` class comes with the **tuneR** package. This S4 class includes different "slots" with the amplitude data (left or right channel), the sampling frequency (or frequency), the number of bits (8/16/24/32) and the type of sound (mono/stereo). High sampling rates (\> 44100 Hz) can be read on these types of objects.
 
 The function to import `.wav` files from the hard drive is `readWave`:
 
@@ -533,7 +541,8 @@ library(tuneR)
 s6 <- readWave("./examples/Phae.long1.wav")
 
 ```
-&nbsp; 
+
+ 
 
 We can verify the class of the object like this:
 
@@ -543,9 +552,10 @@ We can verify the class of the object like this:
 class(s6) 
 
 ```
-&nbsp; 
 
-S4 objects have a structure similar to lists but use '@' to access each position (slot):
+ 
+
+S4 objects have a structure similar to lists but use '\@' to access each position (slot):
 
 ```{r}
 
@@ -556,15 +566,14 @@ str(s6)
 s6@samp.rate 
 
 ```
-&nbsp;
 
-<div class="alert alert-warning">
+ 
 
+::: {.alert .alert-warning}
 "Pulse-code modulation (PCM) is a method used to digitally represent sampled analog signals. It is the standard form of digital audio. In a PCM stream, the amplitude of the analog signal is sampled regularly at uniform intervals, and each sample is quantized to the nearest value within a range of digital steps" ([Wikipedia](https://en.wikipedia.org/wiki/Pulse-code_modulation)).
+:::
 
-</div>
-
-&nbsp; 
+ 
 
 The samples come in the slot '@left':
 
@@ -574,27 +583,26 @@ The samples come in the slot '@left':
 s6@left[1:40]
 
 ```
-&nbsp; 
+
+ 
 
 The number of samples is given by the duration and the sampling rate.
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+-   How can we calculate the duration of the `wave` object using the information in the object?
 
-- How can we calculate the duration of the `wave` object using the information in the object?
+ 
 
-&nbsp; 
+-   Extract the first second of audio from the object `s6` using indexing (and squared brackets)
+:::
 
-- Extract the first second of audio from the object `s6` using indexing (and squared brackets)
+ 
 
-</div>
-
-&nbsp; 
-
-An advantage of using `readWave()` is the ability to read specific segments of sound files, especially useful with long files. This is done using the `from` and` to` arguments and specifying the units of time with the `units` arguments. The units can be converted into "samples", "minutes" or "hours". For example, to read only the section that begins in 1s and ends in 2s of the file "Phae.long1.wav":
+An advantage of using `readWave()` is the ability to read specific segments of sound files, especially useful with long files. This is done using the `from` and`to` arguments and specifying the units of time with the `units` arguments. The units can be converted into "samples", "minutes" or "hours". For example, to read only the section that begins in 1s and ends in 2s of the file "Phae.long1.wav":
 
 ```{r, eval = TRUE}
 
@@ -603,9 +611,10 @@ s7 <- readWave("./examples/Phae.long1.wav", from = 1, to = 2, units = "seconds")
 s7
 
 ```
-&nbsp; 
 
-The `.mp3` files can be imported to R although they are imported in` Wave` format. This is done using the `readMP3()` function:
+ 
+
+The `.mp3` files can be imported to R although they are imported in`Wave` format. This is done using the `readMP3()` function:
 
 ```{r, eval = TRUE}
 
@@ -614,7 +623,8 @@ s7 <- readMP3("./examples/Phae.long1.mp3")
 s7
 
 ```
-&nbsp; 
+
+ 
 
 To obtain information about the object (sampling frequency, number of bits, mono/stereo), it is necessary to use the indexing of S4 class objects:
 
@@ -627,38 +637,36 @@ s7@bit
 s7@stereo
 
 ```
-&nbsp; 
+
+ 
 
 A property that does not appear in these calls is that `readWave` does not normalize the sound. The values that describe the sound will be included between $\pm2^{bit} - 1$:
-  
+
 ```{r, eval = TRUE}
 
 range(s7@left)
 
-``` 
+```
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
-
-<font size="5">Exercise</font> 
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
 The function `Wave` can be used to create wave objects.
 
-&nbsp; 
+ 
 
-- Run the example code in the function documentation
+-   Run the example code in the function documentation
 
-- Plot the oscillogram for the first 0.01 s of 'Wobj'
+-   Plot the oscillogram for the first 0.01 s of 'Wobj'
 
-- Note that the function `sine` provides a shortcut that can be used to create wave object with a sine wave. Check out other similar functions described in the `sine` function documentation. Try 4 of these alternative functions and plot the oscillogram of the first 0.01 s for each of them.   
+-   Note that the function `sine` provides a shortcut that can be used to create wave object with a sine wave. Check out other similar functions described in the `sine` function documentation. Try 4 of these alternative functions and plot the oscillogram of the first 0.01 s for each of them.
+:::
 
-</div>
+ 
 
-&nbsp; 
-
-
-The function `read_sound_files` from warbleR is a wrapper over several sound file reading functions, that  can read files in 'wav', 'mp3', 'flac' and 'wac' format:
+The function `read_sound_files` from warbleR is a wrapper over several sound file reading functions, that can read files in 'wav', 'mp3', 'flac' and 'wac' format:
 
 ```{r, eval = TRUE}
 
@@ -686,7 +694,7 @@ class(rsf4)
 
 ```
 
-&nbsp; 
+ 
 
 The function can also read recordings hosted in an online repository:
 
@@ -702,7 +710,7 @@ class(rsf6)
 
 ```
 
-&nbsp; 
+ 
 
 ## Class `sound` (**phonTools**)
 
@@ -718,12 +726,13 @@ s8
 
 str(s8)
 
-``` 
-&nbsp; 
+```
+
+ 
 
 This function only imports files with a dynamic range of 8 or 16 bits.
 
-&nbsp; 
+ 
 
 ## Class `audioSample` (**audio**)
 
@@ -742,9 +751,10 @@ s10$rate
 s10$bits
 
 ```
-&nbsp; 
 
-The main advantage of the **audio** package is that the sound can be acquired directly within an R session. This is achieved first by preparing a `NAs` vector and then using the` record()` function. For example, to obtain a mono sound of 5 seconds sampled at 16 kHz:
+ 
+
+The main advantage of the **audio** package is that the sound can be acquired directly within an R session. This is achieved first by preparing a `NAs` vector and then using the`record()` function. For example, to obtain a mono sound of 5 seconds sampled at 16 kHz:
 
 ```{r, eval = FALSE}
 
@@ -752,12 +762,13 @@ s11 <- rep(NA_real_, 16000*5)
 
 record(s11, 16000, 1)
 
-``` 
-&nbsp; 
+```
+
+ 
 
 A recording session can be controlled by three complementary functions: `pause()`, `rewind()`, and `resume()`.
 
-&nbsp; 
+ 
 
 ## Export sounds from R
 
@@ -770,7 +781,8 @@ data(tico)
 export(tico, f=22050)
 
 ```
-&nbsp; 
+
+ 
 
 ## Format '.wav'
 
@@ -781,20 +793,22 @@ export(tico, f=22050)
 savewav(tico)
 
 ```
-&nbsp; 
+
+ 
 
 ## Format '.flac'
 
 Free Lossless Audio Codec (FLAC) is a file format for lossless audio data compression. FLAC reduces bandwidth and storage requirements without sacrificing the integrity of the audio source. Audio sources encoded in FLAC are generally reduced in size from 40 to 50 percent. See the flac website for more details ([flac.sourceforge.net](http://flac.sourceforge.net)).
 
-The `.flac` format cannot be used as such with R. However, the `wav2flac() `function allows you to call the FLAC software directly from the console. Therefore, FLAC must be installed on your operating system. If you have a `.wav` file that you want to compress in `.flac`, call:
+The `.flac` format cannot be used as such with R. However, the `wav2flac()`function allows you to call the FLAC software directly from the console. Therefore, FLAC must be installed on your operating system. If you have a `.wav` file that you want to compress in `.flac`, call:
 
 ```{r, eval = FALSE}
 
 wav2flac(file = "./examples/Phae.long1.wav", overwrite = FALSE)
 
 ```
-&nbsp; 
+
+ 
 
 To compress a `.wav` file to a `.flac` format, the argument `reverse = TRUE` must be used:
 
@@ -803,27 +817,25 @@ To compress a `.wav` file to a `.flac` format, the argument `reverse = TRUE` mus
 wav2flac("Phae.long1.flac", reverse = TRUE)
 
 ```
-&nbsp; 
+
+ 
 
 This table, taken from Sueur (2018), summarizes the functions available to import and export sound files in R. The table is incomplete since it does not mention the functions of the `phonTools` package:
 
-<img src="images/tabla-waves.png" alt="tabla imp exp waves">
- 
+<img src="images/tabla-waves.png" alt="tabla imp exp waves" width="700"/>
 
----
+------------------------------------------------------------------------
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+-   How does the sampling rate affect the size of an audio file? (hint: create 2 sounds files with the same data but different sampling rates; use `sine()`)
 
-- How does the sampling rate affect the size of an audio file? (hint: create 2 sounds files  with the same data but different sampling rates; use `sine()`)
+-   How does the dynamic range affect the size of an audio file?
 
-- How does the dynamic range affect the size of an audio file?
-
-- Use the `system.time()` function to compare the performance of the different functions to import audio files in R. For this use the file "LBH.374.SUR.wav" (Long-billed hermit songs) which lasts about 2 min
-
+-   Use the `system.time()` function to compare the performance of the different functions to import audio files in R. For this use the file "LBH.374.SUR.wav" (Long-billed hermit songs) which lasts about 2 min
 
 The following code creates a plot similar to `oscillo` but using dots instead of lines:
 
@@ -848,10 +860,9 @@ par(bg = "#D9EDF7", mar = c(5, 4, 1, 0) + 0.1)
 plot(wav@left) 
 ```
 
+ 
 
-&nbsp; 
-
-- Use the function `downsample()` to reduce the sampling rate of 'wav' (below 44100) and plot the output object. Decrease the sampling rate until you cannot recognize the wave pattern from the original wave object. Try several values so you get a sense at which sampling rate this happens.
+-   Use the function `downsample()` to reduce the sampling rate of 'wav' (below 44100) and plot the output object. Decrease the sampling rate until you cannot recognize the wave pattern from the original wave object. Try several values so you get a sense at which sampling rate this happens.
 
 ```{r, eval =  FALSE, echo = FALSE}
 
@@ -861,25 +872,21 @@ down_wav <- downsample(object = wav, samp.rate = 2756)
 plot(down_wav@left) 
 
 ```
+:::
 
+ 
 
-
-
-</div>
-
-&nbsp; 
-
----
+------------------------------------------------------------------------
 
 ## References
 
-1. Sueur J, Aubin T, Simonis C. 2008. Equipment review: seewave, a free modular tool for sound analysis and synthesis. Bioacoustics 18(2):213–226.
+1.  Sueur J, Aubin T, Simonis C. 2008. Equipment review: seewave, a free modular tool for sound analysis and synthesis. Bioacoustics 18(2):213--226.
 
-1. Sueur, J. (2018). Sound Analysis and Synthesis with R.
+2.  Sueur, J. (2018). Sound Analysis and Synthesis with R.
 
-1. Sueur J. (2018). I/O of sound with R. seewave package vignette. url: https://cran.r-project.org/web/packages/seewave/vignettes/seewave_IO.pdf
+3.  Sueur J. (2018). I/O of sound with R. seewave package vignette. url: https://cran.r-project.org/web/packages/seewave/vignettes/seewave_IO.pdf
 
----
+------------------------------------------------------------------------
 
 <font size="4">Session information</font>
 

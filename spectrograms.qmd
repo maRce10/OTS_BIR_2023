@@ -1,8 +1,5 @@
 ---
 title: <font size="7"><b>Building spectrograms</b></font>
-subtitle: <font size="4"><b>Bioacoustic Analysis in R</b> <br> Organization for Tropical Studies</font>
-author: <font size="3"><a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a></font>
-date: "`r Sys.Date()`"
 toc: true
 toc-depth: 2
 toc-location: left
@@ -14,8 +11,9 @@ format:
     code-fold: show
     code-tools: true
     css: qmd.css
+    link-external-icon: true
+    link-external-newwindow: true  
 ---
-
 
 ```{r, echo = FALSE}
 library(knitr)
@@ -24,8 +22,7 @@ opts_chunk$set(tidy = TRUE, warning = FALSE, message = FALSE)
 
 ```
 
-&nbsp; 
-
+ 
 
 The spectrogram is a fundamental tool in the study of acoustic communication in vertebrates. They are basically a visual representation of the sound where the variation in energy (or power spectral density) is shown on both the frequency and the time domains. Spectrograms allow us to visually explore acoustic variation in our study systems, which makes it easy to distinguish structural differences at small temporal/spectral scales that our ears cannot detect.
 
@@ -41,8 +38,6 @@ data(tico)
 data(orni)
 
 ```
-
-
 
 ## Fourier transformation
 
@@ -120,9 +115,8 @@ This diagram (taken from Sueur 2018) summarizes the process we just simulated:
 knitr::include_graphics("images/FFT_decomp.png")
 
 ```
+
 <font size="1"><b>Tomado de Sueur 2018</b></font>
-
-
 
 The periodogram next to the spectrogram of these simulated sounds looks like this:
 
@@ -141,8 +135,7 @@ par(opar)
 
 ```
 
-&nbsp; 
-
+ 
 
 ## From the Fourier transformation to the spectrogram
 
@@ -159,7 +152,8 @@ s.wav <- tuneR::Wave(left = s, samp.rate = 8000, bit = 16)
 monitoR::viewSpec(s.wav,  ovlp = 95, main = NA, frq.lim = c(0, 3))
 
 ```
-&nbsp; 
+
+ 
 
 If we divide the sound into 10 segments and make periodograms for each of them we can see this pattern in the frequencies:
 
@@ -246,11 +240,9 @@ movie.name =  "periodogram.gif", interval = 0.5, ani.width = 480 * 1.5)
 
 ```
 
- <img src="images/periodogram_spectro.gif" alt="Spectrogram resolution">
+<img src="images/periodogram_spectro.gif" alt="Spectrogram resolution"/>
 
-This animation shows in a very simple way the logic behind the spectrograms: if we calculate Fourier transforms for short segments of time through a sound (e.g. amplitude changes in time) and concatenate them, we can visualize the variation in
-frequencies over time.
-&nbsp; 
+This animation shows in a very simple way the logic behind the spectrograms: if we calculate Fourier transforms for short segments of time through a sound (e.g. amplitude changes in time) and concatenate them, we can visualize the variation in frequencies over time.  
 
 ## Overlap
 
@@ -263,7 +255,8 @@ s.wav <- tuneR::Wave(left = s, samp.rate = 8000, bit = 16)
 monitoR::viewSpec(s.wav, main = NA, frq.lim = c(0, 3))
 
 ```
-&nbsp; 
+
+ 
 
 There are several "tricks" to smooth out the contours of signals with high modulation in a spectrogram, although the main and most common is window overlap. The overlap recycles a percentage of the amplitude samples of a window to calculate the next window. For example, the sound used as an example, with a window size of 512 points divides the sound into 15 segments:
 
@@ -350,7 +343,7 @@ saveGIF(for(i in c(seq(0, 99, by = 5), rep(99, 15)))
 
 ```
 
- <img src="images/spectro.overlap.gif" alt="Spectrogram overlap">
+<img src="images/spectro.overlap.gif" alt="Spectrogram overlap"/>
 
 This increases the number of windows as a function of the overlap for this particular sound:
 
@@ -364,7 +357,7 @@ plot(seq(0, 99, 1), vnts, type =  "l", col = "red", lwd = 4, ylab = "# of time w
 
 ```
 
-&nbsp;  
+ 
 
 This increase in spectrogram sharpness does not come without a cost. The longer the time windows, the greater the number of Fourier transformations to compute, and therefore, the greater the duration of the process. This graphic shows the increase in duration as a function of the number of windows on my computer:
 
@@ -389,17 +382,17 @@ plot(vnts, tme * 1000, type =  "l", col = "red", lwd = 4, xlab = "# of time wind
 
 ```
 
-&nbsp; 
+ 
 
-It is necessary to take this cost into account when producing spectrograms of long sound files (> 1 min).
+It is necessary to take this cost into account when producing spectrograms of long sound files (\> 1 min).
 
-&nbsp; 
+ 
 
 ## Limitations
 
 However, there is a trade-off between the resolution between the 2 domains: the higher the frequency resolution, the lower the resolution in time. The following animation shows, for the sound of the previous example, how the resolution in frequency decreases as the resolution in time increases:
 
- <img src="images/spectro.precision.tradeoff2.gif" alt="Spectrogram resolution 2"> 
+<img src="images/spectro.precision.tradeoff2.gif" alt="Spectrogram resolution 2"/>
 
 ```{r, eval = F, echo = FALSE}
 
@@ -445,7 +438,8 @@ saveGIF(for(x in seq(10, 402, 4))
 },movie.name =  "spectro.precision.tradeoff2.gif", interval = 0.12, ani.width = 480 * 1.5)
 
 ```
-&nbsp; 
+
+ 
 
 This is the relationship between frequency resolution and time resolution for the example signal:
 
@@ -471,16 +465,16 @@ par( mar =c(4, 4, 1, 1))
 plot(res$res.t, res$res.f, type =  "l", col = "blue", lwd = 4, xlab = "Time window size (s)", ylab = "Frequency bin size (Hz)")
 
 ```
-&nbsp; 
 
-&nbsp;
+ 
+
+ 
 
 ## Creating spectrograms in R
 
-There are several R packages with functions that produce spectrograms in the graphical device. This chart (taken from Sueur 2018) summarizes the functions and their arguments:
- <img src="images/r-spectrogram-funs.png" alt="Spectrogram functions">
+There are several R packages with functions that produce spectrograms in the graphical device. This chart (taken from Sueur 2018) summarizes the functions and their arguments: <img src="images/r-spectrogram-funs.png" alt="Spectrogram functions"/>
 
-&nbsp;
+ 
 
 We will focus on making spectrograms using the `spectro ()` function of **seewave**:
 
@@ -494,26 +488,23 @@ spectro(tico2,  f = 22050, wl = 512, ovlp = 90,
 
 ```
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+-   How can I increase the overlap between time windows?
 
-- How can I increase the overlap between time windows?
+-   How much longer it takes to create a 99%-overlap spectrogram compare to a 5%-overlap spectrogram?
 
-- How much longer it takes to create a 99%-overlap spectrogram compare to a 5%-overlap spectrogram?
+-   What does the argument 'collevels' do? Increase the range and look at the spectrogram.
 
-- What does the argument 'collevels' do? Increase the range and look at the spectrogram.
+-   What do the 'flim' and 'tlim' arguments determine?
 
+-   Run the examples that come in the `spectro()` function documentation
+:::
 
-- What do the 'flim' and 'tlim' arguments determine?
-
-- Run the examples that come in the `spectro()` function documentation
-
-</div>
-
-&nbsp; 
+ 
 
 Almost all components of a spectrogram in **seewave** can be modified. We can add scales:
 
@@ -526,6 +517,7 @@ spectro(tico2,  f = 22050, wl = 512, ovlp = 90,
 ```
 
 Change the color palette:
+
 ```{r, eval = TRUE, echo = TRUE}
 
 spectro(tico2,  f = 22050, wl = 512, ovlp = 90,
@@ -534,7 +526,6 @@ spectro(tico2,  f = 22050, wl = 512, ovlp = 90,
           palette = reverse.cm.colors)
 
 ```
-
 
 ```{r, eval = TRUE, echo = TRUE}
 
@@ -546,6 +537,7 @@ spectro(tico2,  f = 22050, wl = 512, ovlp = 90,
 ```
 
 Remove the vertical lines:
+
 ```{r, eval = TRUE, echo = TRUE}
 
 spectro(tico2,  f = 22050, wl = 512, ovlp = 90,
@@ -569,44 +561,39 @@ spectro(tico2,  f = 22050, wl = 512, ovlp = 90,
 
 ```
 
-&nbsp; 
+ 
 
-<div class="alert alert-info">
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
 
-<font size="5">Exercise</font> 
+-   Change the color of the oscillogram to a 'heat color' palette
 
-- Change the color of the oscillogram to a 'heat color' palette
+-   These are some of the color palettes that fit well the gradients in spectrograms:  
 
-- These are some of the color palettes that fit well the gradients in spectrograms:
-&nbsp; 
+    <img src="images/palletes.png" alt="Spectrogram palletes" width="480"/>
 
-  <img src="images/palletes.png" alt="Spectrogram palletes" width="480"> 
+<font size="1"><b>From Sueur 2018</b></font>
 
- <font size="1"><b>From Sueur 2018</b></font>
+ 
 
-&nbsp; 
+Use at least 3 palettes to generate the "tico2" spectrogram
 
- Use at least 3 palettes to generate the "tico2" spectrogram
+ 
 
-&nbsp; 
- 
-- Change the relative height of the oscillogram so that it corresponds to 1/3 of the height of the spectrogram
+-   Change the relative height of the oscillogram so that it corresponds to 1/3 of the height of the spectrogram
 
-- Change the relative width of the amplitude scale so that it corresponds to 1/8 of the spectrogram width
+-   Change the relative width of the amplitude scale so that it corresponds to 1/8 of the spectrogram width
 
-- What does the "zp" argument do? (hint: try `zp = 100` and notice the effect on the spectrogram)
+-   What does the "zp" argument do? (hint: try `zp = 100` and notice the effect on the spectrogram)
 
-- Which value of "wl" (window size) generates smoother spectrograms for the example "orni" object?
+-   Which value of "wl" (window size) generates smoother spectrograms for the example "orni" object?
 
-- The package `viridis` provides some color palettes that are better perceived by people with forms of color blindness and/or color vision deficiency. Install the package and try some of the color palettes available (try `?viridis`)
+-   The package `viridis` provides some color palettes that are better perceived by people with forms of color blindness and/or color vision deficiency. Install the package and try some of the color palettes available (try `?viridis`)
+:::
 
-
-</div>
-
-&nbsp; 
+ 
 
 ## Dynamic spectrograms
-
 
 The package [dynaSpec](https://marce10.github.io/dynaSpec) allows to create static and dynamic visualizations of sounds, ready for publication or presentation. These dynamic spectrograms are produced natively with base graphics, and are save as an .mp4 video in the working directory:
 
@@ -626,23 +613,25 @@ scrolling_spectro(wave = ngh_wren, wl = 600,
     file.name = "../nightingale_wren.mp4", colbg = "#2d2d86", lcol = "#FFFFFFE6")
 ```
 
-<iframe width="100%" height="297" src="images/nightingale_wren.mp4" allowtransparency="true" style="background: #FFFFFF;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="297" src="images/nightingale_wren.mp4" allowtransparency="true" style="background: #FFFFFF;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 
-&nbsp; 
+</iframe>
 
----
+ 
+
+------------------------------------------------------------------------
 
 ## References
-  
-1. Araya-Salas, Marcelo and Wilkins, Matthew R. (2020), dynaSpec: dynamic spectrogram visualizations in R. R package version 1.0.0.
 
-1. Sueur J, Aubin T, Simonis C. 2008. Equipment review: seewave, a free modular tool for sound analysis and synthesis. Bioacoustics 18(2):213–226.
+1.  Araya-Salas, Marcelo and Wilkins, Matthew R. (2020), dynaSpec: dynamic spectrogram visualizations in R. R package version 1.0.0.
 
-1. Sueur, J. (2018). Sound Analysis and Synthesis with R.
+2.  Sueur J, Aubin T, Simonis C. 2008. Equipment review: seewave, a free modular tool for sound analysis and synthesis. Bioacoustics 18(2):213--226.
 
----
+3.  Sueur, J. (2018). Sound Analysis and Synthesis with R.
 
-&nbsp; 
+------------------------------------------------------------------------
+
+ 
 
 <font size="4">Session information</font>
 

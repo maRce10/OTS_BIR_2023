@@ -1,0 +1,68 @@
+---
+date: "`r Sys.Date()`"
+toc: true
+toc-depth: 3
+toc-location: left
+number-sections: true
+highlight-style: pygments
+format:
+  html:
+    df-print: kable
+    code-fold: show
+    code-tools: true
+    css: qmd.css
+    link-external-icon: true
+    link-external-newwindow: true      
+---
+
+ 
+
+<font size="4">
+
+## Getting recordings from Xeno-Canto
+
+The warbleR function [`query_xc()`](https://marce10.github.io/warbleR/reference/query_xc.html) queries for avian vocalization recordings in the open-access online repository [Xeno-Canto](https://xeno-canto.org). It can return recordings metadata or download the associated sound files.
+
+Example on how to get recording's metadata (no downloading):
+
+```{r, message=FALSE,  warning=FALSE}
+
+library(warbleR)
+
+pl <- query_xc(qword = 'Parus major', download = FALSE)
+
+```
+
+Keep only song vocalizations:
+
+```{r}
+
+song_pl <- pl[grep("song", ignore.case = TRUE, pl$Vocalization_type), ]
+
+```
+
+Map locations using [`map_xc()`](https://marce10.github.io/warbleR/reference/map_xc.html):
+
+```{r, results = 'asis', fig.width=10}
+
+map_xc(song_pl, leaflet.map = TRUE)
+
+```
+
+Once you feel fine with the subset of data you can go ahead and download it as follows:
+
+```{r, eval = FALSE, fig.width=10}
+
+query_xc(X = song_pl, download = TRUE, path = "DIRECTORY WHERE YOU WANT TO SAVE THE FILES")
+
+```
+
+------------------------------------------------------------------------
+
+<font size="4">Session information</font>
+
+```{r session info, echo=F}
+
+sessionInfo()
+
+```

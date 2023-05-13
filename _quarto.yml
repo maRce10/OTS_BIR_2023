@@ -1,0 +1,50 @@
+project:
+  type: website
+
+website:
+  title: "OTS Bioacoustic Analysis in R 2023"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - text: "Program"
+        href: program.qmd
+      - text: "Tutorials"
+        menu:
+        - text: "Introduction"
+          href: introduction.qmd
+        - text: "R basics"
+          href: r_basics.qmd
+        - text: "Sound"
+          href: sound.qmd
+        - text: "Spectrograms"
+          href: spectrograms.qmd
+        - text: "seewave"
+          href: seewave.qmd
+        - text: "Annotations"
+          href: annotations.qmd
+        - text: "ohun: automatic detection"
+          href: ohun.qmd
+        - text: "Intro to warbleR"
+          href: intro_to_warbler.qmd 
+        - text: "Measure acoustic structure"
+          href: measure_acoustic_structure.qmd
+        - text: "Comparing measuring methods"
+          href: comparing_methods.qmd        
+        - text: "Quality checks"
+          href: quality_checks.qmd
+        - text: "Measure structure on XC recordings"
+          href: measure_structure_green_hermit.qmd
+      - text: "Course prep"
+        href: course_prep.qmd
+      - text: "Instructor"
+        href: instructor.qmd
+
+format:
+  html:
+    theme: simplex
+    css: qmd.css
+    toc: true
+    
+editor: visual
+
