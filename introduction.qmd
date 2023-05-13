@@ -1,11 +1,18 @@
 ---
 author: "Marcelo Araya-Salas"
-format: revealjs
+format: 
+  revealjs:
+    self-contained: false
+    incremental: false
+    footer: "Bioacoustics in R 2023 | OTS"
+    theme: ["custom.scss"]
+    slide-number: c/t
+    show-slide-number: all
+    hash-type: number
+    preview-links: false
 ---
 
-##  {background-color="black"}
-
-<center><font size="20"><b>Why animal sounds and why R?</b></font></center>
+## Why animal sounds and why R? {.center .aboutmeslide}
 
 &nbsp; 
 
@@ -20,11 +27,11 @@ format: revealjs
 
 &nbsp; 
 
-<center><img src="images/ucr_cin.png" width="600px"/></center> 
+<!-- <center><img src="images/ucr_cin.png" width="600px"/></center>  -->
 
 ---
 
-##  __Animal acoustic signals__ {background-color="black"}
+##  __Animal acoustic signals__ {background-color="black" .center}
 
 
 <center><iframe width="100%" height="600"  src="images/lbh_singing_30fps.mp4" allowtransparency="true" style="background: #000000;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
@@ -33,16 +40,16 @@ format: revealjs
 
 
 
-## __Animal acoustic signals__
+## __Animal acoustic signals__ {.center}
 
 <center><iframe width="100%" height="500" src="images/house-wren.mp4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
 ---
 
 
+## __Common research questions__ {.center}
 
-
-## __Common research questions__
+::: {.incremental}
 
 * How animal acoustic signals vary in space and time? why?
 
@@ -52,11 +59,13 @@ format: revealjs
 
 * How the transmission properties of the environment have shaped signal structure?  
 
+:::
+
 ---
 
 
 
-## __Acoustic analysis workflow__
+## __Acoustic analysis workflow__ {.center}
 
 <center><img src="images/bioacoustic_research_diagram.png" height="100%" width="800px"/></center>
   
@@ -64,21 +73,30 @@ format: revealjs
 
 
 
-## __Why bioacoustics in R?__
+## __Why bioacoustics in R?__ {.center}
+
+::: {.incremental}
 
 - Improves reproducibility of research
+
+- Involves a deeper understanding of the structure of our study systems
 
 - Allows conducting analyses that better fit our research questions and study systems
 
 - Democratizes access to scientific resources
 
+
+:::
 ---
 
 
 
-## __Course outline__
+## __Course outline__ {.center}
+
+::: {.incremental}
 
 - Tutorials with combinations of theoretical background, demonstrations and proofs of concept using R code and self-learning practices on their own acoustic data or supplied example data
 
 - Additional practices and readings assigned after each session
 
+:::
