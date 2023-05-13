@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>OTS Bioacoustic Analysis in R 2023 - Quality checks for recordings and annotations</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">OTS Bioacoustic Analysis in R 2023</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./program.html">
+ <span class="menu-text">Program</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+        <li>
+    <a class="dropdown-item" href="./introduction.html">
+ <span class="dropdown-text">Introduction</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./r_basics.html">
+ <span class="dropdown-text">R basics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sound.html">
+ <span class="dropdown-text">Sound</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./spectrograms.html">
+ <span class="dropdown-text">Spectrograms</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./seewave.html">
+ <span class="dropdown-text">seewave</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./annotations.html">
+ <span class="dropdown-text">Annotations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ohun.html">
+ <span class="dropdown-text">ohun: automatic detection</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./intro_to_warbler.html">
+ <span class="dropdown-text">Intro to warbleR</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./measure_acoustic_structure.html">
+ <span class="dropdown-text">Measure acoustic structure</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./comparing_methods.html">
+ <span class="dropdown-text">Comparing measuring methods</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./quality_checks.html">
+ <span class="dropdown-text">Quality checks</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./measure_structure_green_hermit.html">
+ <span class="dropdown-text">Measure structure on XC recordings</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="./course_prep.html">
+ <span class="menu-text">Course prep</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./instructor.html">
+ <span class="menu-text">Instructor</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#convert-.mp3-to-.wav" id="toc-convert-.mp3-to-.wav" class="nav-link active" data-scroll-target="#convert-.mp3-to-.wav"><span class="toc-section-number">1</span>  Convert .mp3 to .wav</a></li>
+  <li><a href="#homogenize-recordings" id="toc-homogenize-recordings" class="nav-link" data-scroll-target="#homogenize-recordings"><span class="toc-section-number">2</span>  Homogenize recordings</a></li>
+  <li><a href="#check-recordings" id="toc-check-recordings" class="nav-link" data-scroll-target="#check-recordings"><span class="toc-section-number">3</span>  Check recordings</a></li>
+  <li><a href="#spectrograph-settings" id="toc-spectrograph-settings" class="nav-link" data-scroll-target="#spectrograph-settings"><span class="toc-section-number">4</span>  Spectrograph settings</a></li>
+  <li><a href="#double-check-selections" id="toc-double-check-selections" class="nav-link" data-scroll-target="#double-check-selections"><span class="toc-section-number">5</span>  Double-check selections</a></li>
+  <li><a href="#catalogs" id="toc-catalogs" class="nav-link" data-scroll-target="#catalogs"><span class="toc-section-number">6</span>  Catalogs</a></li>
+  <li><a href="#tailoring-selections" id="toc-tailoring-selections" class="nav-link" data-scroll-target="#tailoring-selections"><span class="toc-section-number">7</span>  Tailoring selections</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">8</span>  References</a></li>
+  </ul>
+</nav>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><font size="7"><b>Quality checks for recordings and annotations</b></font></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<p>&nbsp;</p>
+<p>When working with sound files obtained from various sources it is common to have variation in recording formats and parameters or even find corrupt files. Similarly, when a large number of annotations are used, it is normal to find errors in some of them. These problems may prevent the use of acoustic analysis in <strong>warbleR</strong>. Luckily, the package also offers functions to facilitate the detection and correction of errors in sound files and annotations.</p>
+<section id="convert-.mp3-to-.wav" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="convert-.mp3-to-.wav"><span class="header-section-number">1</span> Convert .mp3 to .wav</h2>
+<p>The <code>mp32wav()</code> function allows you to convert files in ‘.mp3’ format to ‘.wav’ format. This function converts all the ‘mp3’ files in the working directory. Let’s use the files in the ‘./examples/mp3’ folder as an example:</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>, <span class="at">ovlp =</span> <span class="dv">90</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">pattern =</span> <span class="st">"mp3$"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">dest.path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">pattern =</span> <span class="st">"mp3$|wav$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "BlackCappedVireo.mp3" "BowheadWhaleSong.mp3" "CanyonWren.mp3"      </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "BlackCappedVireo.mp3" "BlackCappedVireo.wav" "BowheadWhaleSong.mp3"
+[4] "BowheadWhaleSong.wav" "CanyonWren.mp3"       "CanyonWren.wav"      </code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>We can also modify the sampling rate and/or dynamic range with <code>mp32wav()</code>:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">samp.rate =</span> <span class="dv">48</span>, <span class="at">bit.depth =</span> <span class="dv">24</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="at">dest.path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>&nbsp;</p>
+<p>We can check the properties of the ‘.wav’ sound files using the <code>info_sound_files()</code> function:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">info_sound_files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> duration </th>
+   <th style="text-align:center;"> sample.rate </th>
+   <th style="text-align:center;"> channels </th>
+   <th style="text-align:center;"> bits </th>
+   <th style="text-align:center;"> wav.size </th>
+   <th style="text-align:center;"> samples </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> BlackCappedVireo.mp3 </td>
+   <td style="text-align:center;"> 5.459592 </td>
+   <td style="text-align:center;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 0.087770 </td>
+   <td style="text-align:center;"> 120384 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> BlackCappedVireo.wav </td>
+   <td style="text-align:center;"> 5.459592 </td>
+   <td style="text-align:center;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 0.240812 </td>
+   <td style="text-align:center;"> 120384 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> BowheadWhaleSong.mp3 </td>
+   <td style="text-align:center;"> 86.648163 </td>
+   <td style="text-align:center;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 1.386787 </td>
+   <td style="text-align:center;"> 1910592 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> BowheadWhaleSong.wav </td>
+   <td style="text-align:center;"> 86.648163 </td>
+   <td style="text-align:center;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 3.821228 </td>
+   <td style="text-align:center;"> 1910592 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> CanyonWren.mp3 </td>
+   <td style="text-align:center;"> 5.433469 </td>
+   <td style="text-align:center;"> 44.10 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 0.087352 </td>
+   <td style="text-align:center;"> 239616 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> CanyonWren.wav </td>
+   <td style="text-align:center;"> 5.433469 </td>
+   <td style="text-align:center;"> 44.10 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 0.479276 </td>
+   <td style="text-align:center;"> 239616 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="homogenize-recordings" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="homogenize-recordings"><span class="header-section-number">2</span> Homogenize recordings</h2>
+<p>Alternatively, we can use the <code>fix_wavs()</code> function to homogenize the sampling rate, the dynamic interval and the number of channels. It is adviced that all sound files should have the same recording parameters before any acoustic analysis. In the example ‘.mp3’ files, not all of them have been recorded with the same parameters. We can see this if we convert them back to ‘.wav’ and see their properties:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">dest.path =</span> <span class="st">"./examples/mp3"</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="fu">info_sound_files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> duration </th>
+   <th style="text-align:center;"> sample.rate </th>
+   <th style="text-align:center;"> channels </th>
+   <th style="text-align:center;"> bits </th>
+   <th style="text-align:center;"> wav.size </th>
+   <th style="text-align:center;"> samples </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> BlackCappedVireo.mp3 </td>
+   <td style="text-align:center;"> 5.459592 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 0.087770 </td>
+   <td style="text-align:center;"> 120384 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> BlackCappedVireo.wav </td>
+   <td style="text-align:center;"> 5.459592 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 0.240812 </td>
+   <td style="text-align:center;"> 120384 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> BowheadWhaleSong.mp3 </td>
+   <td style="text-align:center;"> 86.648163 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 1.386787 </td>
+   <td style="text-align:center;"> 1910592 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> BowheadWhaleSong.wav </td>
+   <td style="text-align:center;"> 86.648163 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 3.821228 </td>
+   <td style="text-align:center;"> 1910592 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> CanyonWren.mp3 </td>
+   <td style="text-align:center;"> 5.433469 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 44.10 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 0.087352 </td>
+   <td style="text-align:center;"> 239616 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> CanyonWren.wav </td>
+   <td style="text-align:center;"> 5.433469 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 44.10 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 0.479276 </td>
+   <td style="text-align:center;"> 239616 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>&nbsp;</p>
+<p>The <code>fix_wavs()</code> function will convert all files to the same sampling rate and dynamic range:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">fix_wavs</span>(<span class="at">path =</span> mp3.pth, <span class="at">samp.rate =</span> <span class="fl">44.1</span>, <span class="at">bit.depth =</span> <span class="dv">24</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="fu">info_sound_files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3/converted_sound_files"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> duration </th>
+   <th style="text-align:center;"> sample.rate </th>
+   <th style="text-align:center;"> channels </th>
+   <th style="text-align:center;"> bits </th>
+   <th style="text-align:center;"> wav.size </th>
+   <th style="text-align:center;"> samples </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> BlackCappedVireo.mp3 </td>
+   <td style="text-align:center;"> 5.459592 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 16 </td>
+   <td style="text-align:center;"> 0.087770 </td>
+   <td style="text-align:center;"> 120384 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> BlackCappedVireo.wav </td>
+   <td style="text-align:center;"> 5.459592 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 16 </td>
+   <td style="text-align:center;"> 0.240812 </td>
+   <td style="text-align:center;"> 120384 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> BowheadWhaleSong.mp3 </td>
+   <td style="text-align:center;"> 86.648163 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 16 </td>
+   <td style="text-align:center;"> 1.386787 </td>
+   <td style="text-align:center;"> 1910592 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> BowheadWhaleSong.wav </td>
+   <td style="text-align:center;"> 86.648163 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 22.05 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 16 </td>
+   <td style="text-align:center;"> 3.821228 </td>
+   <td style="text-align:center;"> 1910592 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> CanyonWren.mp3 </td>
+   <td style="text-align:center;"> 5.433469 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 44.10 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 16 </td>
+   <td style="text-align:center;"> 0.087352 </td>
+   <td style="text-align:center;"> 239616 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> CanyonWren.wav </td>
+   <td style="text-align:center;"> 5.433469 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 44.10 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 16 </td>
+   <td style="text-align:center;"> 0.479276 </td>
+   <td style="text-align:center;"> 239616 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>Another useful function to check file properties is <code>wav_dur()</code>. This function returns the duration in seconds of each ‘.wav’ file.</p>
+<p>&nbsp;</p>
+</section>
+<section id="check-recordings" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="check-recordings"><span class="header-section-number">3</span> Check recordings</h2>
+<p><code>check_sound_files()</code> should be the first function that should be used before running any <strong>warbleR</strong> analysis. The function simply checks if the sound files in ‘.wav’ format in the working directory can be read in R. For example, the following code checks all the files in the ‘examples’ folder, which should detect the ‘corrupted_file.wav’:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">check_sound_files</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>WAC with trigger(s), converting individual segment(s) to WAV file(s).
+All files can be read
+Not all sound files have the same sampling rate (potentially problematic, particularly for cross_correlation())</code></pre>
+</div>
+</div>
+<p>If we remove that file from the folder, the function returns the following message:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">check_sound_files</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>WAC with trigger(s), converting individual segment(s) to WAV file(s).
+All files can be read
+Not all sound files have the same sampling rate (potentially problematic, particularly for cross_correlation())</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="spectrograph-settings" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="spectrograph-settings"><span class="header-section-number">4</span> Spectrograph settings</h2>
+<p>The parameters that determine the appearance of spectrograms (and power spectra and periodgrams) also have an effect on the measurements taken on them. Therefore it is necessary to use the same parameters to analyze all the signals in a project (except with some exceptions) so that the measurements are comparable. The visualization of spectrograms generated with different spectrographic parameters is a useful way of defining the combination of parameters with which the structure of the signals is distinguished in more detail. The function <code>tweak_spectro()</code> aims to simplify the selection of parameters through the display of spectrograms. The function plots, for a single selection, a mosaic of spectrograms with different display parameters. For numerical arguments, the upper and lower limits of a range can be provided. The following parameters may have variable values:</p>
+<ul>
+<li><strong>wl</strong>: window length (numerical range)</li>
+<li><strong>ovlp</strong>: overlap (numerical range)</li>
+<li><strong>collev.min</strong>: minimum amplitude value for color levels (numerical range)</li>
+<li><strong>wn</strong>: window function name (character)</li>
+<li><strong>pal</strong>: palette (character)</li>
+</ul>
+<p>The following code generates an image with spectrograms that vary in window size and window function (the rest of the parameters are passed to the <code>catalog ()</code> function internally to create the mosaic):</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">tweak_spectro</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">wl =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">1000</span>), <span class="at">wn =</span> <span class="fu">c</span>(<span class="st">"hanning"</span>,</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="st">"hamming"</span>, <span class="st">"rectangle"</span>), <span class="at">length.out =</span> <span class="dv">16</span>, <span class="at">nrow =</span> <span class="dv">8</span>, <span class="at">ncol =</span> <span class="dv">6</span>,</span>
+<span id="cb12-3"><a href="#cb12-3"></a>    <span class="at">width =</span> <span class="dv">15</span>, <span class="at">height =</span> <span class="dv">20</span>, <span class="at">rm.axes =</span> <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="dv">1</span>, <span class="at">box =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><img src="images/spec_param1.jpeg" alt="viewSpec" width="780"></p>
+<p>&nbsp;</p>
+<p>Note that the <code>length.out</code> argument defines the number of values to interpolate within the numerical ranges. <code>wl = 220</code> seems to produce clearer spectrograms.</p>
+<p>We can add a color palette to differentiate the levels of one of the parameters, for example ‘wn’:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># install.packages('RColorBrewer')</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co"># crear paleta</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a>cmc <span class="ot">&lt;-</span> <span class="cf">function</span>(n) <span class="cf">if</span> (n <span class="sc">&gt;</span> <span class="dv">5</span>) <span class="fu">rep</span>(<span class="fu">adjustcolor</span>(<span class="fu">brewer.pal</span>(<span class="dv">5</span>, <span class="st">"Spectral"</span>),</span>
+<span id="cb13-7"><a href="#cb13-7"></a>    <span class="at">alpha.f =</span> <span class="fl">0.6</span>), <span class="fu">ceiling</span>(n<span class="sc">/</span><span class="dv">4</span>))[<span class="dv">1</span><span class="sc">:</span>n] <span class="cf">else</span> <span class="fu">adjustcolor</span>(<span class="fu">brewer.pal</span>(n,</span>
+<span id="cb13-8"><a href="#cb13-8"></a>    <span class="st">"Spectral"</span>), <span class="at">alpha.f =</span> <span class="fl">0.6</span>)</span>
+<span id="cb13-9"><a href="#cb13-9"></a></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="fu">tweak_spectro</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">wl =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">1000</span>), <span class="at">wn =</span> <span class="fu">c</span>(<span class="st">"hanning"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11"></a>    <span class="st">"hamming"</span>, <span class="st">"rectangle"</span>), <span class="at">length.out =</span> <span class="dv">16</span>, <span class="at">nrow =</span> <span class="dv">8</span>, <span class="at">ncol =</span> <span class="dv">6</span>,</span>
+<span id="cb13-12"><a href="#cb13-12"></a>    <span class="at">width =</span> <span class="dv">15</span>, <span class="at">height =</span> <span class="dv">20</span>, <span class="at">rm.axes =</span> <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="dv">1</span>, <span class="at">box =</span> F, <span class="at">group.tag =</span> <span class="st">"wn"</span>,</span>
+<span id="cb13-13"><a href="#cb13-13"></a>    <span class="at">tag.pal =</span> <span class="fu">list</span>(cmc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><img src="images/spec_param3.jpeg" alt="viewSpec" width="780"></p>
+<p>&nbsp;</p>
+<p>We can also use it to choose the color palette and the minimum amplitude for plotting (‘collev.min’):</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">tweak_spectro</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">wl =</span> <span class="dv">220</span>, <span class="at">collev.min =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">20</span>, <span class="sc">-</span><span class="dv">100</span>),</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    <span class="at">pal =</span> <span class="fu">c</span>(<span class="st">"reverse.gray.colors.2"</span>, <span class="st">"reverse.topo.colors"</span>, <span class="st">"reverse.terrain.colors"</span>),</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    <span class="at">length.out =</span> <span class="dv">16</span>, <span class="at">nrow =</span> <span class="dv">8</span>, <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">width =</span> <span class="dv">15</span>, <span class="at">height =</span> <span class="dv">20</span>,</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    <span class="at">rm.axes =</span> <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="dv">1</span>, <span class="at">box =</span> F, <span class="at">group.tag =</span> <span class="st">"pal"</span>, <span class="at">tag.pal =</span> <span class="fu">list</span>(cmc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><img src="images/spec_param2.jpeg" alt="viewSpec" width="780"></p>
+<p>&nbsp;</p>
+</section>
+<section id="double-check-selections" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="double-check-selections"><span class="header-section-number">5</span> Double-check selections</h2>
+<p>The main function to double-check selection tables is <code>check_sels()</code>. This function checks a large number of possible errors in the selection information:</p>
+<ul>
+<li>‘X’ is an object of the class ‘data.frame’ or ‘selection_table’ (see selection_table) and contains the columns required to be used in any warbleR function (‘sound.files’, ‘selec’, ‘start’ , ‘end’, if it does not return an error)</li>
+<li>‘sound.files’ in ‘X’ corresponds to the .wav files in the working directory or in the provided ‘path’ (if no file is found it returns an error, if some files are not found it returns error information in the output data frame)</li>
+<li>the time limit parameters (‘start’, ‘end’) and frequency (‘bottom.freq’, ‘top.freq’, if provided) are numeric and do not contain NA (if they do not return an error)</li>
+<li>There are no duplicate selection tags (‘selec’) within a sound file (if it does not return an error)</li>
+<li>sound files can be read (error information in the output data frame)</li>
+<li>The start and end time of the selections is within the duration of the sound files (error information in the output data frame)</li>
+<li>Sound files can be read (error information in the output data frame)</li>
+<li>The header (header) of the sound files is not damaged (only if the header = TRUE, error information in the selection table with results)</li>
+<li>‘top.freq’ is less than half of the sampling frequency (nyquist frequency, error information in the data table with results)</li>
+<li>Negative values are not found in the time or frequency limit parameters (error information in the data table with results)</li>
+<li>‘start’ higher than ‘end’ or ‘bottom.freq’ higher than ‘top.freq’ (error information in the output data frame)</li>
+<li>The value of ‘channel’ is not greater than the number of channels in the sound files (error information in the output data frame)</li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>cs <span class="ot">&lt;-</span> <span class="fu">check_sels</span>(lbh_selec_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>all selections are OK </code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>The function returns a data frame that includes the information in ‘X’ plus additional columns about the format of the sound files, as well as the result of the checks (column ‘check.res’):</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>cs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:808px; "><table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> channel </th>
+   <th style="text-align:center;"> selec </th>
+   <th style="text-align:center;"> start </th>
+   <th style="text-align:center;"> end </th>
+   <th style="text-align:center;"> bottom.freq </th>
+   <th style="text-align:center;"> top.freq </th>
+   <th style="text-align:center;"> check.res </th>
+   <th style="text-align:center;"> duration </th>
+   <th style="text-align:center;"> min.n.samples </th>
+   <th style="text-align:center;"> sample.rate </th>
+   <th style="text-align:center;"> channels </th>
+   <th style="text-align:center;"> bits </th>
+   <th style="text-align:center;"> sound.file.samples </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.1693549 </td>
+   <td style="text-align:center;"> 1.3423884 </td>
+   <td style="text-align:center;"> 2.220105 </td>
+   <td style="text-align:center;"> 8.604378 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1730334 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 3893 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 56251 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 2.1584085 </td>
+   <td style="text-align:center;"> 2.3214565 </td>
+   <td style="text-align:center;"> 2.169437 </td>
+   <td style="text-align:center;"> 8.807053 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1630480 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 3668 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 56251 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.3433366 </td>
+   <td style="text-align:center;"> 0.5182553 </td>
+   <td style="text-align:center;"> 2.218294 </td>
+   <td style="text-align:center;"> 8.756604 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1749187 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 3935 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 56251 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.1595983 </td>
+   <td style="text-align:center;"> 0.2921692 </td>
+   <td style="text-align:center;"> 2.316862 </td>
+   <td style="text-align:center;"> 8.822316 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1325709 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2982 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 38251 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1.4570585 </td>
+   <td style="text-align:center;"> 1.5832087 </td>
+   <td style="text-align:center;"> 2.284006 </td>
+   <td style="text-align:center;"> 8.888027 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1261502 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2838 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 38251 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.6265520 </td>
+   <td style="text-align:center;"> 0.7577715 </td>
+   <td style="text-align:center;"> 3.006834 </td>
+   <td style="text-align:center;"> 8.822316 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1312195 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2952 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 49500 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1.9742132 </td>
+   <td style="text-align:center;"> 2.1043921 </td>
+   <td style="text-align:center;"> 2.776843 </td>
+   <td style="text-align:center;"> 8.888027 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1301789 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2929 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 49500 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.1233643 </td>
+   <td style="text-align:center;"> 0.2545812 </td>
+   <td style="text-align:center;"> 2.316862 </td>
+   <td style="text-align:center;"> 9.315153 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1312170 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2952 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 49500 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long4.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.5168116 </td>
+   <td style="text-align:center;"> 1.6622365 </td>
+   <td style="text-align:center;"> 2.513997 </td>
+   <td style="text-align:center;"> 9.216586 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1454249 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 3272 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 72000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long4.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 2.9326920 </td>
+   <td style="text-align:center;"> 3.0768784 </td>
+   <td style="text-align:center;"> 2.579708 </td>
+   <td style="text-align:center;"> 10.235116 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1441864 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 3244 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 72000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long4.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.1453977 </td>
+   <td style="text-align:center;"> 0.2904966 </td>
+   <td style="text-align:center;"> 2.579708 </td>
+   <td style="text-align:center;"> 9.742279 </td>
+   <td style="text-align:center;"> OK </td>
+   <td style="text-align:center;"> 0.1450989 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 3264 </td>
+   <td style="text-align:center;"> 22.5 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 72000 </td>
+  </tr>
+</tbody>
+</table></div>
+
+</div>
+</div>
+<p>&nbsp;</p>
+<p>Let’s modified a selection table to see how the function works:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># copiar las primeras 6 filas</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>st2 <span class="ot">&lt;-</span> lbh_selec_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, ]</span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co"># hacer caracter</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>st2<span class="sc">$</span>sound.files <span class="ot">&lt;-</span> <span class="fu">as.character</span>(st2<span class="sc">$</span>sound.files)</span>
+<span id="cb18-6"><a href="#cb18-6"></a></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co"># cambiar nombre de archivo de sonido en sel 1</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>st2<span class="sc">$</span>sound.files[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"aaa.wav"</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co"># modificar fin en sel 3</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a>st2<span class="sc">$</span>end[<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co"># hacer top.freq igual q bottom freq en sel 3</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a>st2<span class="sc">$</span>top.freq[<span class="dv">3</span>] <span class="ot">&lt;-</span> st2<span class="sc">$</span>bottom.freq[<span class="dv">3</span>]</span>
+<span id="cb18-15"><a href="#cb18-15"></a></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="co"># modificar top freq en sel 5</span></span>
+<span id="cb18-17"><a href="#cb18-17"></a>st2<span class="sc">$</span>top.freq[<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb18-18"><a href="#cb18-18"></a></span>
+<span id="cb18-19"><a href="#cb18-19"></a><span class="co"># modificar channes en sel 6</span></span>
+<span id="cb18-20"><a href="#cb18-20"></a>st2<span class="sc">$</span>channel[<span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb18-21"><a href="#cb18-21"></a></span>
+<span id="cb18-22"><a href="#cb18-22"></a><span class="co"># revisar</span></span>
+<span id="cb18-23"><a href="#cb18-23"></a>cs <span class="ot">&lt;-</span> <span class="fu">check_sels</span>(st2)</span>
+<span id="cb18-24"><a href="#cb18-24"></a></span>
+<span id="cb18-25"><a href="#cb18-25"></a>cs[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ some selections listed as having more than 1 channel found in sound files with only 1 channel; channel field relabeled as '1' 
+3 selection(s) are not OK </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> channel </th>
+   <th style="text-align:center;"> selec </th>
+   <th style="text-align:center;"> start </th>
+   <th style="text-align:center;"> end </th>
+   <th style="text-align:center;"> bottom.freq </th>
+   <th style="text-align:center;"> top.freq </th>
+   <th style="text-align:center;"> min.n.samples </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> aaa.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.1693549 </td>
+   <td style="text-align:center;"> 1.3423884 </td>
+   <td style="text-align:center;"> 2.220105 </td>
+   <td style="text-align:center;"> 8.604378 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 2.1584085 </td>
+   <td style="text-align:center;"> 2.3214565 </td>
+   <td style="text-align:center;"> 2.169437 </td>
+   <td style="text-align:center;"> 8.807053 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 3668 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.3433366 </td>
+   <td style="text-align:center;"> 100.0000000 </td>
+   <td style="text-align:center;"> 2.218294 </td>
+   <td style="text-align:center;"> 2.218294 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2242274 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.1595983 </td>
+   <td style="text-align:center;"> 0.2921692 </td>
+   <td style="text-align:center;"> 2.316862 </td>
+   <td style="text-align:center;"> 8.822316 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2982 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1.4570585 </td>
+   <td style="text-align:center;"> 1.5832087 </td>
+   <td style="text-align:center;"> 2.284006 </td>
+   <td style="text-align:center;"> 200.000000 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2838 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.6265520 </td>
+   <td style="text-align:center;"> 0.7577715 </td>
+   <td style="text-align:center;"> 3.006834 </td>
+   <td style="text-align:center;"> 8.822316 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2952 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>&nbsp;</p>
+<p><code>check_sels()</code> is used internally when creating selection tables and extended selection tables.</p>
+<p>&nbsp;</p>
+<section id="visual-inspection-of-spectrograms" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="visual-inspection-of-spectrograms"><span class="header-section-number">5.1</span> Visual inspection of spectrograms</h3>
+<p>Once the information in the selections has been verified, the next step is to ensure that the selections contain accurate information about the location of the signals of interest. This can be done by creating spectrograms of all selections. For this we have several options. The first is <code>spectrograms()</code> (previously called <code>specreator()</code>) which generates (by default) a spectrogram for each selection. We can run it on the sample data like this:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># using default parameters tweak_spectro()</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>, <span class="at">wl =</span> <span class="dv">220</span>, <span class="at">wn =</span> <span class="st">"hanning"</span>,</span>
+<span id="cb20-3"><a href="#cb20-3"></a>    <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">pal =</span> reverse.topo.colors)</span>
+<span id="cb20-4"><a href="#cb20-4"></a></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="fu">spectrograms</span>(lbh_selec_table, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+
+</div>
+<p>&nbsp;</p>
+<p>The images it produces are saved in the working directory and look like this:</p>
+<p><img src="images/spectrograms2.gif" alt="viewSpec" width="400"></p>
+<p>&nbsp;</p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p>&nbsp;</p>
+<ul>
+<li>Have the label shown on the selection display the data in the ‘sel.comment’ column of the sample selection box using the <code>sel.labels</code> argument</li>
+</ul>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="full-spectrograms" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="full-spectrograms"><span class="header-section-number">5.2</span> Full spectrograms</h3>
+<p>We can create spectrograms for the whole sound files using <code>full_spectrograms()</code>. If the <code>X</code> argument is not given, the function will create the spectrograms for all the files in the working directory. Otherwise, the function generates spectrograms for sound files in <code>X</code> and highlights selections with transparent rectangles similar to those of<code>spectrograms()</code>. In this example we download a recording from a striped-throated hermit (<em>Phaethornis striigularis</em>) from Xeno-Canto:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># load package with color palettes</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb21-3"><a href="#cb21-3"></a></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co"># create directory</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="fu">dir.create</span>(<span class="st">"./examples/hermit"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6"></a></span>
+<span id="cb21-7"><a href="#cb21-7"></a><span class="co"># download sound file</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a>phae.stri <span class="ot">&lt;-</span> <span class="fu">query_xc</span>(<span class="at">qword =</span> <span class="st">"nr:154074"</span>, <span class="at">download =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples/hermit"</span>)</span>
+<span id="cb21-9"><a href="#cb21-9"></a></span>
+<span id="cb21-10"><a href="#cb21-10"></a><span class="co"># Convert mp3 to wav format</span></span>
+<span id="cb21-11"><a href="#cb21-11"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/hermit/"</span>, <span class="at">pb =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-12"><a href="#cb21-12"></a></span>
+<span id="cb21-13"><a href="#cb21-13"></a><span class="co"># plot full spec</span></span>
+<span id="cb21-14"><a href="#cb21-14"></a><span class="fu">full_spectrograms</span>(<span class="at">sxrow =</span> <span class="dv">1</span>, <span class="at">rows =</span> <span class="dv">10</span>, <span class="at">pal =</span> magma, <span class="at">wl =</span> <span class="dv">200</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">3</span>,</span>
+<span id="cb21-15"><a href="#cb21-15"></a>    <span class="dv">10</span>), <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">140</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="at">path =</span> <span class="st">"./examples/hermit/"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><img src="images/fullspec_hermit.gif" alt="hermit" width="700"></p>
+<p>&nbsp;</p>
+</section>
+</section>
+<section id="catalogs" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="catalogs"><span class="header-section-number">6</span> Catalogs</h2>
+<p>Catalogs allow you to inspect selections of many recordings in the same image and group them by categories. This makes it easier to verify the consistency of the categories. Many of the arguments are shared with <code>tweak_spectro()</code> (<code>catalog()</code> is used internally in <code>tweak_spectro()</code>). We can generate a catalog with color tags to identify selections from the same sound file as follows:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># read bat inquiry data</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>inq <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="st">"ext_sel_tab_inquiry.RDS"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3"></a></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="fu">catalog</span>(<span class="at">X =</span> inq[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ], <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">50</span>), <span class="at">nrow =</span> <span class="dv">10</span>, <span class="at">ncol =</span> <span class="dv">10</span>,</span>
+<span id="cb22-5"><a href="#cb22-5"></a>    <span class="at">same.time.scale =</span> T, <span class="at">mar =</span> <span class="fl">0.01</span>, <span class="at">gr =</span> <span class="cn">FALSE</span>, <span class="at">img.suffix =</span> <span class="st">"inquiry"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"sound.files"</span>, <span class="st">"selec"</span>), <span class="at">legend =</span> <span class="dv">0</span>, <span class="at">rm.axes =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-7"><a href="#cb22-7"></a>    <span class="at">box =</span> F, <span class="at">group.tag =</span> <span class="st">"sound.files"</span>, <span class="at">tag.pal =</span> <span class="fu">list</span>(magma), <span class="at">width =</span> <span class="dv">20</span>,</span>
+<span id="cb22-8"><a href="#cb22-8"></a>    <span class="at">height =</span> <span class="dv">20</span>, <span class="at">pal =</span> viridis, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><img src="images/Catalog_p1-inquiry.jpeg" alt="viewSpec" width="680"></p>
+<p>&nbsp;</p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p>&nbsp;</p>
+<ul>
+<li>Using the ‘lbh_selec_table’ data, create a catalog with selections color-tagged by song type</li>
+</ul>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="tailoring-selections" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="tailoring-selections"><span class="header-section-number">7</span> Tailoring selections</h2>
+<p>The position of the selections in the sound file (i.e.&nbsp;its ‘coordinates’ of time and frequency) can be modified interactively from R using the <code>sel_tailor()</code> function. This function produces a graphic window showing spectrograms and a series of ‘buttons’ that allow you to modify the view and move forward in the selection table:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">tailor_sels</span>(<span class="at">X =</span> lbh_selec_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, ], <span class="at">auto.next =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><img src="images/seltailor.contour.gif" alt="expraven1" width="820"></p>
+<p>&nbsp;</p>
+<p>The function returns the corrected data as a data frame in R and also saves a ‘.csv’ file in the directory where the sound files are located.</p>
+<p><code>sel_tailor()</code> can also be used to modify frequency contours such as those produced by the <code>dfDTW()</code> or <code>ffDTW()</code> function:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>cntours <span class="ot">&lt;-</span> <span class="fu">freq_ts</span>(<span class="at">X =</span> lbh_selec_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ])</span>
+<span id="cb24-2"><a href="#cb24-2"></a></span>
+<span id="cb24-3"><a href="#cb24-3"></a>tail.cntours <span class="ot">&lt;-</span> <span class="fu">tailor_sels</span>(<span class="at">X =</span> lbh_selec_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], <span class="at">ts.df =</span> cntours,</span>
+<span id="cb24-4"><a href="#cb24-4"></a>    <span class="at">auto.contour =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><img src="images/seltailor.contour.gif" alt="expraven1" width="820"></p>
+<p>&nbsp;</p>
+<hr>
+</section>
+<section id="references" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="references"><span class="header-section-number">8</span> References</h2>
+<ol type="1">
+<li>Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal acoustic signals. Methods Ecol Evol 8:184–191.</li>
+</ol>
+<p>&nbsp;</p>
+<hr>
+<p><font size="4">Session information</font></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 Patched (2022-11-10 r83330)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04.5 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+
+locale:
+ [1] LC_CTYPE=es_ES.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=es_CR.UTF-8        LC_COLLATE=es_ES.UTF-8    
+ [5] LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=es_ES.UTF-8   
+ [7] LC_PAPER=es_CR.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=es_CR.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] kableExtra_1.3.4   warbleR_1.1.28     NatureSounds_1.0.4 knitr_1.41        
+[5] seewave_2.2.0      tuneR_1.4.1       
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.10        formatR_1.12       compiler_4.2.2     moments_0.14.1    
+ [5] bitops_1.0-7       tools_4.2.2        digest_0.6.31      viridisLite_0.4.1 
+ [9] jsonlite_1.8.4     evaluate_0.19      lifecycle_1.0.3    fftw_1.0-7        
+[13] rlang_1.0.6        cli_3.6.0          rstudioapi_0.14    yaml_2.3.6        
+[17] parallel_4.2.2     xfun_0.35          fastmap_1.1.0      stringr_1.5.0     
+[21] httr_1.4.4         xml2_1.3.3         systemfonts_1.0.4  vctrs_0.5.2       
+[25] htmlwidgets_1.5.4  webshot_0.5.4      svglite_2.1.0      glue_1.6.2        
+[29] R6_2.5.1           dtw_1.23-1         pbapply_1.6-0      rmarkdown_2.19    
+[33] magrittr_2.0.3     bioacoustics_0.2.8 scales_1.2.1       htmltools_0.5.4   
+[37] MASS_7.3-58.2      rvest_1.0.3        colorspace_2.1-0   stringi_1.7.12    
+[41] proxy_0.4-27       signal_0.7-7       RCurl_1.98-1.9     munsell_0.5.0     
+[45] rjson_0.2.21      </code></pre>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/marce10\.github\.io\/OTS_BIR_2023\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb26" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &lt;font size="7"&gt;&lt;b&gt;Quality checks for recordings and annotations&lt;/b&gt;&lt;/font&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="an">toc-depth:</span><span class="co"> 2</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="an">toc-location:</span><span class="co"> left</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="an">number-sections:</span><span class="co"> true</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="an">highlight-style:</span><span class="co"> pygments</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: kable</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="co">    css: styles.css</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="co">    link-external-icon: true</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="co">    link-external-newwindow: true  </span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="co"># options to customize chunk outputs</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">class.source =</span> <span class="st">"numberLines lineAnchors"</span>, <span class="co"># for code line numbers</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">tidy.opts =</span> <span class="fu">list</span>(<span class="at">width.cutoff =</span> <span class="dv">65</span>), </span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">tidy =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">message =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">warning =</span> <span class="cn">FALSE</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>When working with sound files obtained from various sources it is common to have variation in recording formats and parameters or even find corrupt files. Similarly, when a large number of annotations are used, it is normal to find errors in some of them. These problems may prevent the use of acoustic analysis in **warbleR**. Luckily, the package also offers functions to facilitate the detection and correction of errors in sound files and annotations.</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Convert .mp3 to .wav</span></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>The <span class="in">`mp32wav()`</span> function allows you to convert files in '.mp3' format to '.wav' format. This function converts all the 'mp3' files in the working directory. Let's use the files in the './examples/mp3' folder as an example:</span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a><span class="in">```{r clean session, echo=F, warning=FALSE, message=FALSE}</span></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a><span class="co"># rm(list = ls())</span></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a><span class="co"># unload all non-based packages</span></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">paste</span>(<span class="st">'package:'</span>, <span class="fu">names</span>(<span class="fu">sessionInfo</span>()<span class="sc">$</span>otherPkgs), <span class="at">sep =</span> <span class="st">""</span>), <span class="cf">function</span>(x) <span class="fu">try</span>(<span class="fu">detach</span>(x, <span class="at">unload =</span> <span class="cn">FALSE</span>, <span class="at">character.only =</span> <span class="cn">TRUE</span>), <span class="at">silent =</span> T))</span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">dpi =</span> <span class="dv">60</span>)</span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(warbleR)</span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a>mp3.pth <span class="ot">&lt;-</span> <span class="st">"./examples/mp3/"</span></span>
+<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="at">wl =</span> <span class="dv">220</span>, <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">pb =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a><span class="in">```{r , eval = FALSE}</span></span>
+<span id="cb26-59"><a href="#cb26-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-60"><a href="#cb26-60" aria-hidden="true" tabindex="-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>, <span class="at">ovlp =</span> <span class="dv">90</span>)</span>
+<span id="cb26-61"><a href="#cb26-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-62"><a href="#cb26-62" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">pattern =</span> <span class="st">"mp3$"</span>)</span>
+<span id="cb26-63"><a href="#cb26-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-64"><a href="#cb26-64" aria-hidden="true" tabindex="-1"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>,  <span class="at">dest.path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb26-65"><a href="#cb26-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-66"><a href="#cb26-66" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">pattern =</span> <span class="st">"mp3$|wav$"</span>)</span>
+<span id="cb26-67"><a href="#cb26-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-68"><a href="#cb26-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-69"><a href="#cb26-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-70"><a href="#cb26-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
+<span id="cb26-71"><a href="#cb26-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-72"><a href="#cb26-72" aria-hidden="true" tabindex="-1"></a><span class="fu">unlink</span>(<span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb26-73"><a href="#cb26-73" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-74"><a href="#cb26-74" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>,  <span class="at">pattern =</span> <span class="st">"mp3$"</span>)</span>
+<span id="cb26-75"><a href="#cb26-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-76"><a href="#cb26-76" aria-hidden="true" tabindex="-1"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">dest.path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb26-77"><a href="#cb26-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-78"><a href="#cb26-78" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>,  <span class="at">pattern =</span> <span class="st">"mp3$|wav$"</span>)</span>
+<span id="cb26-79"><a href="#cb26-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-80"><a href="#cb26-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-81"><a href="#cb26-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-82"><a href="#cb26-82" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb26-83"><a href="#cb26-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-84"><a href="#cb26-84" aria-hidden="true" tabindex="-1"></a>We can also modify the sampling rate and/or dynamic range with <span class="in">`mp32wav()`</span>:</span>
+<span id="cb26-85"><a href="#cb26-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-86"><a href="#cb26-86" aria-hidden="true" tabindex="-1"></a><span class="in">```{r , eval = FALSE}</span></span>
+<span id="cb26-87"><a href="#cb26-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-88"><a href="#cb26-88" aria-hidden="true" tabindex="-1"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">samp.rate =</span> <span class="dv">48</span>, <span class="at">bit.depth =</span> <span class="dv">24</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">dest.path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb26-89"><a href="#cb26-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-90"><a href="#cb26-90" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb26-91"><a href="#cb26-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-92"><a href="#cb26-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-93"><a href="#cb26-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-94"><a href="#cb26-94" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb26-95"><a href="#cb26-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-96"><a href="#cb26-96" aria-hidden="true" tabindex="-1"></a>We can check the properties of the '.wav' sound files using the <span class="in">`info_sound_files()`</span> function:</span>
+<span id="cb26-97"><a href="#cb26-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-98"><a href="#cb26-98" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = FALSE}</span></span>
+<span id="cb26-99"><a href="#cb26-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-100"><a href="#cb26-100" aria-hidden="true" tabindex="-1"></a><span class="fu">info_sound_files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb26-101"><a href="#cb26-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-102"><a href="#cb26-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-103"><a href="#cb26-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-104"><a href="#cb26-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE, message=FALSE}</span></span>
+<span id="cb26-105"><a href="#cb26-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-106"><a href="#cb26-106" aria-hidden="true" tabindex="-1"></a>wi <span class="ot">&lt;-</span> <span class="fu">info_sound_files</span>(<span class="at">path =</span> mp3.pth)</span>
+<span id="cb26-107"><a href="#cb26-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-108"><a href="#cb26-108" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(wi, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>, <span class="at">escape =</span> F)</span>
+<span id="cb26-109"><a href="#cb26-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-110"><a href="#cb26-110" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb26-111"><a href="#cb26-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-112"><a href="#cb26-112" aria-hidden="true" tabindex="-1"></a>kbl</span>
+<span id="cb26-113"><a href="#cb26-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-114"><a href="#cb26-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-115"><a href="#cb26-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-116"><a href="#cb26-116" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb26-117"><a href="#cb26-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-118"><a href="#cb26-118" aria-hidden="true" tabindex="-1"></a><span class="fu">## Homogenize recordings</span></span>
+<span id="cb26-119"><a href="#cb26-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-120"><a href="#cb26-120" aria-hidden="true" tabindex="-1"></a>Alternatively, we can use the <span class="in">`fix_wavs()`</span> function to homogenize the sampling rate, the dynamic interval and the number of channels. It is adviced that all sound files should have the same recording parameters before any acoustic analysis. In the example '.mp3' files, not all of them have been recorded with the same parameters. We can see this if we convert them back to '.wav' and see their properties:</span>
+<span id="cb26-121"><a href="#cb26-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-122"><a href="#cb26-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F}</span></span>
+<span id="cb26-123"><a href="#cb26-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-124"><a href="#cb26-124" aria-hidden="true" tabindex="-1"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">dest.path =</span> <span class="st">"./examples/mp3"</span></span>
+<span id="cb26-125"><a href="#cb26-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-126"><a href="#cb26-126" aria-hidden="true" tabindex="-1"></a><span class="fu">info_sound_files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb26-127"><a href="#cb26-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-128"><a href="#cb26-128" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-129"><a href="#cb26-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-130"><a href="#cb26-130" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, echo <span class="ot">=</span> F}</span>
+<span id="cb26-131"><a href="#cb26-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-132"><a href="#cb26-132" aria-hidden="true" tabindex="-1"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">dest.path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb26-133"><a href="#cb26-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-134"><a href="#cb26-134" aria-hidden="true" tabindex="-1"></a>wi <span class="ot">&lt;-</span> <span class="fu">info_sound_files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb26-135"><a href="#cb26-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-136"><a href="#cb26-136" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(wi, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>, <span class="at">escape =</span> F)</span>
+<span id="cb26-137"><a href="#cb26-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-138"><a href="#cb26-138" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">column_spec</span>(kbl, <span class="dv">3</span>, <span class="at">background =</span> <span class="st">"#ccebff"</span>)</span>
+<span id="cb26-139"><a href="#cb26-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-140"><a href="#cb26-140" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb26-141"><a href="#cb26-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-142"><a href="#cb26-142" aria-hidden="true" tabindex="-1"></a>kbl</span>
+<span id="cb26-143"><a href="#cb26-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-144"><a href="#cb26-144" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-145"><a href="#cb26-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-146"><a href="#cb26-146" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-147"><a href="#cb26-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-148"><a href="#cb26-148" aria-hidden="true" tabindex="-1"></a><span class="at">The </span><span class="st">`</span><span class="fu">fix_wavs</span>()<span class="st">`</span><span class="at"> function will convert all files to the same sampling rate and dynamic range:</span></span>
+<span id="cb26-149"><a href="#cb26-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-150"><a href="#cb26-150" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r ,eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-151"><a href="#cb26-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-152"><a href="#cb26-152" aria-hidden="true" tabindex="-1"></a><span class="fu">fix_wavs</span>(<span class="at">path =</span> mp3.pth, <span class="at">samp.rate =</span> <span class="fl">44.1</span>, <span class="at">bit.depth =</span> <span class="dv">24</span>)</span>
+<span id="cb26-153"><a href="#cb26-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-154"><a href="#cb26-154" aria-hidden="true" tabindex="-1"></a><span class="fu">info_sound_files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3/converted_sound_files"</span>)</span>
+<span id="cb26-155"><a href="#cb26-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-156"><a href="#cb26-156" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-157"><a href="#cb26-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-158"><a href="#cb26-158" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, echo <span class="ot">=</span> <span class="cn">FALSE</span>, message<span class="ot">=</span><span class="cn">FALSE</span>, warning<span class="ot">=</span><span class="cn">FALSE</span>, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-159"><a href="#cb26-159" aria-hidden="true" tabindex="-1"></a><span class="fu">fix_wavs</span>(<span class="at">samp.rate =</span> <span class="fl">44.1</span>, <span class="at">bit.depth =</span> <span class="dv">24</span>, <span class="at">path =</span> <span class="st">"./examples/mp3"</span>)</span>
+<span id="cb26-160"><a href="#cb26-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-161"><a href="#cb26-161" aria-hidden="true" tabindex="-1"></a>wi <span class="ot">&lt;-</span> <span class="fu">info_sound_files</span>(<span class="at">path =</span> <span class="st">"./examples/mp3/converted_sound_files/"</span>)</span>
+<span id="cb26-162"><a href="#cb26-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-163"><a href="#cb26-163" aria-hidden="true" tabindex="-1"></a><span class="co"># unlink(list.files(path = "./examples/mp3", pattern = "\\.wav$", ignore.case = TRUE))</span></span>
+<span id="cb26-164"><a href="#cb26-164" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-165"><a href="#cb26-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-166"><a href="#cb26-166" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, echo <span class="ot">=</span> <span class="cn">FALSE</span>, message<span class="ot">=</span><span class="cn">FALSE</span>, warning<span class="ot">=</span><span class="cn">FALSE</span>}</span>
+<span id="cb26-167"><a href="#cb26-167" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(wi, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>, <span class="at">escape =</span> F)</span>
+<span id="cb26-168"><a href="#cb26-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-169"><a href="#cb26-169" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">column_spec</span>(kbl, <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>), <span class="at">background =</span> <span class="st">"#ccebff"</span>)</span>
+<span id="cb26-170"><a href="#cb26-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-171"><a href="#cb26-171" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb26-172"><a href="#cb26-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-173"><a href="#cb26-173" aria-hidden="true" tabindex="-1"></a>kbl</span>
+<span id="cb26-174"><a href="#cb26-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-175"><a href="#cb26-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-176"><a href="#cb26-176" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-177"><a href="#cb26-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-178"><a href="#cb26-178" aria-hidden="true" tabindex="-1"></a><span class="at">Another useful function to check file properties is </span><span class="st">`</span><span class="fu">wav_dur</span>()<span class="st">`</span><span class="at">. This function returns the duration in seconds of each '.wav' file.</span></span>
+<span id="cb26-179"><a href="#cb26-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-180"><a href="#cb26-180" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-181"><a href="#cb26-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-182"><a href="#cb26-182" aria-hidden="true" tabindex="-1"></a><span class="at">## Check recordings</span></span>
+<span id="cb26-183"><a href="#cb26-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-184"><a href="#cb26-184" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="fu">check_sound_files</span>()<span class="st">`</span><span class="at"> should be the first function that should be used before running any **warbleR** analysis. The function simply checks if the sound files in '.wav' format in the working directory can be read in R. For example, the following code checks all the files in the 'examples' folder, which should detect the 'corrupted_file.wav':</span></span>
+<span id="cb26-185"><a href="#cb26-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-186"><a href="#cb26-186" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-187"><a href="#cb26-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-188"><a href="#cb26-188" aria-hidden="true" tabindex="-1"></a><span class="fu">check_sound_files</span>()</span>
+<span id="cb26-189"><a href="#cb26-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-190"><a href="#cb26-190" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-191"><a href="#cb26-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-192"><a href="#cb26-192" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, echo <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-193"><a href="#cb26-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-194"><a href="#cb26-194" aria-hidden="true" tabindex="-1"></a><span class="fu">check_sound_files</span>()</span>
+<span id="cb26-195"><a href="#cb26-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-196"><a href="#cb26-196" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-197"><a href="#cb26-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-198"><a href="#cb26-198" aria-hidden="true" tabindex="-1"></a><span class="at">If we remove that file from the folder, the function returns the following message:</span></span>
+<span id="cb26-199"><a href="#cb26-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-200"><a href="#cb26-200" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-201"><a href="#cb26-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-202"><a href="#cb26-202" aria-hidden="true" tabindex="-1"></a><span class="fu">check_sound_files</span>()</span>
+<span id="cb26-203"><a href="#cb26-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-204"><a href="#cb26-204" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-205"><a href="#cb26-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-206"><a href="#cb26-206" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, echo <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-207"><a href="#cb26-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-208"><a href="#cb26-208" aria-hidden="true" tabindex="-1"></a><span class="co">#cortar </span></span>
+<span id="cb26-209"><a href="#cb26-209" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">file.copy</span>(<span class="fu">file.path</span>(.Options<span class="sc">$</span>warbleR<span class="sc">$</span>path, <span class="st">"corrupted_file.wav"</span>), <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"corrupted_file.wav"</span>))</span>
+<span id="cb26-210"><a href="#cb26-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-211"><a href="#cb26-211" aria-hidden="true" tabindex="-1"></a><span class="fu">unlink</span>(<span class="fu">file.path</span>(.Options<span class="sc">$</span>warbleR<span class="sc">$</span>path, <span class="st">"corrupted_file.wav"</span>))</span>
+<span id="cb26-212"><a href="#cb26-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-213"><a href="#cb26-213" aria-hidden="true" tabindex="-1"></a><span class="co">#check</span></span>
+<span id="cb26-214"><a href="#cb26-214" aria-hidden="true" tabindex="-1"></a><span class="fu">check_sound_files</span>()</span>
+<span id="cb26-215"><a href="#cb26-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-216"><a href="#cb26-216" aria-hidden="true" tabindex="-1"></a><span class="co"># cortar</span></span>
+<span id="cb26-217"><a href="#cb26-217" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">file.copy</span>(<span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"corrupted_file.wav"</span>), <span class="fu">file.path</span>(.Options<span class="sc">$</span>warbleR<span class="sc">$</span>path, <span class="st">"corrupted_file.wav"</span>))</span>
+<span id="cb26-218"><a href="#cb26-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-219"><a href="#cb26-219" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-220"><a href="#cb26-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-221"><a href="#cb26-221" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-222"><a href="#cb26-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-223"><a href="#cb26-223" aria-hidden="true" tabindex="-1"></a><span class="at">## Spectrograph settings</span></span>
+<span id="cb26-224"><a href="#cb26-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-225"><a href="#cb26-225" aria-hidden="true" tabindex="-1"></a><span class="at">The parameters that determine the appearance of spectrograms (and power spectra and periodgrams) also have an effect on the measurements taken on them. Therefore it is necessary to use the same parameters to analyze all the signals in a project (except with some exceptions) so that the measurements are comparable. The visualization of spectrograms generated with different spectrographic parameters is a useful way of defining the combination of parameters with which the structure of the signals is distinguished in more detail. The function </span><span class="st">`</span><span class="fu">tweak_spectro</span>()<span class="st">`</span><span class="at"> aims to simplify the selection of parameters through the display of spectrograms. The function plots, for a single selection, a mosaic of spectrograms with different display parameters. For numerical arguments, the upper and lower limits of a range can be provided. The following parameters may have variable values:</span></span>
+<span id="cb26-226"><a href="#cb26-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-227"><a href="#cb26-227" aria-hidden="true" tabindex="-1"></a><span class="at">-   **wl**: window length (numerical range)</span></span>
+<span id="cb26-228"><a href="#cb26-228" aria-hidden="true" tabindex="-1"></a><span class="at">-   **ovlp**: overlap (numerical range)</span></span>
+<span id="cb26-229"><a href="#cb26-229" aria-hidden="true" tabindex="-1"></a><span class="at">-   **collev.min**: minimum amplitude value for color levels (numerical range)</span></span>
+<span id="cb26-230"><a href="#cb26-230" aria-hidden="true" tabindex="-1"></a><span class="at">-   **wn**: window function name (character)</span></span>
+<span id="cb26-231"><a href="#cb26-231" aria-hidden="true" tabindex="-1"></a><span class="at">-   **pal**: palette (character)</span></span>
+<span id="cb26-232"><a href="#cb26-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-233"><a href="#cb26-233" aria-hidden="true" tabindex="-1"></a><span class="at">The following code generates an image with spectrograms that vary in window size and window function (the rest of the parameters are passed to the </span><span class="st">`</span><span class="fu">catalog</span> ()<span class="st">`</span><span class="at"> function internally to create the mosaic):</span></span>
+<span id="cb26-234"><a href="#cb26-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-235"><a href="#cb26-235" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-236"><a href="#cb26-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-237"><a href="#cb26-237" aria-hidden="true" tabindex="-1"></a><span class="fu">tweak_spectro</span>(<span class="at">X =</span> lbh_selec_table,  <span class="at">wl =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">1000</span>),  <span class="at">wn =</span> <span class="fu">c</span>(<span class="st">"hanning"</span>, <span class="st">"hamming"</span>, <span class="st">"rectangle"</span>), </span>
+<span id="cb26-238"><a href="#cb26-238" aria-hidden="true" tabindex="-1"></a>           <span class="at">length.out =</span> <span class="dv">16</span>, <span class="at">nrow =</span> <span class="dv">8</span>, <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">width =</span> <span class="dv">15</span>, <span class="at">height =</span> <span class="dv">20</span>,</span>
+<span id="cb26-239"><a href="#cb26-239" aria-hidden="true" tabindex="-1"></a>           <span class="at">rm.axes =</span> <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="dv">1</span>, <span class="at">box =</span> F)</span>
+<span id="cb26-240"><a href="#cb26-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-241"><a href="#cb26-241" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-242"><a href="#cb26-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-243"><a href="#cb26-243" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;img src="images/spec_param1.jpeg" alt="viewSpec" width="780"/&gt;</span></span>
+<span id="cb26-244"><a href="#cb26-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-245"><a href="#cb26-245" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-246"><a href="#cb26-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-247"><a href="#cb26-247" aria-hidden="true" tabindex="-1"></a><span class="at">Note that the </span><span class="st">`</span>length.out<span class="st">`</span><span class="at"> argument defines the number of values to interpolate within the numerical ranges. </span><span class="st">`</span><span class="at">wl =</span> <span class="dv">220</span><span class="st">`</span><span class="at"> seems to produce clearer spectrograms.</span></span>
+<span id="cb26-248"><a href="#cb26-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-249"><a href="#cb26-249" aria-hidden="true" tabindex="-1"></a><span class="at">We can add a color palette to differentiate the levels of one of the parameters, for example 'wn':</span></span>
+<span id="cb26-250"><a href="#cb26-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-251"><a href="#cb26-251" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-252"><a href="#cb26-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-253"><a href="#cb26-253" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("RColorBrewer")</span></span>
+<span id="cb26-254"><a href="#cb26-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-255"><a href="#cb26-255" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb26-256"><a href="#cb26-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-257"><a href="#cb26-257" aria-hidden="true" tabindex="-1"></a><span class="co"># crear paleta</span></span>
+<span id="cb26-258"><a href="#cb26-258" aria-hidden="true" tabindex="-1"></a>cmc <span class="ot">&lt;-</span> <span class="cf">function</span>(n) <span class="cf">if</span>(n <span class="sc">&gt;</span> <span class="dv">5</span>) <span class="fu">rep</span>(<span class="fu">adjustcolor</span>(<span class="fu">brewer.pal</span>(<span class="dv">5</span>, <span class="st">"Spectral"</span>), <span class="at">alpha.f =</span> <span class="fl">0.6</span>), <span class="fu">ceiling</span>(n<span class="sc">/</span><span class="dv">4</span>))[<span class="dv">1</span><span class="sc">:</span>n] <span class="cf">else</span> <span class="fu">adjustcolor</span>(<span class="fu">brewer.pal</span>(n, <span class="st">"Spectral"</span>), <span class="at">alpha.f =</span> <span class="fl">0.6</span>)</span>
+<span id="cb26-259"><a href="#cb26-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-260"><a href="#cb26-260" aria-hidden="true" tabindex="-1"></a><span class="fu">tweak_spectro</span>(<span class="at">X =</span> lbh_selec_table,  <span class="at">wl =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">1000</span>),  <span class="at">wn =</span> <span class="fu">c</span>(<span class="st">"hanning"</span>, <span class="st">"hamming"</span>, <span class="st">"rectangle"</span>), </span>
+<span id="cb26-261"><a href="#cb26-261" aria-hidden="true" tabindex="-1"></a>           <span class="at">length.out =</span> <span class="dv">16</span>, <span class="at">nrow =</span> <span class="dv">8</span>, <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">width =</span> <span class="dv">15</span>, <span class="at">height =</span> <span class="dv">20</span>, </span>
+<span id="cb26-262"><a href="#cb26-262" aria-hidden="true" tabindex="-1"></a>           <span class="at">rm.axes =</span> <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="dv">1</span>, <span class="at">box =</span> F,  <span class="at">group.tag =</span> <span class="st">"wn"</span>,  </span>
+<span id="cb26-263"><a href="#cb26-263" aria-hidden="true" tabindex="-1"></a>           <span class="at">tag.pal =</span> <span class="fu">list</span>(cmc))</span>
+<span id="cb26-264"><a href="#cb26-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-265"><a href="#cb26-265" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-266"><a href="#cb26-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-267"><a href="#cb26-267" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;img src="images/spec_param3.jpeg" alt="viewSpec" width="780"/&gt;</span></span>
+<span id="cb26-268"><a href="#cb26-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-269"><a href="#cb26-269" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-270"><a href="#cb26-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-271"><a href="#cb26-271" aria-hidden="true" tabindex="-1"></a><span class="at">We can also use it to choose the color palette and the minimum amplitude for plotting ('collev.min'):</span></span>
+<span id="cb26-272"><a href="#cb26-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-273"><a href="#cb26-273" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-274"><a href="#cb26-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-275"><a href="#cb26-275" aria-hidden="true" tabindex="-1"></a><span class="fu">tweak_spectro</span>(<span class="at">X =</span> lbh_selec_table,  <span class="at">wl =</span> <span class="dv">220</span>,  <span class="at">collev.min =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">20</span>, <span class="sc">-</span><span class="dv">100</span>), <span class="at">pal =</span> <span class="fu">c</span>(<span class="st">"reverse.gray.colors.2"</span>, <span class="st">"reverse.topo.colors"</span>,  <span class="st">"reverse.terrain.colors"</span>), <span class="at">length.out =</span> <span class="dv">16</span>, <span class="at">nrow =</span> <span class="dv">8</span>, <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">width =</span> <span class="dv">15</span>, <span class="at">height =</span> <span class="dv">20</span>, <span class="at">rm.axes =</span> <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="dv">1</span>, <span class="at">box =</span> F,  <span class="at">group.tag =</span> <span class="st">"pal"</span>,  <span class="at">tag.pal =</span> <span class="fu">list</span>(cmc))</span>
+<span id="cb26-276"><a href="#cb26-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-277"><a href="#cb26-277" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-278"><a href="#cb26-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-279"><a href="#cb26-279" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;img src="images/spec_param2.jpeg" alt="viewSpec" width="780"/&gt;</span></span>
+<span id="cb26-280"><a href="#cb26-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-281"><a href="#cb26-281" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-282"><a href="#cb26-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-283"><a href="#cb26-283" aria-hidden="true" tabindex="-1"></a><span class="at">## Double-check selections</span></span>
+<span id="cb26-284"><a href="#cb26-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-285"><a href="#cb26-285" aria-hidden="true" tabindex="-1"></a><span class="at">The main function to double-check selection tables is </span><span class="st">`</span><span class="fu">check_sels</span>()<span class="st">`</span><span class="at">. This function checks a large number of possible errors in the selection information:</span></span>
+<span id="cb26-286"><a href="#cb26-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-287"><a href="#cb26-287" aria-hidden="true" tabindex="-1"></a><span class="at">-   'X' is an object of the class 'data.frame' or 'selection_table' (see selection_table) and contains the columns required to be used in any warbleR function ('sound.files', 'selec', 'start' , 'end', if it does not return an error)</span></span>
+<span id="cb26-288"><a href="#cb26-288" aria-hidden="true" tabindex="-1"></a><span class="at">-   'sound.files' in 'X' corresponds to the .wav files in the working directory or in the provided 'path' (if no file is found it returns an error, if some files are not found it returns error information in the output data frame)</span></span>
+<span id="cb26-289"><a href="#cb26-289" aria-hidden="true" tabindex="-1"></a><span class="at">-   the time limit parameters ('start', 'end') and frequency ('bottom.freq', 'top.freq', if provided) are numeric and do not contain NA (if they do not return an error)</span></span>
+<span id="cb26-290"><a href="#cb26-290" aria-hidden="true" tabindex="-1"></a><span class="at">-   There are no duplicate selection tags ('selec') within a sound file (if it does not return an error)</span></span>
+<span id="cb26-291"><a href="#cb26-291" aria-hidden="true" tabindex="-1"></a><span class="at">-   sound files can be read (error information in the output data frame)</span></span>
+<span id="cb26-292"><a href="#cb26-292" aria-hidden="true" tabindex="-1"></a><span class="at">-   The start and end time of the selections is within the duration of the sound files (error information in the output data frame)</span></span>
+<span id="cb26-293"><a href="#cb26-293" aria-hidden="true" tabindex="-1"></a><span class="at">-   Sound files can be read (error information in the output data frame)</span></span>
+<span id="cb26-294"><a href="#cb26-294" aria-hidden="true" tabindex="-1"></a><span class="at">-   The header (header) of the sound files is not damaged (only if the header = TRUE, error information in the selection table with results)</span></span>
+<span id="cb26-295"><a href="#cb26-295" aria-hidden="true" tabindex="-1"></a><span class="at">-   'top.freq' is less than half of the sampling frequency (nyquist frequency, error information in the data table with results)</span></span>
+<span id="cb26-296"><a href="#cb26-296" aria-hidden="true" tabindex="-1"></a><span class="at">-   Negative values are not found in the time or frequency limit parameters (error information in the data table with results)</span></span>
+<span id="cb26-297"><a href="#cb26-297" aria-hidden="true" tabindex="-1"></a><span class="at">-   'start' higher than 'end' or 'bottom.freq' higher than 'top.freq' (error information in the output data frame)</span></span>
+<span id="cb26-298"><a href="#cb26-298" aria-hidden="true" tabindex="-1"></a><span class="at">-   The value of 'channel' is not greater than the number of channels in the sound files (error information in the output data frame)</span></span>
+<span id="cb26-299"><a href="#cb26-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-302"><a href="#cb26-302" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb26-303"><a href="#cb26-303" aria-hidden="true" tabindex="-1"></a>cs <span class="ot">&lt;-</span> <span class="fu">check_sels</span>(lbh_selec_table)</span>
+<span id="cb26-304"><a href="#cb26-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-305"><a href="#cb26-305" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-306"><a href="#cb26-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-307"><a href="#cb26-307" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-308"><a href="#cb26-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-309"><a href="#cb26-309" aria-hidden="true" tabindex="-1"></a><span class="at">The function returns a data frame that includes the information in 'X' plus additional columns about the format of the sound files, as well as the result of the checks (column 'check.res'):</span></span>
+<span id="cb26-310"><a href="#cb26-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-311"><a href="#cb26-311" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-312"><a href="#cb26-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-313"><a href="#cb26-313" aria-hidden="true" tabindex="-1"></a>cs</span>
+<span id="cb26-314"><a href="#cb26-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-315"><a href="#cb26-315" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-316"><a href="#cb26-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-317"><a href="#cb26-317" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, echo <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-318"><a href="#cb26-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-319"><a href="#cb26-319" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(cs, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>, <span class="at">escape =</span> F)</span>
+<span id="cb26-320"><a href="#cb26-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-321"><a href="#cb26-321" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">column_spec</span>(kbl, <span class="dv">10</span>, <span class="at">background =</span> <span class="st">"#ccebff"</span>)</span>
+<span id="cb26-322"><a href="#cb26-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-323"><a href="#cb26-323" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb26-324"><a href="#cb26-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-325"><a href="#cb26-325" aria-hidden="true" tabindex="-1"></a><span class="fu">scroll_box</span>(kbl, <span class="at">width =</span> <span class="st">"808px"</span>,</span>
+<span id="cb26-326"><a href="#cb26-326" aria-hidden="true" tabindex="-1"></a><span class="at">box_css =</span> <span class="st">"border: 1px solid #ddd; padding: 5px; "</span>, <span class="at">extra_css =</span> <span class="cn">NULL</span>)</span>
+<span id="cb26-327"><a href="#cb26-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-328"><a href="#cb26-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-329"><a href="#cb26-329" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-330"><a href="#cb26-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-331"><a href="#cb26-331" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-332"><a href="#cb26-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-333"><a href="#cb26-333" aria-hidden="true" tabindex="-1"></a><span class="at">Let's modified a selection table to see how the function works:</span></span>
+<span id="cb26-334"><a href="#cb26-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-335"><a href="#cb26-335" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-336"><a href="#cb26-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-337"><a href="#cb26-337" aria-hidden="true" tabindex="-1"></a><span class="co"># copiar las primeras 6 filas</span></span>
+<span id="cb26-338"><a href="#cb26-338" aria-hidden="true" tabindex="-1"></a>st2 <span class="ot">&lt;-</span> lbh_selec_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, ]</span>
+<span id="cb26-339"><a href="#cb26-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-340"><a href="#cb26-340" aria-hidden="true" tabindex="-1"></a><span class="co"># hacer caracter </span></span>
+<span id="cb26-341"><a href="#cb26-341" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>sound.files <span class="ot">&lt;-</span> <span class="fu">as.character</span>(st2<span class="sc">$</span>sound.files)</span>
+<span id="cb26-342"><a href="#cb26-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-343"><a href="#cb26-343" aria-hidden="true" tabindex="-1"></a><span class="co"># cambiar nombre de archivo de sonido en sel 1</span></span>
+<span id="cb26-344"><a href="#cb26-344" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>sound.files[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"aaa.wav"</span></span>
+<span id="cb26-345"><a href="#cb26-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-346"><a href="#cb26-346" aria-hidden="true" tabindex="-1"></a><span class="co"># modificar fin en sel 3</span></span>
+<span id="cb26-347"><a href="#cb26-347" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>end[<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb26-348"><a href="#cb26-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-349"><a href="#cb26-349" aria-hidden="true" tabindex="-1"></a><span class="co"># hacer top.freq igual q bottom freq en sel 3</span></span>
+<span id="cb26-350"><a href="#cb26-350" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>top.freq[<span class="dv">3</span>] <span class="ot">&lt;-</span> st2<span class="sc">$</span>bottom.freq[<span class="dv">3</span>]</span>
+<span id="cb26-351"><a href="#cb26-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-352"><a href="#cb26-352" aria-hidden="true" tabindex="-1"></a><span class="co"># modificar top freq en sel 5</span></span>
+<span id="cb26-353"><a href="#cb26-353" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>top.freq[<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb26-354"><a href="#cb26-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-355"><a href="#cb26-355" aria-hidden="true" tabindex="-1"></a><span class="co"># modificar channes en sel 6</span></span>
+<span id="cb26-356"><a href="#cb26-356" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>channel[<span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb26-357"><a href="#cb26-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-358"><a href="#cb26-358" aria-hidden="true" tabindex="-1"></a><span class="co">#revisar</span></span>
+<span id="cb26-359"><a href="#cb26-359" aria-hidden="true" tabindex="-1"></a>cs <span class="ot">&lt;-</span> <span class="fu">check_sels</span>(st2)</span>
+<span id="cb26-360"><a href="#cb26-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-361"><a href="#cb26-361" aria-hidden="true" tabindex="-1"></a>cs[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">10</span>)]</span>
+<span id="cb26-362"><a href="#cb26-362" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-363"><a href="#cb26-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-364"><a href="#cb26-364" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, echo <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-365"><a href="#cb26-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-366"><a href="#cb26-366" aria-hidden="true" tabindex="-1"></a><span class="co"># copiar las primeras 6 filas</span></span>
+<span id="cb26-367"><a href="#cb26-367" aria-hidden="true" tabindex="-1"></a>st2 <span class="ot">&lt;-</span> lbh_selec_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, ]</span>
+<span id="cb26-368"><a href="#cb26-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-369"><a href="#cb26-369" aria-hidden="true" tabindex="-1"></a><span class="co"># hacer caracter </span></span>
+<span id="cb26-370"><a href="#cb26-370" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>sound.files <span class="ot">&lt;-</span> <span class="fu">as.character</span>(st2<span class="sc">$</span>sound.files)</span>
+<span id="cb26-371"><a href="#cb26-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-372"><a href="#cb26-372" aria-hidden="true" tabindex="-1"></a><span class="co"># cambiar nombre de archivo de sonido en sel 1</span></span>
+<span id="cb26-373"><a href="#cb26-373" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>sound.files[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"aaa.wav"</span></span>
+<span id="cb26-374"><a href="#cb26-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-375"><a href="#cb26-375" aria-hidden="true" tabindex="-1"></a><span class="co"># modificar fin en sel 3</span></span>
+<span id="cb26-376"><a href="#cb26-376" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>end[<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb26-377"><a href="#cb26-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-378"><a href="#cb26-378" aria-hidden="true" tabindex="-1"></a><span class="co"># hacer top.freq igual q bottom freq en sel 3</span></span>
+<span id="cb26-379"><a href="#cb26-379" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>top.freq[<span class="dv">3</span>] <span class="ot">&lt;-</span> st2<span class="sc">$</span>bottom.freq[<span class="dv">3</span>]</span>
+<span id="cb26-380"><a href="#cb26-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-381"><a href="#cb26-381" aria-hidden="true" tabindex="-1"></a><span class="co"># modificar top freq en sel 5</span></span>
+<span id="cb26-382"><a href="#cb26-382" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>top.freq[<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb26-383"><a href="#cb26-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-384"><a href="#cb26-384" aria-hidden="true" tabindex="-1"></a><span class="co"># modificar channes en sel 6</span></span>
+<span id="cb26-385"><a href="#cb26-385" aria-hidden="true" tabindex="-1"></a>st2<span class="sc">$</span>channel[<span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb26-386"><a href="#cb26-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-387"><a href="#cb26-387" aria-hidden="true" tabindex="-1"></a><span class="co">#revisar</span></span>
+<span id="cb26-388"><a href="#cb26-388" aria-hidden="true" tabindex="-1"></a>cs <span class="ot">&lt;-</span> <span class="fu">check_sels</span>(st2)</span>
+<span id="cb26-389"><a href="#cb26-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-390"><a href="#cb26-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-391"><a href="#cb26-391" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-392"><a href="#cb26-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-393"><a href="#cb26-393" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, echo <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-394"><a href="#cb26-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-395"><a href="#cb26-395" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(cs[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">10</span>)], <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>, <span class="at">escape =</span> F)</span>
+<span id="cb26-396"><a href="#cb26-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-397"><a href="#cb26-397" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">column_spec</span>(kbl, <span class="dv">8</span>, <span class="at">background =</span> <span class="st">"#ccebff"</span>)</span>
+<span id="cb26-398"><a href="#cb26-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-399"><a href="#cb26-399" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb26-400"><a href="#cb26-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-401"><a href="#cb26-401" aria-hidden="true" tabindex="-1"></a>kbl</span>
+<span id="cb26-402"><a href="#cb26-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-403"><a href="#cb26-403" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-404"><a href="#cb26-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-405"><a href="#cb26-405" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-406"><a href="#cb26-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-407"><a href="#cb26-407" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="fu">check_sels</span>()<span class="st">`</span><span class="at"> is used internally when creating selection tables and extended selection tables.</span></span>
+<span id="cb26-408"><a href="#cb26-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-409"><a href="#cb26-409" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-410"><a href="#cb26-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-411"><a href="#cb26-411" aria-hidden="true" tabindex="-1"></a><span class="at">### Visual inspection of spectrograms</span></span>
+<span id="cb26-412"><a href="#cb26-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-413"><a href="#cb26-413" aria-hidden="true" tabindex="-1"></a><span class="at">Once the information in the selections has been verified, the next step is to ensure that the selections contain accurate information about the location of the signals of interest. This can be done by creating spectrograms of all selections. For this we have several options. The first is </span><span class="st">`</span><span class="fu">spectrograms</span>()<span class="st">`</span><span class="at"> (previously called </span><span class="st">`</span><span class="fu">specreator</span>()<span class="st">`</span><span class="at">) which generates (by default) a spectrogram for each selection. We can run it on the sample data like this:</span></span>
+<span id="cb26-414"><a href="#cb26-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-415"><a href="#cb26-415" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-416"><a href="#cb26-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-417"><a href="#cb26-417" aria-hidden="true" tabindex="-1"></a><span class="co"># using default parameters tweak_spectro()</span></span>
+<span id="cb26-418"><a href="#cb26-418" aria-hidden="true" tabindex="-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>, <span class="at">wl =</span> <span class="dv">220</span>, <span class="at">wn =</span> <span class="st">"hanning"</span>, <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">pal =</span> reverse.topo.colors)</span>
+<span id="cb26-419"><a href="#cb26-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-420"><a href="#cb26-420" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrograms</span>(lbh_selec_table, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">5</span>))</span>
+<span id="cb26-421"><a href="#cb26-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-422"><a href="#cb26-422" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-423"><a href="#cb26-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-424"><a href="#cb26-424" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>, echo <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-425"><a href="#cb26-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-426"><a href="#cb26-426" aria-hidden="true" tabindex="-1"></a><span class="co"># using default parameters tweak_spectro()</span></span>
+<span id="cb26-427"><a href="#cb26-427" aria-hidden="true" tabindex="-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"~/Dropbox/Workshops/Bioacoustics/Taller Bioacoustics Arequipa 2019/Taller 2/ejemplos"</span>, <span class="at">wl =</span> <span class="dv">220</span>, <span class="at">wn =</span> <span class="st">"hanning"</span>, <span class="at">ovlp =</span> <span class="dv">90</span>, <span class="at">pal =</span> reverse.topo.colors)</span>
+<span id="cb26-428"><a href="#cb26-428" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-429"><a href="#cb26-429" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrograms</span>(lbh_selec_table, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">5</span>))</span>
+<span id="cb26-430"><a href="#cb26-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-431"><a href="#cb26-431" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-432"><a href="#cb26-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-433"><a href="#cb26-433" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-434"><a href="#cb26-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-435"><a href="#cb26-435" aria-hidden="true" tabindex="-1"></a><span class="at">The images it produces are saved in the working directory and look like this:</span></span>
+<span id="cb26-436"><a href="#cb26-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-437"><a href="#cb26-437" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;img src="images/spectrograms2.gif" alt="viewSpec" width="400"/&gt;</span></span>
+<span id="cb26-438"><a href="#cb26-438" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-439"><a href="#cb26-439" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-440"><a href="#cb26-440" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-441"><a href="#cb26-441" aria-hidden="true" tabindex="-1"></a><span class="at">::: {.alert .alert-info}</span></span>
+<span id="cb26-442"><a href="#cb26-442" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;font size="5"&gt;Exercise&lt;/font&gt;</span></span>
+<span id="cb26-443"><a href="#cb26-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-444"><a href="#cb26-444" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-445"><a href="#cb26-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-446"><a href="#cb26-446" aria-hidden="true" tabindex="-1"></a><span class="at">-   Have the label shown on the selection display the data in the 'sel.comment' column of the sample selection box using the </span><span class="st">`</span>sel.labels<span class="st">`</span><span class="at"> argument</span></span>
+<span id="cb26-447"><a href="#cb26-447" aria-hidden="true" tabindex="-1"></a><span class="at">:::</span></span>
+<span id="cb26-448"><a href="#cb26-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-449"><a href="#cb26-449" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-450"><a href="#cb26-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-451"><a href="#cb26-451" aria-hidden="true" tabindex="-1"></a><span class="at">### Full spectrograms</span></span>
+<span id="cb26-452"><a href="#cb26-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-453"><a href="#cb26-453" aria-hidden="true" tabindex="-1"></a><span class="at">We can create spectrograms for the whole sound files using </span><span class="st">`</span><span class="fu">full_spectrograms</span>()<span class="st">`</span><span class="at">. If the </span><span class="st">`</span>X<span class="st">`</span><span class="at"> argument is not given, the function will create the spectrograms for all the files in the working directory. Otherwise, the function generates spectrograms for sound files in </span><span class="st">`</span>X<span class="st">`</span><span class="at"> and highlights selections with transparent rectangles similar to those of</span><span class="st">`</span><span class="fu">spectrograms</span>()<span class="st">`</span><span class="at">. In this example we download a recording from a striped-throated hermit (*Phaethornis striigularis*) from Xeno-Canto:</span></span>
+<span id="cb26-454"><a href="#cb26-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-455"><a href="#cb26-455" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-456"><a href="#cb26-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-457"><a href="#cb26-457" aria-hidden="true" tabindex="-1"></a><span class="co"># load package with color palettes</span></span>
+<span id="cb26-458"><a href="#cb26-458" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb26-459"><a href="#cb26-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-460"><a href="#cb26-460" aria-hidden="true" tabindex="-1"></a><span class="co"># create directory</span></span>
+<span id="cb26-461"><a href="#cb26-461" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"./examples/hermit"</span>)</span>
+<span id="cb26-462"><a href="#cb26-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-463"><a href="#cb26-463" aria-hidden="true" tabindex="-1"></a><span class="co"># download sound file</span></span>
+<span id="cb26-464"><a href="#cb26-464" aria-hidden="true" tabindex="-1"></a>phae.stri <span class="ot">&lt;-</span> <span class="fu">query_xc</span>(<span class="at">qword =</span> <span class="st">"nr:154074"</span>, <span class="at">download =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples/hermit"</span>)</span>
+<span id="cb26-465"><a href="#cb26-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-466"><a href="#cb26-466" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert mp3 to wav format</span></span>
+<span id="cb26-467"><a href="#cb26-467" aria-hidden="true" tabindex="-1"></a><span class="fu">mp32wav</span>(<span class="at">path =</span> <span class="st">"./examples/hermit/"</span>, <span class="at">pb =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-468"><a href="#cb26-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-469"><a href="#cb26-469" aria-hidden="true" tabindex="-1"></a><span class="co"># plot full spec</span></span>
+<span id="cb26-470"><a href="#cb26-470" aria-hidden="true" tabindex="-1"></a><span class="fu">full_spectrograms</span>(<span class="at">sxrow =</span> <span class="dv">1</span>, <span class="at">rows =</span> <span class="dv">10</span>, <span class="at">pal =</span> magma,  <span class="at">wl =</span> <span class="dv">200</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">10</span>),</span>
+<span id="cb26-471"><a href="#cb26-471" aria-hidden="true" tabindex="-1"></a>          <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">140</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="at">path =</span> <span class="st">"./examples/hermit/"</span>)</span>
+<span id="cb26-472"><a href="#cb26-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-473"><a href="#cb26-473" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-474"><a href="#cb26-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-475"><a href="#cb26-475" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;img src="images/fullspec_hermit.gif" alt="hermit" width="700"/&gt;</span></span>
+<span id="cb26-476"><a href="#cb26-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-477"><a href="#cb26-477" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-478"><a href="#cb26-478" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-479"><a href="#cb26-479" aria-hidden="true" tabindex="-1"></a><span class="at">## Catalogs</span></span>
+<span id="cb26-480"><a href="#cb26-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-481"><a href="#cb26-481" aria-hidden="true" tabindex="-1"></a><span class="at">Catalogs allow you to inspect selections of many recordings in the same image and group them by categories. This makes it easier to verify the consistency of the categories. Many of the arguments are shared with </span><span class="st">`</span><span class="fu">tweak_spectro</span>()<span class="st">`</span><span class="at"> (</span><span class="st">`</span><span class="fu">catalog</span>()<span class="st">`</span><span class="at"> is used internally in </span><span class="st">`</span><span class="fu">tweak_spectro</span>()<span class="st">`</span><span class="at">). We can generate a catalog with color tags to identify selections from the same sound file as follows:</span></span>
+<span id="cb26-482"><a href="#cb26-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-483"><a href="#cb26-483" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval <span class="ot">=</span> <span class="cn">FALSE</span>}</span>
+<span id="cb26-484"><a href="#cb26-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-485"><a href="#cb26-485" aria-hidden="true" tabindex="-1"></a><span class="co"># read bat inquiry data</span></span>
+<span id="cb26-486"><a href="#cb26-486" aria-hidden="true" tabindex="-1"></a>inq <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="st">"ext_sel_tab_inquiry.RDS"</span>)</span>
+<span id="cb26-487"><a href="#cb26-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-488"><a href="#cb26-488" aria-hidden="true" tabindex="-1"></a><span class="fu">catalog</span>(<span class="at">X =</span> inq[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ], <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">50</span>), <span class="at">nrow =</span> <span class="dv">10</span>, <span class="at">ncol =</span> <span class="dv">10</span>, </span>
+<span id="cb26-489"><a href="#cb26-489" aria-hidden="true" tabindex="-1"></a>        <span class="at">same.time.scale =</span> T, <span class="at">mar =</span> <span class="fl">0.01</span>, <span class="at">gr =</span> <span class="cn">FALSE</span>, <span class="at">img.suffix =</span> <span class="st">"inquiry"</span>,</span>
+<span id="cb26-490"><a href="#cb26-490" aria-hidden="true" tabindex="-1"></a>        <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"sound.files"</span>, <span class="st">"selec"</span>), <span class="at">legend =</span> <span class="dv">0</span>, <span class="at">rm.axes =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb26-491"><a href="#cb26-491" aria-hidden="true" tabindex="-1"></a>        <span class="at">box =</span> F,  <span class="at">group.tag =</span> <span class="st">"sound.files"</span>,  <span class="at">tag.pal =</span> <span class="fu">list</span>(magma), </span>
+<span id="cb26-492"><a href="#cb26-492" aria-hidden="true" tabindex="-1"></a>        <span class="at">width =</span> <span class="dv">20</span>, <span class="at">height =</span> <span class="dv">20</span>, <span class="at">pal =</span> viridis, <span class="at">collevels =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">5</span>))</span>
+<span id="cb26-493"><a href="#cb26-493" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-494"><a href="#cb26-494" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-495"><a href="#cb26-495" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-496"><a href="#cb26-496" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;img src="images/Catalog_p1-inquiry.jpeg" alt="viewSpec" width="680"/&gt;</span></span>
+<span id="cb26-497"><a href="#cb26-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-498"><a href="#cb26-498" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-499"><a href="#cb26-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-500"><a href="#cb26-500" aria-hidden="true" tabindex="-1"></a><span class="at">::: {.alert .alert-info}</span></span>
+<span id="cb26-501"><a href="#cb26-501" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;font size="5"&gt;Exercise&lt;/font&gt;</span></span>
+<span id="cb26-502"><a href="#cb26-502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-503"><a href="#cb26-503" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-504"><a href="#cb26-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-505"><a href="#cb26-505" aria-hidden="true" tabindex="-1"></a><span class="at">-   Using the 'lbh_selec_table' data, create a catalog with selections color-tagged by song type</span></span>
+<span id="cb26-506"><a href="#cb26-506" aria-hidden="true" tabindex="-1"></a><span class="at">:::</span></span>
+<span id="cb26-507"><a href="#cb26-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-508"><a href="#cb26-508" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-509"><a href="#cb26-509" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-510"><a href="#cb26-510" aria-hidden="true" tabindex="-1"></a><span class="at">## Tailoring selections</span></span>
+<span id="cb26-511"><a href="#cb26-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-512"><a href="#cb26-512" aria-hidden="true" tabindex="-1"></a><span class="at">The position of the selections in the sound file (i.e. its 'coordinates' of time and frequency) can be modified interactively from R using the </span><span class="st">`</span><span class="fu">sel_tailor</span>()<span class="st">`</span><span class="at"> function. This function produces a graphic window showing spectrograms and a series of 'buttons' that allow you to modify the view and move forward in the selection table:</span></span>
+<span id="cb26-513"><a href="#cb26-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-514"><a href="#cb26-514" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval<span class="ot">=</span>F}</span>
+<span id="cb26-515"><a href="#cb26-515" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-516"><a href="#cb26-516" aria-hidden="true" tabindex="-1"></a><span class="fu">tailor_sels</span>(<span class="at">X =</span> lbh_selec_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, ], <span class="at">auto.next =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-517"><a href="#cb26-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-518"><a href="#cb26-518" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-519"><a href="#cb26-519" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-520"><a href="#cb26-520" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;img src="images/seltailor.contour.gif" alt="expraven1" width="820"/&gt;</span></span>
+<span id="cb26-521"><a href="#cb26-521" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-522"><a href="#cb26-522" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-523"><a href="#cb26-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-524"><a href="#cb26-524" aria-hidden="true" tabindex="-1"></a><span class="at">The function returns the corrected data as a data frame in R and also saves a '.csv' file in the directory where the sound files are located.</span></span>
+<span id="cb26-525"><a href="#cb26-525" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-526"><a href="#cb26-526" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="fu">sel_tailor</span>()<span class="st">`</span><span class="at"> can also be used to modify frequency contours such as those produced by the </span><span class="st">`</span><span class="fu">dfDTW</span>()<span class="st">`</span><span class="at"> or </span><span class="st">`</span><span class="fu">ffDTW</span>()<span class="st">`</span><span class="at"> function:</span></span>
+<span id="cb26-527"><a href="#cb26-527" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-528"><a href="#cb26-528" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r, eval<span class="ot">=</span><span class="cn">FALSE</span>}</span>
+<span id="cb26-529"><a href="#cb26-529" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-530"><a href="#cb26-530" aria-hidden="true" tabindex="-1"></a>cntours <span class="ot">&lt;-</span> <span class="fu">freq_ts</span>(<span class="at">X =</span> lbh_selec_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ])</span>
+<span id="cb26-531"><a href="#cb26-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-532"><a href="#cb26-532" aria-hidden="true" tabindex="-1"></a>tail.cntours <span class="ot">&lt;-</span><span class="fu">tailor_sels</span>(<span class="at">X =</span> lbh_selec_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], <span class="at">ts.df =</span> cntours, </span>
+<span id="cb26-533"><a href="#cb26-533" aria-hidden="true" tabindex="-1"></a>                <span class="at">auto.contour =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-534"><a href="#cb26-534" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb26-535"><a href="#cb26-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-536"><a href="#cb26-536" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;img src="images/seltailor.contour.gif" alt="expraven1" width="820"/&gt;</span></span>
+<span id="cb26-537"><a href="#cb26-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-538"><a href="#cb26-538" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-539"><a href="#cb26-539" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-540"><a href="#cb26-540" aria-hidden="true" tabindex="-1"></a><span class="at">------------------------------------------------------------------------</span></span>
+<span id="cb26-541"><a href="#cb26-541" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-542"><a href="#cb26-542" aria-hidden="true" tabindex="-1"></a><span class="at">## References</span></span>
+<span id="cb26-543"><a href="#cb26-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-544"><a href="#cb26-544" aria-hidden="true" tabindex="-1"></a><span class="at">1.  Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal acoustic signals. Methods Ecol Evol 8:184--191.</span></span>
+<span id="cb26-545"><a href="#cb26-545" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-546"><a href="#cb26-546" aria-hidden="true" tabindex="-1"></a><span class="at">&nbsp;</span></span>
+<span id="cb26-547"><a href="#cb26-547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-548"><a href="#cb26-548" aria-hidden="true" tabindex="-1"></a><span class="at">------------------------------------------------------------------------</span></span>
+<span id="cb26-549"><a href="#cb26-549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-550"><a href="#cb26-550" aria-hidden="true" tabindex="-1"></a><span class="at">&lt;font size="4"&gt;Session information&lt;/font&gt;</span></span>
+<span id="cb26-551"><a href="#cb26-551" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-552"><a href="#cb26-552" aria-hidden="true" tabindex="-1"></a><span class="st">```</span>{r session info, echo<span class="ot">=</span>F}</span>
+<span id="cb26-553"><a href="#cb26-553" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-554"><a href="#cb26-554" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb26-555"><a href="#cb26-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-556"><a href="#cb26-556" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,9 +1,17 @@
 project:
   type: website
-
+  output-dir: docs
+  
 website:
   title: "OTS Bioacoustic Analysis in R 2023"
+  search: true
+  site-url: https://marce10.github.io/OTS_BIR_2023/
+  repo-url: https://github.com/maRce10/OTS_BIR_2023/
   navbar:
+    right:
+      - icon: github
+        href: https://github.com/
+        aria-label: GitHub
     left:
       - href: index.qmd
         text: Home
@@ -43,7 +51,7 @@ website:
 format:
   html:
     theme: simplex
-    css: qmd.css
+    css: styles.css
     toc: true
     
 editor: visual

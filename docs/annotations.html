@@ -1,0 +1,2239 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>OTS Bioacoustic Analysis in R 2023 - Import annotations into R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">OTS Bioacoustic Analysis in R 2023</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./program.html">
+ <span class="menu-text">Program</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+        <li>
+    <a class="dropdown-item" href="./introduction.html">
+ <span class="dropdown-text">Introduction</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./r_basics.html">
+ <span class="dropdown-text">R basics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sound.html">
+ <span class="dropdown-text">Sound</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./spectrograms.html">
+ <span class="dropdown-text">Spectrograms</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./seewave.html">
+ <span class="dropdown-text">seewave</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./annotations.html">
+ <span class="dropdown-text">Annotations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ohun.html">
+ <span class="dropdown-text">ohun: automatic detection</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./intro_to_warbler.html">
+ <span class="dropdown-text">Intro to warbleR</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./measure_acoustic_structure.html">
+ <span class="dropdown-text">Measure acoustic structure</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./comparing_methods.html">
+ <span class="dropdown-text">Comparing measuring methods</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./quality_checks.html">
+ <span class="dropdown-text">Quality checks</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./measure_structure_green_hermit.html">
+ <span class="dropdown-text">Measure structure on XC recordings</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="./course_prep.html">
+ <span class="menu-text">Course prep</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./instructor.html">
+ <span class="menu-text">Instructor</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#annotation-tables" id="toc-annotation-tables" class="nav-link active" data-scroll-target="#annotation-tables"><span class="toc-section-number">1</span>  Annotation tables</a></li>
+  <li><a href="#raven" id="toc-raven" class="nav-link" data-scroll-target="#raven"><span class="toc-section-number">2</span>  Raven</a></li>
+  <li><a href="#rraven" id="toc-rraven" class="nav-link" data-scroll-target="#rraven"><span class="toc-section-number">3</span>  Rraven</a></li>
+  <li><a href="#import-raven-data" id="toc-import-raven-data" class="nav-link" data-scroll-target="#import-raven-data"><span class="toc-section-number">4</span>  Import Raven data</a></li>
+  <li><a href="#export-r-data-to-raven" id="toc-export-r-data-to-raven" class="nav-link" data-scroll-target="#export-r-data-to-raven"><span class="toc-section-number">5</span>  Export R data to Raven</a></li>
+  <li><a href="#warbler-formats" id="toc-warbler-formats" class="nav-link" data-scroll-target="#warbler-formats"><span class="toc-section-number">6</span>  warbleR formats</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">7</span>  References</a></li>
+  </ul>
+</nav>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><font size="7"><b>Import annotations into R</b></font></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>&nbsp;</p>
+<section id="annotation-tables" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="annotation-tables"><span class="header-section-number">1</span> Annotation tables</h2>
+<p>An annotation table (or selection table in Raven’s terminology and <strong>warbleR</strong>) is a spreadsheet that contains information about the location (and frequency) of the sounds of interest in one or more sound files. Therefore, the basic annotation table should contain at least 3 columns:</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> start </th>
+   <th style="text-align:center;"> end </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> sound_file_1.wav </td>
+   <td style="text-align:center;"> 2.45 </td>
+   <td style="text-align:center;"> 3.28 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_1.wav </td>
+   <td style="text-align:center;"> 2.90 </td>
+   <td style="text-align:center;"> 4.93 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_2.wav </td>
+   <td style="text-align:center;"> 3.12 </td>
+   <td style="text-align:center;"> 3.32 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_2.wav </td>
+   <td style="text-align:center;"> 3.48 </td>
+   <td style="text-align:center;"> 4.29 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>&nbsp;</p>
+<p>Ideally we should also include the frequency range of the annotations:</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> start </th>
+   <th style="text-align:center;"> end </th>
+   <th style="text-align:center;"> bottom.freq </th>
+   <th style="text-align:center;"> top.freq </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> sound_file_1.wav </td>
+   <td style="text-align:center;"> 2.45 </td>
+   <td style="text-align:center;"> 3.28 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 4.46 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 7.73 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_1.wav </td>
+   <td style="text-align:center;"> 2.90 </td>
+   <td style="text-align:center;"> 4.93 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 4.85 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 7.58 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_2.wav </td>
+   <td style="text-align:center;"> 3.12 </td>
+   <td style="text-align:center;"> 3.32 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 4.54 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 8.13 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_2.wav </td>
+   <td style="text-align:center;"> 3.48 </td>
+   <td style="text-align:center;"> 4.29 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 5.30 </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 10.26 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>&nbsp;</p>
+<p>.. and a unique identifier (at least within each sound file) for each annotation:</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> selec </th>
+   <th style="text-align:center;"> start </th>
+   <th style="text-align:center;"> end </th>
+   <th style="text-align:center;"> bottom.freq </th>
+   <th style="text-align:center;"> top.freq </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> sound_file_1.wav </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 1 </td>
+   <td style="text-align:center;"> 2.45 </td>
+   <td style="text-align:center;"> 3.28 </td>
+   <td style="text-align:center;"> 4.46 </td>
+   <td style="text-align:center;"> 7.73 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_1.wav </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2 </td>
+   <td style="text-align:center;"> 2.90 </td>
+   <td style="text-align:center;"> 4.93 </td>
+   <td style="text-align:center;"> 4.85 </td>
+   <td style="text-align:center;"> 7.58 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_2.wav </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 1 </td>
+   <td style="text-align:center;"> 3.12 </td>
+   <td style="text-align:center;"> 3.32 </td>
+   <td style="text-align:center;"> 4.54 </td>
+   <td style="text-align:center;"> 8.13 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_2.wav </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 2 </td>
+   <td style="text-align:center;"> 3.48 </td>
+   <td style="text-align:center;"> 4.29 </td>
+   <td style="text-align:center;"> 5.30 </td>
+   <td style="text-align:center;"> 10.26 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>Finally, for sound files with multiple channels, the annotation table should indicate in which channel the sound of interest is located:</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> channel </th>
+   <th style="text-align:center;"> selec </th>
+   <th style="text-align:center;"> start </th>
+   <th style="text-align:center;"> end </th>
+   <th style="text-align:center;"> bottom.freq </th>
+   <th style="text-align:center;"> top.freq </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> sound_file_1.wav </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2.45 </td>
+   <td style="text-align:center;"> 3.28 </td>
+   <td style="text-align:center;"> 4.46 </td>
+   <td style="text-align:center;"> 7.73 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_1.wav </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 2.90 </td>
+   <td style="text-align:center;"> 4.93 </td>
+   <td style="text-align:center;"> 4.85 </td>
+   <td style="text-align:center;"> 7.58 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_2.wav </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 3.12 </td>
+   <td style="text-align:center;"> 3.32 </td>
+   <td style="text-align:center;"> 4.54 </td>
+   <td style="text-align:center;"> 8.13 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> sound_file_2.wav </td>
+   <td style="text-align:center;background-color: #ccebff !important;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 3.48 </td>
+   <td style="text-align:center;"> 4.29 </td>
+   <td style="text-align:center;"> 5.30 </td>
+   <td style="text-align:center;"> 10.26 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>&nbsp;</p>
+<p>This format, with the same column names as in the previous example, is the one used by the <strong>warbleR</strong> package as a basic data object to work on batches of sounds (“batches”). The mandatory columns are “sound.files”, “selec”, “start”, and “end”. The frequency range columns (“bottom.freq” and “top.freq”) and the channel number (“channel”) are optional.</p>
+<p>Annotation tables can be generated within R, or imported from sound analysis programs (mainly, Raven, Avisoft, Syrinx and Audacity).</p>
+</section>
+<section id="raven" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="raven"><span class="header-section-number">2</span> Raven</h2>
+<p><a href="http://www.birds.cornell.edu/brp/raven/RavenOverview.html">Raven sound analysis software</a> (<a href="http://www.birds.cornell.edu">Cornell Lab of Ornithology</a>) provides very powerful tools for the analysis of sounds (animals). <strong>Raven</strong> allows you to use the cursor to manually define the frequency and time limits of the signals. It is a very flexible and user friendly program. The annotations can be saved in a selection file (selection table) in .txt format:</p>
+<p>&nbsp;</p>
+<p><img src="images/Raven.selec.gif" alt="Raven" width="820"></p>
+<p>&nbsp;</p>
+<p>Selections can be reopened on the original file where they were made:</p>
+<p>&nbsp;</p>
+<p><img src="images/Raven.open.st.gif" alt="Raven" width="820"></p>
+<p>&nbsp;</p>
+<p>The selections with sound (sound selection table) are a special type of annotation that contains all the information about the address of the files and allows to be opened directly without opening the sound file first. To create these selections, you must include the ‘Begin File’, ‘Begin Path’ and “File offset (s) ’columns (the latter only if the file contains annotations for more than one sound file):</p>
+<p>&nbsp;</p>
+<p><img src="images/Raven.create.sst.gif" alt="Raven" width="820"></p>
+<p>&nbsp;</p>
+<p>These selections open easily in Raven, as long as the sound files are kept in the original folders:</p>
+<p>&nbsp;</p>
+<p><img src="images/Raven.open.sst.gif" alt="Raven" width="820"></p>
+<p>&nbsp;</p>
+</section>
+<section id="rraven" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="rraven"><span class="header-section-number">3</span> Rraven</h2>
+<p>&nbsp;</p>
+<p>The <strong>Rraven</strong> package is designed to facilitate data exchange between R and <a href="http://www.birds.cornell.edu/brp/raven/RavenOverview.html">Raven sound analysis software</a>. R can simplify the automation of complex analysis routines. In addition, R packages such as <strong>warbleR</strong>, <strong>seewave</strong> and <strong>monitorR</strong> (among others) provide additional methods of analysis, which work as a perfect complement to those found in Raven. Therefore, bridging these applications can greatly expand the bioacoustic toolkit.</p>
+<p>Currently, most Raven analyzes cannot be run in the background from a command terminal. Therefore, most of the <strong>Rraven</strong> functions are designed to simplify the exchange of data between the two programs, and in some cases, export files to Raven for further analysis. This tutorial provides detailed examples for each function in <strong>Rraven</strong>, including both the R code and the additional steps required to fully conduct the analyses. Raven Pro must be installed in order to run some of the code.</p>
+<p>In this link you will find several videos that show in detail the different tools in Raven.</p>
+<p>http://ravensoundsoftware.com/video-tutorials/</p>
+<p>&nbsp;</p>
+</section>
+<section id="import-raven-data" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="import-raven-data"><span class="header-section-number">4</span> Import Raven data</h2>
+<section id="imp_raven" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="imp_raven"><span class="header-section-number">4.1</span> <em>imp_raven</em></h3>
+<p>This function imports Raven selection tables. You can import several files at once. Raven can also import selection tables that include data from multiple recordings. The function returns a single data frame with the information contained in the selection files. We already have 4 Raven selection tables in the example directory:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples"</span>, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.txt$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Label Track3.txt"                  "LBH 1 selection table example.txt"
+[3] "LBH 2 selection table example.txt" "LBH 3 selection table example.txt"
+[5] "LBH 4 selection table example.txt"</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>This code shows how to import all the data contained in those files into R:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rvn.dat <span class="ot">&lt;-</span> <span class="fu">imp_raven</span>(<span class="at">all.data =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(rvn.dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>1 file(s) could not be read:  Label Track3.txt</code></pre>
+</div>
+<div class="cell-output-display">
+
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:808px; "><table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> Selection </th>
+   <th style="text-align:center;"> View </th>
+   <th style="text-align:center;"> Channel </th>
+   <th style="text-align:center;"> Begin Time (s) </th>
+   <th style="text-align:center;"> End Time (s) </th>
+   <th style="text-align:center;"> Low Freq (Hz) </th>
+   <th style="text-align:center;"> High Freq (Hz) </th>
+   <th style="text-align:center;"> Begin File </th>
+   <th style="text-align:center;"> channel </th>
+   <th style="text-align:center;"> Begin Path </th>
+   <th style="text-align:center;"> File Offset (s) </th>
+   <th style="text-align:center;"> File Offset </th>
+   <th style="text-align:center;"> selec.file </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> Spectrogram 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.169 </td>
+   <td style="text-align:center;"> 1.342 </td>
+   <td style="text-align:center;"> 2220 </td>
+   <td style="text-align:center;"> 8604 </td>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> /tmp/RtmpWpOeaR/Phae.long1.wav </td>
+   <td style="text-align:center;"> 1.169 </td>
+   <td style="text-align:center;"> NA </td>
+   <td style="text-align:center;"> LBH 1 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> Spectrogram 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2.158 </td>
+   <td style="text-align:center;"> 2.321 </td>
+   <td style="text-align:center;"> 2169 </td>
+   <td style="text-align:center;"> 8807 </td>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> /tmp/RtmpWpOeaR/Phae.long1.wav </td>
+   <td style="text-align:center;"> 2.158 </td>
+   <td style="text-align:center;"> NA </td>
+   <td style="text-align:center;"> LBH 1 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> Spectrogram 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.343 </td>
+   <td style="text-align:center;"> 0.518 </td>
+   <td style="text-align:center;"> 2218 </td>
+   <td style="text-align:center;"> 8757 </td>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> /tmp/RtmpWpOeaR/Phae.long1.wav </td>
+   <td style="text-align:center;"> 0.343 </td>
+   <td style="text-align:center;"> NA </td>
+   <td style="text-align:center;"> LBH 1 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> Spectrogram 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.160 </td>
+   <td style="text-align:center;"> 0.292 </td>
+   <td style="text-align:center;"> 2317 </td>
+   <td style="text-align:center;"> 8822 </td>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> /tmp/RtmpWpOeaR/Phae.long2.wav </td>
+   <td style="text-align:center;"> 0.160 </td>
+   <td style="text-align:center;"> NA </td>
+   <td style="text-align:center;"> LBH 2 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> Spectrogram 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.457 </td>
+   <td style="text-align:center;"> 1.583 </td>
+   <td style="text-align:center;"> 2284 </td>
+   <td style="text-align:center;"> 8888 </td>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> /tmp/RtmpWpOeaR/Phae.long2.wav </td>
+   <td style="text-align:center;"> 1.457 </td>
+   <td style="text-align:center;"> NA </td>
+   <td style="text-align:center;"> LBH 2 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> Spectrogram 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.627 </td>
+   <td style="text-align:center;"> 0.758 </td>
+   <td style="text-align:center;"> 3007 </td>
+   <td style="text-align:center;"> 8822 </td>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> /tmp/RtmpWpOeaR/Phae.long3.wav </td>
+   <td style="text-align:center;"> NA </td>
+   <td style="text-align:center;"> 0.627 </td>
+   <td style="text-align:center;"> LBH 3 selection table example.txt </td>
+  </tr>
+</tbody>
+</table></div>
+
+</div>
+</div>
+<p>&nbsp;</p>
+<p>Note that the ‘waveform’ view data has been deleted. It can also be imported as follows (but note that the example selection tables do not have waveform data):</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rvn.dat <span class="ot">&lt;-</span> <span class="fu">imp_raven</span>(<span class="at">all.data =</span> <span class="cn">TRUE</span>, <span class="at">waveform =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>&nbsp;</p>
+<p>Raven selections can also be imported in ‘selection.table’ format so that you can input directly into <strong>warbleR</strong> functions. To do this, you only need to set <code>warbler.format = TRUE</code>:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rvn.dat <span class="ot">&lt;-</span> <span class="fu">imp_raven</span>(<span class="at">all.data =</span> <span class="cn">FALSE</span>, <span class="at">freq.cols =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples"</span>, <span class="at">warbler.format =</span> <span class="cn">TRUE</span>, <span class="at">all.data =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(rvn.dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>1 file(s) could not be read:  Label Track3.txt</code></pre>
+</div>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> selec </th>
+   <th style="text-align:center;"> Channel </th>
+   <th style="text-align:center;"> start </th>
+   <th style="text-align:center;"> end </th>
+   <th style="text-align:center;"> bottom.freq </th>
+   <th style="text-align:center;"> top.freq </th>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> channel </th>
+   <th style="text-align:center;"> selec.file </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.169355 </td>
+   <td style="text-align:center;"> 1.342388 </td>
+   <td style="text-align:center;"> 2.22011 </td>
+   <td style="text-align:center;"> 8.60438 </td>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> LBH 1 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2.158408 </td>
+   <td style="text-align:center;"> 2.321457 </td>
+   <td style="text-align:center;"> 2.16944 </td>
+   <td style="text-align:center;"> 8.80705 </td>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> LBH 1 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.343337 </td>
+   <td style="text-align:center;"> 0.518255 </td>
+   <td style="text-align:center;"> 2.21829 </td>
+   <td style="text-align:center;"> 8.75660 </td>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> LBH 1 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.159598 </td>
+   <td style="text-align:center;"> 0.292169 </td>
+   <td style="text-align:center;"> 2.31686 </td>
+   <td style="text-align:center;"> 8.82232 </td>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> LBH 2 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.457058 </td>
+   <td style="text-align:center;"> 1.583209 </td>
+   <td style="text-align:center;"> 2.28401 </td>
+   <td style="text-align:center;"> 8.88803 </td>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> LBH 2 selection table example.txt </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.626552 </td>
+   <td style="text-align:center;"> 0.757771 </td>
+   <td style="text-align:center;"> 3.00683 </td>
+   <td style="text-align:center;"> 8.82232 </td>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> LBH 3 selection table example.txt </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>&nbsp;</p>
+<p>The output data frame contains the following columns: “sound.files”, “channel”, “selec”, “start”, “end” and “selec.file.” You can also import the frequency range parameters in ‘selection.table’ by setting ‘freq.cols’ tp <code>TRUE</code>. The data frame returned by <code>imp_raven()</code> (when in the <strong>warbleR</strong> format) can be entered into several functions of <strong>warbleR</strong> for a more detailed analysis.</p>
+</section>
+<section id="relabel_colms" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="relabel_colms"><span class="header-section-number">4.2</span> <em>relabel_colms</em></h3>
+<p>This is a simple function to re-label the columns to match the format of the selection table used in <strong>warbleR</strong>:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># para simplificar solo las primeras 7 columnas</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>st1 <span class="ot">&lt;-</span> rvn.dat[ ,<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>st1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">relabel_colms</span>(st1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+
+</div>
+<p>&nbsp;</p>
+<p>Additional columns can also be re-labeled:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">relabel_colms</span>(st1, <span class="at">extra.cols.name =</span> <span class="st">"View"</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">extra.cols.new.name =</span> <span class="st">"Raven view"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 14px; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> selec </th>
+   <th style="text-align:center;"> Channel </th>
+   <th style="text-align:center;"> start </th>
+   <th style="text-align:center;"> end </th>
+   <th style="text-align:center;"> bottom.freq </th>
+   <th style="text-align:center;"> top.freq </th>
+   <th style="text-align:center;"> sound.files </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.169355 </td>
+   <td style="text-align:center;"> 1.342388 </td>
+   <td style="text-align:center;"> 2.22011 </td>
+   <td style="text-align:center;"> 8.60438 </td>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2.158408 </td>
+   <td style="text-align:center;"> 2.321457 </td>
+   <td style="text-align:center;"> 2.16944 </td>
+   <td style="text-align:center;"> 8.80705 </td>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.343337 </td>
+   <td style="text-align:center;"> 0.518255 </td>
+   <td style="text-align:center;"> 2.21829 </td>
+   <td style="text-align:center;"> 8.75660 </td>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.159598 </td>
+   <td style="text-align:center;"> 0.292169 </td>
+   <td style="text-align:center;"> 2.31686 </td>
+   <td style="text-align:center;"> 8.82232 </td>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.457058 </td>
+   <td style="text-align:center;"> 1.583209 </td>
+   <td style="text-align:center;"> 2.28401 </td>
+   <td style="text-align:center;"> 8.88803 </td>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.626552 </td>
+   <td style="text-align:center;"> 0.757771 </td>
+   <td style="text-align:center;"> 3.00683 </td>
+   <td style="text-align:center;"> 8.82232 </td>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.974213 </td>
+   <td style="text-align:center;"> 2.104392 </td>
+   <td style="text-align:center;"> 2.77684 </td>
+   <td style="text-align:center;"> 8.88803 </td>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.123364 </td>
+   <td style="text-align:center;"> 0.254581 </td>
+   <td style="text-align:center;"> 2.31686 </td>
+   <td style="text-align:center;"> 9.31515 </td>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.516812 </td>
+   <td style="text-align:center;"> 1.662236 </td>
+   <td style="text-align:center;"> 2.51400 </td>
+   <td style="text-align:center;"> 9.21659 </td>
+   <td style="text-align:center;"> Phae.long4.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2.932692 </td>
+   <td style="text-align:center;"> 3.076878 </td>
+   <td style="text-align:center;"> 2.57971 </td>
+   <td style="text-align:center;"> 10.23512 </td>
+   <td style="text-align:center;"> Phae.long4.wav </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.145398 </td>
+   <td style="text-align:center;"> 0.290497 </td>
+   <td style="text-align:center;"> 2.57971 </td>
+   <td style="text-align:center;"> 9.74228 </td>
+   <td style="text-align:center;"> Phae.long4.wav </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+</section>
+<section id="export-r-data-to-raven" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="export-r-data-to-raven"><span class="header-section-number">5</span> Export R data to Raven</h2>
+<section id="exp_raven" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="exp_raven"><span class="header-section-number">5.1</span> <em>exp_raven</em></h3>
+<p><em>exp_raven</em> saves a selection table in ‘.txt’ format that can be opened directly in Raven. No objects are returned to the R environment. The following code exports a selection table from a single sound file:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>st1 <span class="ot">&lt;-</span> lbh_selec_table[lbh_selec_table<span class="sc">$</span>sound.files <span class="sc">==</span> <span class="st">"Phae.long1.wav"</span>,]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">exp_raven</span>(st1, <span class="at">file.name =</span> <span class="st">"Phaethornis 1"</span>, <span class="at">khz.to.hz =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>&nbsp;</p>
+<p>If the path to the sound file is provided, the functions export a ‘sound selection table’ that can be opened directly by Raven (and which will also open the associated sound file):</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>st1 <span class="ot">&lt;-</span> lbh_selec_table[lbh_selec_table<span class="sc">$</span>sound.files <span class="sc">==</span> <span class="st">"Phae.long1.wav"</span>,]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">exp_raven</span>(st1, <span class="at">file.name =</span> <span class="st">"Phaethornis 1"</span>, <span class="at">khz.to.hz =</span> <span class="cn">TRUE</span>, <span class="at">sound.file.path =</span> <span class="st">"./examples"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><img src="images/exp_raven1.gif" class="img-fluid"></p>
+<p>&nbsp;</p>
+<p>This is useful for adding new selections or even new measurements:</p>
+<p><img src="images/exp_raven2.gif" class="img-fluid"> &nbsp;</p>
+<p>If there are several sound files available, users can export them as a single selection file or as multiple selection files (one for each sound file). This example creates a multiple selection of sound files:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp_raven</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">file.name =</span> <span class="st">"Phaethornis multiple sound files"</span>, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">sound.file.path =</span> <span class="st">"./examples"</span>, <span class="at">single.file =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>&nbsp;</p>
+<p>These types of tables can be opened as a multi-file display in Raven:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/exp_raven3.gif" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">ex</figcaption><p></p>
+</figure>
+</div>
+<p>&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p>&nbsp;</p>
+<ul>
+<li>Annotate 2 sound files from the “./examples” folder using <strong>Raven</strong></li>
+</ul>
+<p>&nbsp;</p>
+<ul>
+<li>Import the annotation files into R using Rraven’s <code>imp_raven()</code></li>
+</ul>
+</div>
+<p>&nbsp;</p>
+</section>
+</section>
+<section id="warbler-formats" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="warbler-formats"><span class="header-section-number">6</span> warbleR formats</h2>
+<section id="selection-tables" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="selection-tables"><span class="header-section-number">6.1</span> Selection tables</h3>
+<p>These objects are created with the <code>selection_table()</code> function. The function takes data frames containing selection data (name of the sound file, selection, start, end …), verifies if the information is consistent (see the function <code>check_sels()</code> for details) and saves the ‘diagnostic’ metadata as an attribute. The selection tables are basically data frames in which the information contained has been corroborated so it can be read by other <strong>warbleR</strong> functions. The selection tables must contain (at least) the following columns:</p>
+<ol type="1">
+<li>sound files (sound.files)</li>
+<li>selection (selec)</li>
+<li>start</li>
+<li>end</li>
+</ol>
+<p>The sample data “lbh_selec_table” contains these columns:</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"lbh_selec_table"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>lbh_selec_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<div style="border: 1px solid #ddd; padding: 1px; overflow-x: scroll; width:740px; "><table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> channel </th>
+   <th style="text-align:center;"> selec </th>
+   <th style="text-align:center;"> start </th>
+   <th style="text-align:center;"> end </th>
+   <th style="text-align:center;"> bottom.freq </th>
+   <th style="text-align:center;"> top.freq </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.169355 </td>
+   <td style="text-align:center;"> 1.342388 </td>
+   <td style="text-align:center;"> 2.22011 </td>
+   <td style="text-align:center;"> 8.60438 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 2.158408 </td>
+   <td style="text-align:center;"> 2.321457 </td>
+   <td style="text-align:center;"> 2.16944 </td>
+   <td style="text-align:center;"> 8.80705 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long1.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.343337 </td>
+   <td style="text-align:center;"> 0.518255 </td>
+   <td style="text-align:center;"> 2.21829 </td>
+   <td style="text-align:center;"> 8.75660 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.159598 </td>
+   <td style="text-align:center;"> 0.292169 </td>
+   <td style="text-align:center;"> 2.31686 </td>
+   <td style="text-align:center;"> 8.82232 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long2.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1.457058 </td>
+   <td style="text-align:center;"> 1.583209 </td>
+   <td style="text-align:center;"> 2.28401 </td>
+   <td style="text-align:center;"> 8.88803 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.626552 </td>
+   <td style="text-align:center;"> 0.757771 </td>
+   <td style="text-align:center;"> 3.00683 </td>
+   <td style="text-align:center;"> 8.82232 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 1.974213 </td>
+   <td style="text-align:center;"> 2.104392 </td>
+   <td style="text-align:center;"> 2.77684 </td>
+   <td style="text-align:center;"> 8.88803 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long3.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.123364 </td>
+   <td style="text-align:center;"> 0.254581 </td>
+   <td style="text-align:center;"> 2.31686 </td>
+   <td style="text-align:center;"> 9.31515 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long4.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 1.516812 </td>
+   <td style="text-align:center;"> 1.662236 </td>
+   <td style="text-align:center;"> 2.51400 </td>
+   <td style="text-align:center;"> 9.21659 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long4.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 2.932692 </td>
+   <td style="text-align:center;"> 3.076878 </td>
+   <td style="text-align:center;"> 2.57971 </td>
+   <td style="text-align:center;"> 10.23512 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> Phae.long4.wav </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.145398 </td>
+   <td style="text-align:center;"> 0.290497 </td>
+   <td style="text-align:center;"> 2.57971 </td>
+   <td style="text-align:center;"> 9.74228 </td>
+  </tr>
+</tbody>
+</table></div>
+
+</div>
+</div>
+<p>&nbsp;</p>
+<p>… and can be converted to the <em>selection_table</em> format like this:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># global parameters</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">selection_table</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">pb =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>st</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="kable-table">
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+sound.files
+</th>
+<th style="text-align:right;">
+channel
+</th>
+<th style="text-align:right;">
+selec
+</th>
+<th style="text-align:right;">
+start
+</th>
+<th style="text-align:right;">
+end
+</th>
+<th style="text-align:right;">
+bottom.freq
+</th>
+<th style="text-align:right;">
+top.freq
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Phae.long1.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.169355
+</td>
+<td style="text-align:right;">
+1.342388
+</td>
+<td style="text-align:right;">
+2.22011
+</td>
+<td style="text-align:right;">
+8.60438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long1.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2.158408
+</td>
+<td style="text-align:right;">
+2.321457
+</td>
+<td style="text-align:right;">
+2.16944
+</td>
+<td style="text-align:right;">
+8.80705
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long1.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.343337
+</td>
+<td style="text-align:right;">
+0.518255
+</td>
+<td style="text-align:right;">
+2.21829
+</td>
+<td style="text-align:right;">
+8.75660
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long2.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.159598
+</td>
+<td style="text-align:right;">
+0.292169
+</td>
+<td style="text-align:right;">
+2.31686
+</td>
+<td style="text-align:right;">
+8.82232
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long2.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1.457058
+</td>
+<td style="text-align:right;">
+1.583209
+</td>
+<td style="text-align:right;">
+2.28401
+</td>
+<td style="text-align:right;">
+8.88803
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long3.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.626552
+</td>
+<td style="text-align:right;">
+0.757771
+</td>
+<td style="text-align:right;">
+3.00683
+</td>
+<td style="text-align:right;">
+8.82232
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long3.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1.974213
+</td>
+<td style="text-align:right;">
+2.104392
+</td>
+<td style="text-align:right;">
+2.77684
+</td>
+<td style="text-align:right;">
+8.88803
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long3.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.123364
+</td>
+<td style="text-align:right;">
+0.254581
+</td>
+<td style="text-align:right;">
+2.31686
+</td>
+<td style="text-align:right;">
+9.31515
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long4.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.516812
+</td>
+<td style="text-align:right;">
+1.662236
+</td>
+<td style="text-align:right;">
+2.51400
+</td>
+<td style="text-align:right;">
+9.21659
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long4.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2.932692
+</td>
+<td style="text-align:right;">
+3.076878
+</td>
+<td style="text-align:right;">
+2.57971
+</td>
+<td style="text-align:right;">
+10.23512
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phae.long4.wav
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.145398
+</td>
+<td style="text-align:right;">
+0.290497
+</td>
+<td style="text-align:right;">
+2.57971
+</td>
+<td style="text-align:right;">
+9.74228
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+</div>
+</div>
+<p>Note that the path to the sound files has been provided. This is necessary in order to verify that the data provided conforms to the characteristics of the audio files.</p>
+<p>Selection tables have their own class in R:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(st)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "selection_table" "data.frame"     </code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="extended-selection-tables" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="extended-selection-tables"><span class="header-section-number">6.2</span> Extended selection tables</h3>
+<p>When the <code>extended = TRUE</code> argument the function generates an object of the <em>extended_selection_table</em> class that also contains a list of ‘wave’ objects corresponding to each of the selections in the data. Therefore, the function <strong>transforms the selection table into self-contained objects</strong> since the original sound files are no longer needed to perform most of the acoustic analysis in <strong>warbleR</strong>. This can greatly facilitate the storage and exchange of (bio)acoustic data. In addition, it also speeds up analysis, since it is not necessary to read the sound files every time the data is analyzed.</p>
+<p>Now, as mentioned earlier, you need the <code>selection_table()</code> function to create an extended selection table. You must also set the argument <code>extended = TRUE</code> (otherwise, the class would be a selection table). The following code converts the sample data into an extended selection table:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  global parameters</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ext_st <span class="ot">&lt;-</span> <span class="fu">selection_table</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">pb =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">extended =</span> <span class="cn">TRUE</span>, <span class="at">confirm.extended =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+
+</div>
+<p>&nbsp;</p>
+<p>And that is. Now the acoustic data and the selection data (as well as the additional metadata) are all together in a single R object.</p>
+<p>&nbsp;</p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p>&nbsp;</p>
+<ul>
+<li><p>Run the example code in the <code>selection_table()</code> function documentation</p></li>
+<li><p>What do the arguments “mar” and “by.song” do?</p></li>
+</ul>
+</div>
+<p>&nbsp;</p>
+<hr>
+</section>
+</section>
+<section id="references" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="references"><span class="header-section-number">7</span> References</h2>
+<ul>
+<li>Araya-Salas (2017), <em>Rraven: connecting R and Raven bioacoustic software</em>. R package version 1.0.2.</li>
+</ul>
+<hr>
+<p>&nbsp;</p>
+<p><font size="4">Session information</font></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 Patched (2022-11-10 r83330)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04.5 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+
+locale:
+ [1] LC_CTYPE=es_ES.UTF-8       LC_NUMERIC=C               LC_TIME=es_CR.UTF-8       
+ [4] LC_COLLATE=es_ES.UTF-8     LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=es_ES.UTF-8   
+ [7] LC_PAPER=es_CR.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
+[10] LC_TELEPHONE=C             LC_MEASUREMENT=es_CR.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] kableExtra_1.3.4   warbleR_1.1.28     NatureSounds_1.0.4 knitr_1.41         seewave_2.2.0     
+[6] tuneR_1.4.1       
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.10       compiler_4.2.2    highr_0.9         bitops_1.0-7      tools_4.2.2      
+ [6] digest_0.6.31     jsonlite_1.8.4    evaluate_0.19     lifecycle_1.0.3   viridisLite_0.4.1
+[11] fftw_1.0-7        rlang_1.0.6       cli_3.6.0         rstudioapi_0.14   yaml_2.3.6       
+[16] parallel_4.2.2    xfun_0.35         fastmap_1.1.0     httr_1.4.4        stringr_1.5.0    
+[21] xml2_1.3.3        vctrs_0.5.2       htmlwidgets_1.5.4 systemfonts_1.0.4 webshot_0.5.4    
+[26] svglite_2.1.0     glue_1.6.2        R6_2.5.1          dtw_1.23-1        pbapply_1.6-0    
+[31] rmarkdown_2.19    magrittr_2.0.3    scales_1.2.1      htmltools_0.5.4   MASS_7.3-58.2    
+[36] rvest_1.0.3       colorspace_2.1-0  proxy_0.4-27      stringi_1.7.12    RCurl_1.98-1.9   
+[41] signal_0.7-7      munsell_0.5.0     rjson_0.2.21      Rraven_1.0.13    </code></pre>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/marce10\.github\.io\/OTS_BIR_2023\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb20" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &lt;font size="7"&gt;&lt;b&gt;Import annotations into R&lt;/b&gt;&lt;/font&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="an">toc-depth:</span><span class="co"> 2</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="an">toc-location:</span><span class="co"> left</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="an">number-sections:</span><span class="co"> true</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="an">highlight-style:</span><span class="co"> pygments</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: kable</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">    css: styles.css</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">    link-external-icon: true</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">    link-external-newwindow: true  </span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Annotation tables</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>An annotation table (or selection table in Raven's terminology and **warbleR**) is a spreadsheet that contains information about the location (and frequency) of the sounds of interest in one or more sound files. Therefore, the basic annotation table should contain at least 3 columns:</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits=</span><span class="dv">3</span>)</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">mean =</span> <span class="dv">3</span>)</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> start <span class="sc">+</span> <span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">mean =</span> <span class="dv">1</span>))</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>cd.anot <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sound.files =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"sound_file_1.wav"</span>, <span class="st">"sound_file_2.wav"</span>), <span class="at">each =</span> <span class="dv">2</span>), start, end) </span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(cd.anot, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>)</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>kbl</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>Ideally we should also include the frequency range of the annotations:</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>cd.anot<span class="sc">$</span>bottom.freq <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">mean =</span> <span class="dv">5</span>)</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>cd.anot<span class="sc">$</span>top.freq <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">mean =</span> <span class="dv">9</span>)</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(cd.anot, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>)</span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">column_spec</span>(kbl, <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">background =</span> <span class="st">"#ccebff"</span>)</span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>kbl</span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>.. and a unique identifier (at least within each sound file) for each annotation:</span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a>cd.anot<span class="sc">$</span>selec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a>cd.anot <span class="ot">&lt;-</span> cd.anot[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)]</span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(cd.anot, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>)</span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">column_spec</span>(kbl, <span class="dv">2</span>, <span class="at">background =</span> <span class="st">"#ccebff"</span>)</span>
+<span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb20-77"><a href="#cb20-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a>kbl</span>
+<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-80"><a href="#cb20-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a>Finally, for sound files with multiple channels, the annotation table should indicate in which channel the sound of interest is located:</span>
+<span id="cb20-83"><a href="#cb20-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-84"><a href="#cb20-84" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
+<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a>cd.anot<span class="sc">$</span>channel <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a>cd.anot <span class="ot">&lt;-</span> cd.anot[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>)]</span>
+<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(cd.anot, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>)</span>
+<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">column_spec</span>(kbl, <span class="dv">2</span>, <span class="at">background =</span> <span class="st">"#ccebff"</span>)</span>
+<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-96"><a href="#cb20-96" aria-hidden="true" tabindex="-1"></a>kbl</span>
+<span id="cb20-97"><a href="#cb20-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-98"><a href="#cb20-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-99"><a href="#cb20-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-101"><a href="#cb20-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a>This format, with the same column names as in the previous example, is the one used by the **warbleR** package as a basic data object to work on batches of sounds ("batches"). The mandatory columns are "sound.files", "selec", "start", and "end". The frequency range columns ("bottom.freq" and "top.freq") and the channel number ("channel") are optional.</span>
+<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a>Annotation tables can be generated within R, or imported from sound analysis programs (mainly, Raven, Avisoft, Syrinx and Audacity).</span>
+<span id="cb20-105"><a href="#cb20-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-106"><a href="#cb20-106" aria-hidden="true" tabindex="-1"></a><span class="fu">## Raven</span></span>
+<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Raven sound analysis software</span><span class="co">](http://www.birds.cornell.edu/brp/raven/RavenOverview.html)</span> (<span class="co">[</span><span class="ot">Cornell Lab of Ornithology</span><span class="co">](http://www.birds.cornell.edu)</span>) provides very powerful tools for the analysis of sounds (animals). **Raven** allows you to use the cursor to manually define the frequency and time limits of the signals. It is a very flexible and user friendly program. The annotations can be saved in a selection file (selection table) in .txt format:</span>
+<span id="cb20-109"><a href="#cb20-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/Raven.selec.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Raven"</span> <span class="er">width</span><span class="ot">=</span><span class="st">"820"</span><span class="kw">/&gt;</span></span>
+<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a>Selections can be reopened on the original file where they were made:</span>
+<span id="cb20-117"><a href="#cb20-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-118"><a href="#cb20-118" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-120"><a href="#cb20-120" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/Raven.open.st.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Raven"</span> <span class="er">width</span><span class="ot">=</span><span class="st">"820"</span><span class="kw">/&gt;</span></span>
+<span id="cb20-121"><a href="#cb20-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-123"><a href="#cb20-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-124"><a href="#cb20-124" aria-hidden="true" tabindex="-1"></a>The selections with sound (sound selection table) are a special type of annotation that contains all the information about the address of the files and allows to be opened directly without opening the sound file first. To create these selections, you must include the 'Begin File', 'Begin Path' and "File offset (s) 'columns (the latter only if the file contains annotations for more than one sound file):</span>
+<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-127"><a href="#cb20-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-128"><a href="#cb20-128" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/Raven.create.sst.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Raven"</span> <span class="er">width</span><span class="ot">=</span><span class="st">"820"</span><span class="kw">/&gt;</span></span>
+<span id="cb20-129"><a href="#cb20-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-130"><a href="#cb20-130" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-131"><a href="#cb20-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-132"><a href="#cb20-132" aria-hidden="true" tabindex="-1"></a>These selections open easily in Raven, as long as the sound files are kept in the original folders:</span>
+<span id="cb20-133"><a href="#cb20-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-134"><a href="#cb20-134" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-135"><a href="#cb20-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-136"><a href="#cb20-136" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/Raven.open.sst.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Raven"</span> <span class="er">width</span><span class="ot">=</span><span class="st">"820"</span><span class="kw">/&gt;</span></span>
+<span id="cb20-137"><a href="#cb20-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-138"><a href="#cb20-138" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-139"><a href="#cb20-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-140"><a href="#cb20-140" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rraven</span></span>
+<span id="cb20-141"><a href="#cb20-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-142"><a href="#cb20-142" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-143"><a href="#cb20-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-144"><a href="#cb20-144" aria-hidden="true" tabindex="-1"></a>The **Rraven** package is designed to facilitate data exchange between R and [Raven sound analysis software](http://www.birds.cornell.edu/brp/raven/RavenOverview.html). R can simplify the automation of complex analysis routines. In addition, R packages such as **warbleR**, **seewave** and **monitorR** (among others) provide additional methods of analysis, which work as a perfect complement to those found in Raven. Therefore, bridging these applications can greatly expand the bioacoustic toolkit.</span>
+<span id="cb20-145"><a href="#cb20-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-146"><a href="#cb20-146" aria-hidden="true" tabindex="-1"></a>Currently, most Raven analyzes cannot be run in the background from a command terminal. Therefore, most of the **Rraven** functions are designed to simplify the exchange of data between the two programs, and in some cases, export files to Raven for further analysis. This tutorial provides detailed examples for each function in **Rraven**, including both the R code and the additional steps required to fully conduct the analyses. Raven Pro must be installed in order to run some of the code.</span>
+<span id="cb20-147"><a href="#cb20-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-148"><a href="#cb20-148" aria-hidden="true" tabindex="-1"></a>In this link you will find several videos that show in detail the different tools in Raven.</span>
+<span id="cb20-149"><a href="#cb20-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-150"><a href="#cb20-150" aria-hidden="true" tabindex="-1"></a>http://ravensoundsoftware.com/video-tutorials/</span>
+<span id="cb20-151"><a href="#cb20-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-152"><a href="#cb20-152" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-153"><a href="#cb20-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-154"><a href="#cb20-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## Import Raven data</span></span>
+<span id="cb20-155"><a href="#cb20-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-156"><a href="#cb20-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### *imp_raven*</span></span>
+<span id="cb20-157"><a href="#cb20-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-158"><a href="#cb20-158" aria-hidden="true" tabindex="-1"></a>This function imports Raven selection tables. You can import several files at once. Raven can also import selection tables that include data from multiple recordings. The function returns a single data frame with the information contained in the selection files. We already have 4 Raven selection tables in the example directory:</span>
+<span id="cb20-159"><a href="#cb20-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-160"><a href="#cb20-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=T, echo=T}</span></span>
+<span id="cb20-161"><a href="#cb20-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-162"><a href="#cb20-162" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"./examples"</span>, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.txt$"</span>)</span>
+<span id="cb20-163"><a href="#cb20-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-164"><a href="#cb20-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-165"><a href="#cb20-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-166"><a href="#cb20-166" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-167"><a href="#cb20-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-168"><a href="#cb20-168" aria-hidden="true" tabindex="-1"></a>This code shows how to import all the data contained in those files into R:</span>
+<span id="cb20-169"><a href="#cb20-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-170"><a href="#cb20-170" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=FALSE}</span></span>
+<span id="cb20-171"><a href="#cb20-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-172"><a href="#cb20-172" aria-hidden="true" tabindex="-1"></a>rvn.dat <span class="ot">&lt;-</span> <span class="fu">imp_raven</span>(<span class="at">all.data =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples"</span>)</span>
+<span id="cb20-173"><a href="#cb20-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-174"><a href="#cb20-174" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(rvn.dat)</span>
+<span id="cb20-175"><a href="#cb20-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-176"><a href="#cb20-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-177"><a href="#cb20-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-178"><a href="#cb20-178" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=TRUE, echo=F, message=F}</span></span>
+<span id="cb20-179"><a href="#cb20-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-180"><a href="#cb20-180" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rraven)</span>
+<span id="cb20-181"><a href="#cb20-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-182"><a href="#cb20-182" aria-hidden="true" tabindex="-1"></a>rvn.dat <span class="ot">&lt;-</span> <span class="fu">imp_raven</span>(<span class="at">all.data =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples"</span>)</span>
+<span id="cb20-183"><a href="#cb20-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-184"><a href="#cb20-184" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(<span class="fu">head</span>(rvn.dat), <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F, <span class="at">escape =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb20-185"><a href="#cb20-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-186"><a href="#cb20-186" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>, <span class="st">"responsive"</span>), <span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">font_size =</span> <span class="dv">11</span>)</span>
+<span id="cb20-187"><a href="#cb20-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-188"><a href="#cb20-188" aria-hidden="true" tabindex="-1"></a><span class="fu">scroll_box</span>(kbl, <span class="at">width =</span> <span class="st">"808px"</span>,</span>
+<span id="cb20-189"><a href="#cb20-189" aria-hidden="true" tabindex="-1"></a><span class="at">box_css =</span> <span class="st">"border: 1px solid #ddd; padding: 5px; "</span>, <span class="at">extra_css =</span> <span class="cn">NULL</span>)</span>
+<span id="cb20-190"><a href="#cb20-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-191"><a href="#cb20-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-192"><a href="#cb20-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-193"><a href="#cb20-193" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-194"><a href="#cb20-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-195"><a href="#cb20-195" aria-hidden="true" tabindex="-1"></a>Note that the 'waveform' view data has been deleted. It can also be imported as follows (but note that the example selection tables do not have waveform data):</span>
+<span id="cb20-196"><a href="#cb20-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-197"><a href="#cb20-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=FALSE}</span></span>
+<span id="cb20-198"><a href="#cb20-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-199"><a href="#cb20-199" aria-hidden="true" tabindex="-1"></a>rvn.dat <span class="ot">&lt;-</span> <span class="fu">imp_raven</span>(<span class="at">all.data =</span> <span class="cn">TRUE</span>, <span class="at">waveform =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples"</span>)</span>
+<span id="cb20-200"><a href="#cb20-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-201"><a href="#cb20-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-202"><a href="#cb20-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-203"><a href="#cb20-203" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-204"><a href="#cb20-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-205"><a href="#cb20-205" aria-hidden="true" tabindex="-1"></a>Raven selections can also be imported in 'selection.table' format so that you can input directly into **warbleR** functions. To do this, you only need to set <span class="in">`warbler.format = TRUE`</span>:</span>
+<span id="cb20-206"><a href="#cb20-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-207"><a href="#cb20-207" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=FALSE}</span></span>
+<span id="cb20-208"><a href="#cb20-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-209"><a href="#cb20-209" aria-hidden="true" tabindex="-1"></a>rvn.dat <span class="ot">&lt;-</span> <span class="fu">imp_raven</span>(<span class="at">all.data =</span> <span class="cn">FALSE</span>, <span class="at">freq.cols =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples"</span>, <span class="at">warbler.format =</span> <span class="cn">TRUE</span>, <span class="at">all.data =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-210"><a href="#cb20-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-211"><a href="#cb20-211" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(rvn.dat)</span>
+<span id="cb20-212"><a href="#cb20-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-213"><a href="#cb20-213" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-214"><a href="#cb20-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-215"><a href="#cb20-215" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=TRUE, echo=FALSE}</span></span>
+<span id="cb20-216"><a href="#cb20-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-217"><a href="#cb20-217" aria-hidden="true" tabindex="-1"></a>rvn.dat <span class="ot">&lt;-</span> <span class="fu">imp_raven</span>(<span class="at">warbler.format =</span> <span class="cn">TRUE</span>, <span class="at">all.data =</span> <span class="cn">FALSE</span>, <span class="at">freq.cols =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"./examples/"</span>)</span>
+<span id="cb20-218"><a href="#cb20-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-219"><a href="#cb20-219" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(<span class="fu">head</span>(rvn.dat), <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-220"><a href="#cb20-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-221"><a href="#cb20-221" aria-hidden="true" tabindex="-1"></a><span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>, <span class="st">"responsive"</span>), <span class="at">full_width =</span> <span class="cn">TRUE</span>, <span class="at">font_size =</span> <span class="dv">12</span>)</span>
+<span id="cb20-222"><a href="#cb20-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-223"><a href="#cb20-223" aria-hidden="true" tabindex="-1"></a><span class="co"># scroll_box(kbl, width = "808",</span></span>
+<span id="cb20-224"><a href="#cb20-224" aria-hidden="true" tabindex="-1"></a><span class="co"># box_css = "border: 1px solid #ddd; padding: 5px; ", extra_css = NULL)</span></span>
+<span id="cb20-225"><a href="#cb20-225" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-226"><a href="#cb20-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-227"><a href="#cb20-227" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-228"><a href="#cb20-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-229"><a href="#cb20-229" aria-hidden="true" tabindex="-1"></a>The output data frame contains the following columns: "sound.files", "channel", "selec", "start", "end" and "selec.file." You can also import the frequency range parameters in 'selection.table' by setting 'freq.cols' tp <span class="in">`TRUE`</span>. The data frame returned by <span class="in">`imp_raven()`</span> (when in the **warbleR** format) can be entered into several functions of **warbleR** for a more detailed analysis.</span>
+<span id="cb20-230"><a href="#cb20-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-231"><a href="#cb20-231" aria-hidden="true" tabindex="-1"></a><span class="fu">### *relabel_colms*</span></span>
+<span id="cb20-232"><a href="#cb20-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-233"><a href="#cb20-233" aria-hidden="true" tabindex="-1"></a>This is a simple function to re-label the columns to match the format of the selection table used in **warbleR**:</span>
+<span id="cb20-234"><a href="#cb20-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-235"><a href="#cb20-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F, echo = T}</span></span>
+<span id="cb20-236"><a href="#cb20-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-237"><a href="#cb20-237" aria-hidden="true" tabindex="-1"></a><span class="co"># para simplificar solo las primeras 7 columnas</span></span>
+<span id="cb20-238"><a href="#cb20-238" aria-hidden="true" tabindex="-1"></a>st1 <span class="ot">&lt;-</span> rvn.dat[ ,<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb20-239"><a href="#cb20-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-240"><a href="#cb20-240" aria-hidden="true" tabindex="-1"></a>st1</span>
+<span id="cb20-241"><a href="#cb20-241" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-242"><a href="#cb20-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-243"><a href="#cb20-243" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = F}</span></span>
+<span id="cb20-244"><a href="#cb20-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-245"><a href="#cb20-245" aria-hidden="true" tabindex="-1"></a><span class="co">#to simplify the example select a subset of the columns </span></span>
+<span id="cb20-246"><a href="#cb20-246" aria-hidden="true" tabindex="-1"></a>st1 <span class="ot">&lt;-</span> rvn.dat[ ,<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb20-247"><a href="#cb20-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-248"><a href="#cb20-248" aria-hidden="true" tabindex="-1"></a><span class="co">#check original column names</span></span>
+<span id="cb20-249"><a href="#cb20-249" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(st1, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F, <span class="at">escape =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb20-250"><a href="#cb20-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-251"><a href="#cb20-251" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>, <span class="st">"responsive"</span>), <span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb20-252"><a href="#cb20-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-253"><a href="#cb20-253" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-254"><a href="#cb20-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-255"><a href="#cb20-255" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F, echo = T}</span></span>
+<span id="cb20-256"><a href="#cb20-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-257"><a href="#cb20-257" aria-hidden="true" tabindex="-1"></a><span class="fu">relabel_colms</span>(st1)</span>
+<span id="cb20-258"><a href="#cb20-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-259"><a href="#cb20-259" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-260"><a href="#cb20-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-261"><a href="#cb20-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = F}</span></span>
+<span id="cb20-262"><a href="#cb20-262" aria-hidden="true" tabindex="-1"></a>rc <span class="ot">&lt;-</span> <span class="fu">relabel_colms</span>(st1)</span>
+<span id="cb20-263"><a href="#cb20-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-264"><a href="#cb20-264" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(rc, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F, <span class="at">escape =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb20-265"><a href="#cb20-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-266"><a href="#cb20-266" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>, <span class="st">"responsive"</span>), <span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb20-267"><a href="#cb20-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-268"><a href="#cb20-268" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-269"><a href="#cb20-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-270"><a href="#cb20-270" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-271"><a href="#cb20-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-272"><a href="#cb20-272" aria-hidden="true" tabindex="-1"></a>Additional columns can also be re-labeled:</span>
+<span id="cb20-273"><a href="#cb20-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-274"><a href="#cb20-274" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = F, echo = T}</span></span>
+<span id="cb20-275"><a href="#cb20-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-276"><a href="#cb20-276" aria-hidden="true" tabindex="-1"></a><span class="fu">relabel_colms</span>(st1, <span class="at">extra.cols.name =</span> <span class="st">"View"</span>,</span>
+<span id="cb20-277"><a href="#cb20-277" aria-hidden="true" tabindex="-1"></a>              <span class="at">extra.cols.new.name =</span> <span class="st">"Raven view"</span>)</span>
+<span id="cb20-278"><a href="#cb20-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-279"><a href="#cb20-279" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-280"><a href="#cb20-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-281"><a href="#cb20-281" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = F}</span></span>
+<span id="cb20-282"><a href="#cb20-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-283"><a href="#cb20-283" aria-hidden="true" tabindex="-1"></a>rc <span class="ot">&lt;-</span> <span class="fu">relabel_colms</span>(st1, <span class="at">extra.cols.name =</span> <span class="st">"View"</span>,</span>
+<span id="cb20-284"><a href="#cb20-284" aria-hidden="true" tabindex="-1"></a> <span class="st">"Raven view"</span>)</span>
+<span id="cb20-285"><a href="#cb20-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-286"><a href="#cb20-286" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(rc, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F, <span class="at">escape =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb20-287"><a href="#cb20-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-288"><a href="#cb20-288" aria-hidden="true" tabindex="-1"></a><span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>, <span class="st">"responsive"</span>), <span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb20-289"><a href="#cb20-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-290"><a href="#cb20-290" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-291"><a href="#cb20-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-292"><a href="#cb20-292" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-293"><a href="#cb20-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-294"><a href="#cb20-294" aria-hidden="true" tabindex="-1"></a><span class="fu">## Export R data to Raven</span></span>
+<span id="cb20-295"><a href="#cb20-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-296"><a href="#cb20-296" aria-hidden="true" tabindex="-1"></a><span class="fu">### *exp_raven*</span></span>
+<span id="cb20-297"><a href="#cb20-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-298"><a href="#cb20-298" aria-hidden="true" tabindex="-1"></a>*exp_raven* saves a selection table in '.txt' format that can be opened directly in Raven. No objects are returned to the R environment. The following code exports a selection table from a single sound file:</span>
+<span id="cb20-299"><a href="#cb20-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-300"><a href="#cb20-300" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=FALSE, echo=T}</span></span>
+<span id="cb20-301"><a href="#cb20-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-302"><a href="#cb20-302" aria-hidden="true" tabindex="-1"></a>st1 <span class="ot">&lt;-</span> lbh_selec_table[lbh_selec_table<span class="sc">$</span>sound.files <span class="sc">==</span> <span class="st">"Phae.long1.wav"</span>,]</span>
+<span id="cb20-303"><a href="#cb20-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-304"><a href="#cb20-304" aria-hidden="true" tabindex="-1"></a><span class="fu">exp_raven</span>(st1, <span class="at">file.name =</span> <span class="st">"Phaethornis 1"</span>, <span class="at">khz.to.hz =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-305"><a href="#cb20-305" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-306"><a href="#cb20-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-307"><a href="#cb20-307" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-308"><a href="#cb20-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-309"><a href="#cb20-309" aria-hidden="true" tabindex="-1"></a>If the path to the sound file is provided, the functions export a 'sound selection table' that can be opened directly by Raven (and which will also open the associated sound file):</span>
+<span id="cb20-310"><a href="#cb20-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-311"><a href="#cb20-311" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=FALSE, echo=T}</span></span>
+<span id="cb20-312"><a href="#cb20-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-313"><a href="#cb20-313" aria-hidden="true" tabindex="-1"></a>st1 <span class="ot">&lt;-</span> lbh_selec_table[lbh_selec_table<span class="sc">$</span>sound.files <span class="sc">==</span> <span class="st">"Phae.long1.wav"</span>,]</span>
+<span id="cb20-314"><a href="#cb20-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-315"><a href="#cb20-315" aria-hidden="true" tabindex="-1"></a><span class="fu">exp_raven</span>(st1, <span class="at">file.name =</span> <span class="st">"Phaethornis 1"</span>, <span class="at">khz.to.hz =</span> <span class="cn">TRUE</span>, <span class="at">sound.file.path =</span> <span class="st">"./examples"</span>)</span>
+<span id="cb20-316"><a href="#cb20-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-317"><a href="#cb20-317" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-318"><a href="#cb20-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-319"><a href="#cb20-319" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/exp_raven1.gif)</span></span>
+<span id="cb20-320"><a href="#cb20-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-321"><a href="#cb20-321" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-322"><a href="#cb20-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-323"><a href="#cb20-323" aria-hidden="true" tabindex="-1"></a>This is useful for adding new selections or even new measurements:</span>
+<span id="cb20-324"><a href="#cb20-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-325"><a href="#cb20-325" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/exp_raven2.gif)</span> &nbsp;</span>
+<span id="cb20-326"><a href="#cb20-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-327"><a href="#cb20-327" aria-hidden="true" tabindex="-1"></a>If there are several sound files available, users can export them as a single selection file or as multiple selection files (one for each sound file). This example creates a multiple selection of sound files:</span>
+<span id="cb20-328"><a href="#cb20-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-329"><a href="#cb20-329" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=FALSE, echo=T}</span></span>
+<span id="cb20-330"><a href="#cb20-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-331"><a href="#cb20-331" aria-hidden="true" tabindex="-1"></a><span class="fu">exp_raven</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">file.name =</span> <span class="st">"Phaethornis multiple sound files"</span>, </span>
+<span id="cb20-332"><a href="#cb20-332" aria-hidden="true" tabindex="-1"></a><span class="at">sound.file.path =</span> <span class="st">"./examples"</span>, <span class="at">single.file =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-333"><a href="#cb20-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-334"><a href="#cb20-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-335"><a href="#cb20-335" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-336"><a href="#cb20-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-337"><a href="#cb20-337" aria-hidden="true" tabindex="-1"></a>These types of tables can be opened as a multi-file display in Raven:</span>
+<span id="cb20-338"><a href="#cb20-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-339"><a href="#cb20-339" aria-hidden="true" tabindex="-1"></a><span class="al">![ex](images/exp_raven3.gif)</span></span>
+<span id="cb20-340"><a href="#cb20-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-341"><a href="#cb20-341" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-342"><a href="#cb20-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-343"><a href="#cb20-343" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb20-344"><a href="#cb20-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-345"><a href="#cb20-345" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-346"><a href="#cb20-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-347"><a href="#cb20-347" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
+<span id="cb20-348"><a href="#cb20-348" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"5"</span><span class="kw">&gt;</span>Exercise<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb20-349"><a href="#cb20-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-350"><a href="#cb20-350" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-351"><a href="#cb20-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-352"><a href="#cb20-352" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Annotate 2 sound files from the "./examples" folder using **Raven**</span>
+<span id="cb20-353"><a href="#cb20-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-354"><a href="#cb20-354" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-355"><a href="#cb20-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-356"><a href="#cb20-356" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Import the annotation files into R using Rraven's <span class="in">`imp_raven()`</span></span>
+<span id="cb20-357"><a href="#cb20-357" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb20-358"><a href="#cb20-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-359"><a href="#cb20-359" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-360"><a href="#cb20-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-361"><a href="#cb20-361" aria-hidden="true" tabindex="-1"></a><span class="fu">## warbleR formats</span></span>
+<span id="cb20-362"><a href="#cb20-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-363"><a href="#cb20-363" aria-hidden="true" tabindex="-1"></a><span class="fu">### Selection tables</span></span>
+<span id="cb20-364"><a href="#cb20-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-365"><a href="#cb20-365" aria-hidden="true" tabindex="-1"></a>These objects are created with the <span class="in">`selection_table()`</span> function. The function takes data frames containing selection data (name of the sound file, selection, start, end ...), verifies if the information is consistent (see the function <span class="in">`check_sels()`</span> for details) and saves the 'diagnostic' metadata as an attribute. The selection tables are basically data frames in which the information contained has been corroborated so it can be read by other **warbleR** functions. The selection tables must contain (at least) the following columns:</span>
+<span id="cb20-366"><a href="#cb20-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-367"><a href="#cb20-367" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>sound files (sound.files)</span>
+<span id="cb20-368"><a href="#cb20-368" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>selection (selec)</span>
+<span id="cb20-369"><a href="#cb20-369" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>start</span>
+<span id="cb20-370"><a href="#cb20-370" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>end</span>
+<span id="cb20-371"><a href="#cb20-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-372"><a href="#cb20-372" aria-hidden="true" tabindex="-1"></a>The sample data "lbh_selec_table" contains these columns:</span>
+<span id="cb20-373"><a href="#cb20-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-374"><a href="#cb20-374" aria-hidden="true" tabindex="-1"></a><span class="in">```{r extn_sel_2, echo = FALSE, message = FALSE}</span></span>
+<span id="cb20-375"><a href="#cb20-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-376"><a href="#cb20-376" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb20-377"><a href="#cb20-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-378"><a href="#cb20-378" aria-hidden="true" tabindex="-1"></a><span class="co"># unload all non-based packages</span></span>
+<span id="cb20-379"><a href="#cb20-379" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">paste</span>(<span class="st">'package:'</span>, <span class="fu">names</span>(<span class="fu">sessionInfo</span>()<span class="sc">$</span>otherPkgs), <span class="at">sep =</span> <span class="st">""</span>), <span class="cf">function</span>(x) <span class="fu">try</span>(<span class="fu">detach</span>(x, <span class="at">unload =</span> <span class="cn">FALSE</span>, <span class="at">character.only =</span> <span class="cn">TRUE</span>), <span class="at">silent =</span> T))</span>
+<span id="cb20-380"><a href="#cb20-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-381"><a href="#cb20-381" aria-hidden="true" tabindex="-1"></a><span class="co">#load packages</span></span>
+<span id="cb20-382"><a href="#cb20-382" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(warbleR)</span>
+<span id="cb20-383"><a href="#cb20-383" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb20-384"><a href="#cb20-384" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb20-385"><a href="#cb20-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-386"><a href="#cb20-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-387"><a href="#cb20-387" aria-hidden="true" tabindex="-1"></a>cf <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/cuadro de funciones warbleR.csv"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-388"><a href="#cb20-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-389"><a href="#cb20-389" aria-hidden="true" tabindex="-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>) </span>
+<span id="cb20-390"><a href="#cb20-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-391"><a href="#cb20-391" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">knitr.table.format =</span> <span class="st">"html"</span>) </span>
+<span id="cb20-392"><a href="#cb20-392" aria-hidden="true" tabindex="-1"></a>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">comment =</span> <span class="st">""</span>)</span>
+<span id="cb20-393"><a href="#cb20-393" aria-hidden="true" tabindex="-1"></a>opts_knit<span class="sc">$</span><span class="fu">set</span>(<span class="at">root.dir =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb20-394"><a href="#cb20-394" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">width =</span> <span class="dv">100</span>, <span class="at">max.print =</span> <span class="dv">100</span>)</span>
+<span id="cb20-395"><a href="#cb20-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-396"><a href="#cb20-396" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-397"><a href="#cb20-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-398"><a href="#cb20-398" aria-hidden="true" tabindex="-1"></a><span class="in">```{r extn_sel_4.1, eval=FALSE}</span></span>
+<span id="cb20-399"><a href="#cb20-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-400"><a href="#cb20-400" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"lbh_selec_table"</span>)</span>
+<span id="cb20-401"><a href="#cb20-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-402"><a href="#cb20-402" aria-hidden="true" tabindex="-1"></a>lbh_selec_table</span>
+<span id="cb20-403"><a href="#cb20-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-404"><a href="#cb20-404" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-405"><a href="#cb20-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-406"><a href="#cb20-406" aria-hidden="true" tabindex="-1"></a><span class="in">```{r extn_sel_4.2, echo=FALSE}</span></span>
+<span id="cb20-407"><a href="#cb20-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-408"><a href="#cb20-408" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">kable</span>(lbh_selec_table, <span class="at">align =</span> <span class="st">"c"</span>, <span class="at">row.names =</span> F,  <span class="at">format =</span> <span class="st">"html"</span>)</span>
+<span id="cb20-409"><a href="#cb20-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-410"><a href="#cb20-410" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span>  <span class="fu">kable_styling</span>(kbl, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>, <span class="at">font_size =</span> <span class="dv">14</span>)</span>
+<span id="cb20-411"><a href="#cb20-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-412"><a href="#cb20-412" aria-hidden="true" tabindex="-1"></a>kbl <span class="ot">&lt;-</span> <span class="fu">scroll_box</span>(kbl, <span class="at">width =</span> <span class="st">"740px"</span>,</span>
+<span id="cb20-413"><a href="#cb20-413" aria-hidden="true" tabindex="-1"></a><span class="at">box_css =</span> <span class="st">"border: 1px solid #ddd; padding: 1px; "</span>, <span class="at">extra_css =</span> <span class="cn">NULL</span>)</span>
+<span id="cb20-414"><a href="#cb20-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-415"><a href="#cb20-415" aria-hidden="true" tabindex="-1"></a>kbl</span>
+<span id="cb20-416"><a href="#cb20-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-417"><a href="#cb20-417" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-418"><a href="#cb20-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-419"><a href="#cb20-419" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-420"><a href="#cb20-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-421"><a href="#cb20-421" aria-hidden="true" tabindex="-1"></a>... and can be converted to the *selection_table* format like this:</span>
+<span id="cb20-422"><a href="#cb20-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-423"><a href="#cb20-423" aria-hidden="true" tabindex="-1"></a><span class="in">```{r extn_sel_4.32, eval = FALSE}</span></span>
+<span id="cb20-424"><a href="#cb20-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-425"><a href="#cb20-425" aria-hidden="true" tabindex="-1"></a><span class="co"># global parameters</span></span>
+<span id="cb20-426"><a href="#cb20-426" aria-hidden="true" tabindex="-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>)</span>
+<span id="cb20-427"><a href="#cb20-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-428"><a href="#cb20-428" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">selection_table</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">pb =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-429"><a href="#cb20-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-430"><a href="#cb20-430" aria-hidden="true" tabindex="-1"></a>st</span>
+<span id="cb20-431"><a href="#cb20-431" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-432"><a href="#cb20-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-433"><a href="#cb20-433" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = FALSE}</span></span>
+<span id="cb20-434"><a href="#cb20-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-435"><a href="#cb20-435" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">selection_table</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">pb =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-436"><a href="#cb20-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-437"><a href="#cb20-437" aria-hidden="true" tabindex="-1"></a>st</span>
+<span id="cb20-438"><a href="#cb20-438" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-439"><a href="#cb20-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-440"><a href="#cb20-440" aria-hidden="true" tabindex="-1"></a>Note that the path to the sound files has been provided. This is necessary in order to verify that the data provided conforms to the characteristics of the audio files.</span>
+<span id="cb20-441"><a href="#cb20-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-442"><a href="#cb20-442" aria-hidden="true" tabindex="-1"></a>Selection tables have their own class in R:</span>
+<span id="cb20-443"><a href="#cb20-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-446"><a href="#cb20-446" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-447"><a href="#cb20-447" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(st)</span>
+<span id="cb20-448"><a href="#cb20-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-449"><a href="#cb20-449" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-450"><a href="#cb20-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-451"><a href="#cb20-451" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-452"><a href="#cb20-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-453"><a href="#cb20-453" aria-hidden="true" tabindex="-1"></a><span class="fu">### Extended selection tables</span></span>
+<span id="cb20-454"><a href="#cb20-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-455"><a href="#cb20-455" aria-hidden="true" tabindex="-1"></a>When the <span class="in">`extended = TRUE`</span> argument the function generates an object of the *extended_selection_table* class that also contains a list of 'wave' objects corresponding to each of the selections in the data. Therefore, the function **transforms the selection table into self-contained objects** since the original sound files are no longer needed to perform most of the acoustic analysis in **warbleR**. This can greatly facilitate the storage and exchange of (bio)acoustic data. In addition, it also speeds up analysis, since it is not necessary to read the sound files every time the data is analyzed.</span>
+<span id="cb20-456"><a href="#cb20-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-457"><a href="#cb20-457" aria-hidden="true" tabindex="-1"></a>Now, as mentioned earlier, you need the <span class="in">`selection_table()`</span> function to create an extended selection table. You must also set the argument <span class="in">`extended = TRUE`</span> (otherwise, the class would be a selection table). The following code converts the sample data into an extended selection table:</span>
+<span id="cb20-458"><a href="#cb20-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-459"><a href="#cb20-459" aria-hidden="true" tabindex="-1"></a><span class="in">```{r extn_sel_4.3, eval = FALSE}</span></span>
+<span id="cb20-460"><a href="#cb20-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-461"><a href="#cb20-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-462"><a href="#cb20-462" aria-hidden="true" tabindex="-1"></a><span class="co">#  global parameters</span></span>
+<span id="cb20-463"><a href="#cb20-463" aria-hidden="true" tabindex="-1"></a><span class="fu">warbleR_options</span>(<span class="at">wav.path =</span> <span class="st">"./examples"</span>)</span>
+<span id="cb20-464"><a href="#cb20-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-465"><a href="#cb20-465" aria-hidden="true" tabindex="-1"></a>ext_st <span class="ot">&lt;-</span> <span class="fu">selection_table</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">pb =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb20-466"><a href="#cb20-466" aria-hidden="true" tabindex="-1"></a>          <span class="at">extended =</span> <span class="cn">TRUE</span>, <span class="at">confirm.extended =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-467"><a href="#cb20-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-468"><a href="#cb20-468" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-469"><a href="#cb20-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-470"><a href="#cb20-470" aria-hidden="true" tabindex="-1"></a><span class="in">```{r extn_sel_4.33, eval = TRUE, echo = FALSE}</span></span>
+<span id="cb20-471"><a href="#cb20-471" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-472"><a href="#cb20-472" aria-hidden="true" tabindex="-1"></a>ext_st <span class="ot">&lt;-</span> <span class="fu">selection_table</span>(<span class="at">X =</span> lbh_selec_table, <span class="at">pb =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb20-473"><a href="#cb20-473" aria-hidden="true" tabindex="-1"></a>          <span class="at">extended =</span> <span class="cn">TRUE</span>, <span class="at">confirm.extended =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-474"><a href="#cb20-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-475"><a href="#cb20-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-476"><a href="#cb20-476" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-477"><a href="#cb20-477" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-478"><a href="#cb20-478" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-479"><a href="#cb20-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-480"><a href="#cb20-480" aria-hidden="true" tabindex="-1"></a>And that is. Now the acoustic data and the selection data (as well as the additional metadata) are all together in a single R object.</span>
+<span id="cb20-481"><a href="#cb20-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-482"><a href="#cb20-482" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-483"><a href="#cb20-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-484"><a href="#cb20-484" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
+<span id="cb20-485"><a href="#cb20-485" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"5"</span><span class="kw">&gt;</span>Exercise<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb20-486"><a href="#cb20-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-487"><a href="#cb20-487" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-488"><a href="#cb20-488" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-489"><a href="#cb20-489" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Run the example code in the <span class="in">`selection_table()`</span> function documentation</span>
+<span id="cb20-490"><a href="#cb20-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-491"><a href="#cb20-491" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>What do the arguments "mar" and "by.song" do?</span>
+<span id="cb20-492"><a href="#cb20-492" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb20-493"><a href="#cb20-493" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-494"><a href="#cb20-494" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-495"><a href="#cb20-495" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-496"><a href="#cb20-496" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb20-497"><a href="#cb20-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-498"><a href="#cb20-498" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb20-499"><a href="#cb20-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-500"><a href="#cb20-500" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Araya-Salas (2017), *Rraven: connecting R and Raven bioacoustic software*. R package version 1.0.2.</span>
+<span id="cb20-501"><a href="#cb20-501" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-502"><a href="#cb20-502" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb20-503"><a href="#cb20-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-504"><a href="#cb20-504" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb20-505"><a href="#cb20-505" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-506"><a href="#cb20-506" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"4"</span><span class="kw">&gt;</span>Session information<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb20-507"><a href="#cb20-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-508"><a href="#cb20-508" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info, echo=F}</span></span>
+<span id="cb20-509"><a href="#cb20-509" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-510"><a href="#cb20-510" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb20-511"><a href="#cb20-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-512"><a href="#cb20-512" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>

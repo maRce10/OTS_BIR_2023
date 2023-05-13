@@ -10,7 +10,7 @@ format:
     df-print: kable
     code-fold: show
     code-tools: true
-    css: qmd.css
+    css: styles.css
     link-external-icon: true
     link-external-newwindow: true      
 ---

@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>OTS Bioacoustic Analysis in R 2023 - Seewave</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">OTS Bioacoustic Analysis in R 2023</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./program.html">
+ <span class="menu-text">Program</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+        <li>
+    <a class="dropdown-item" href="./introduction.html">
+ <span class="dropdown-text">Introduction</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./r_basics.html">
+ <span class="dropdown-text">R basics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sound.html">
+ <span class="dropdown-text">Sound</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./spectrograms.html">
+ <span class="dropdown-text">Spectrograms</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./seewave.html">
+ <span class="dropdown-text">seewave</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./annotations.html">
+ <span class="dropdown-text">Annotations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ohun.html">
+ <span class="dropdown-text">ohun: automatic detection</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./intro_to_warbler.html">
+ <span class="dropdown-text">Intro to warbleR</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./measure_acoustic_structure.html">
+ <span class="dropdown-text">Measure acoustic structure</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./comparing_methods.html">
+ <span class="dropdown-text">Comparing measuring methods</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./quality_checks.html">
+ <span class="dropdown-text">Quality checks</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./measure_structure_green_hermit.html">
+ <span class="dropdown-text">Measure structure on XC recordings</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="./course_prep.html">
+ <span class="menu-text">Course prep</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./instructor.html">
+ <span class="menu-text">Instructor</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#oscillograms" id="toc-oscillograms" class="nav-link active" data-scroll-target="#oscillograms"><span class="toc-section-number">1</span>  Oscillograms</a></li>
+  <li><a href="#power-spectra" id="toc-power-spectra" class="nav-link" data-scroll-target="#power-spectra"><span class="toc-section-number">2</span>  Power Spectra</a></li>
+  <li><a href="#wave-manipulation" id="toc-wave-manipulation" class="nav-link" data-scroll-target="#wave-manipulation"><span class="toc-section-number">3</span>  Wave manipulation</a></li>
+  <li><a href="#measurements" id="toc-measurements" class="nav-link" data-scroll-target="#measurements"><span class="toc-section-number">4</span>  Measurements</a></li>
+  </ul>
+</nav>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><font size="7"><b>Seewave</b></font></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>&nbsp;</p>
+<p><strong>seewave</strong> provides a wide variety of tools to accurately assess sound properties in the R environment. It is an extensive package with lots of features. The package allows to visualize and measure characteristics of time, frequency and amplitude of sounds. The tools are arranged in a modular way (each analysis in its own function) which allows combining them to generate more elaborate analyzes.</p>
+<p>The majority of the functions of <strong>seewave</strong> work on wave objects (but not on audio files in folders). Here we will see examples of some of these tools, focusing on those that are potentially more useful for the study of vocal behavior in animals.</p>
+<p>First we must load the package:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seewave)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We can see the description of the package <strong>seewave</strong> in this way:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>?seewave</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="example-data-in-seewave" class="level3" data-number="0.1">
+<h3 data-number="0.1" class="anchored" data-anchor-id="example-data-in-seewave"><span class="header-section-number">0.1</span> Example data in seewave</h3>
+<p><strong>seewave</strong> brings several objects that we can use as an example to explore its functions. We can call them with the <code>data ()</code> function:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cargar ejemplos</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(tico)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(orni)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(sheep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>&nbsp;</p>
+<div class="alert alert-warning">
+<p>⚠ <code>data()</code> only works to load examples that come with the packages by default, not to load your own audio files!!</p>
+</div>
+<p>&nbsp;</p>
+<p>We can see the information of each of them using <code>?</code>:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>?tico</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>&nbsp;</p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<p>What kind of object is <code>tico</code>?</p>
+<p>What is the sampling rate and duration?</p>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="oscillograms" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="oscillograms"><span class="header-section-number">1</span> Oscillograms</h2>
+<p>You can create the oscillogram of the entire “wave” object like this:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can also generate it for a segment:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The visualizations in <strong>seewave</strong> allow a high degree of customization. For example change the color:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>As with most <strong>seewave</strong> functions many other components of the chart can be modified, for example:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># grey background</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>op <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"grey"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">k =</span> <span class="dv">4</span> , <span class="at">j =</span> <span class="dv">1</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">colwave =</span> <span class="st">"black"</span>, </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">coltitle =</span> <span class="st">"yellow"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">collab =</span> <span class="st">"red"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">colline =</span> <span class="st">"white"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">colaxis =</span> <span class="st">"blue"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">coly0 =</span> <span class="st">"grey50"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>We can also generate other representations of “amplitude vs.&nbsp;time”, such as “amplitude envelopes”:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can superimpose it on the oscillogram to facilitate comparison:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+
+</div>
+<p>&nbsp;</p>
+<div class="alert alert-success">
+<p><font size="3"><b>Sliding window for time series</b></font></p>
+<p>&nbsp;</p>
+<p>Sliding windows allow you to smooth out the contours of a time series by calculating an average value around the “neighborhood” of values for a given value. In the case of amplitude envelope the size of the “neighborhood” is given by the length of the window (“wl”). The larger the window length, the greater the smoothing of the curve:</p>
+<p>&nbsp;</p>
+<p><img src="images/env_sliding_window_ENG.gif" alt="Sliding window"></p>
+<p>&nbsp;</p>
+<p>This animation shows how the amplitude envelope of the “tico” object is smoothed with a 512-point window:</p>
+<p>&nbsp;</p>
+<p><img src="images/env_sliding_window_scheme_ENG512.gif" alt="Sliding window"></p>
+<p>&nbsp;</p>
+<p>… or a 1024 point window:</p>
+<p>&nbsp;</p>
+<p><img src="images/env_sliding_window_scheme_ENG1024.gif" alt="Sliding window"></p>
+<p>&nbsp;</p>
+</div>
+<p>&nbsp;</p>
+<p>We can use these amplitude “hills” to define segments in the “wave” object using the <code>timer()</code> function. The “ssmooth” argument allows us to use a sliding window:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tmr <span class="ot">&lt;-</span> <span class="fu">timer</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">threshold =</span> <span class="dv">5</span>, <span class="at">ssmooth =</span> <span class="dv">40</span>, </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">bty =</span> <span class="st">"l"</span>, <span class="at">colval =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tmr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>$s
+[1] 6.013985e-02 5.918741e-02 5.134111e-02 4.535434e-05 5.728253e-02
+[6] 4.535434e-05 6.667088e-03 4.535434e-05 4.966300e-02
+
+$p
+ [1] 2.208756e-02 1.004599e-01 8.272631e-02 2.267717e-04 8.594647e-02
+ [6] 4.535434e-05 8.132033e-02 4.988977e-04 4.535434e-05 6.068410e-02
+
+$r
+[1] 0.6552769
+
+$s.start
+[1] 0.02208756 0.18268727 0.32460099 0.37616887 0.46216069 0.51948857 0.60085425
+[8] 0.60802024 0.60811095
+
+$s.end
+[1] 0.08222741 0.24187468 0.37594210 0.37621422 0.51944322 0.51953393 0.60752134
+[8] 0.60806559 0.65777395
+
+$first
+[1] "pause"</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>The output is a list with the following elements:</p>
+<ul>
+<li><strong>s</strong>: duration of detected signals (in s)</li>
+<li><strong>p</strong>: duration of pauses (i.e.&nbsp;gaps) between signals</li>
+<li><strong>r</strong>: ratio of <strong>s</strong> to <strong>r</strong></li>
+<li><strong>s.start</strong>: start of signals</li>
+<li><strong>end</strong>: end of signals</li>
+</ul>
+<p>&nbsp;</p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li>In the previous example using <code>timer()</code> the last pulse is divided into 2 detections, one very small at the beginning and another containing the rest of the pulse. Change the “ssmooth” argument until this section is detected as a single pulse.</li>
+</ul>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="power-spectra" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="power-spectra"><span class="header-section-number">2</span> Power Spectra</h2>
+<p>We can visualize the amplitude in the frequency domain using power spectra. The <code>meanspec()</code> function calculates the average distribution of energy in the frequency range (the average power spectrum):</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mspc <span class="ot">&lt;-</span> <span class="fu">meanspec</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), mspc), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(mspc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 256</code></pre>
+</div>
+</div>
+<p>The <code>spec()</code> function, on the other hand, calculates the spectrum for the entire signal:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>spc <span class="ot">&lt;-</span> <span class="fu">spec</span>(orni, <span class="at">f=</span><span class="dv">22050</span>, <span class="at">wl=</span><span class="dv">512</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(spc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7921</code></pre>
+</div>
+</div>
+<p>The result of <code>spec()</code> or <code>meanspec()</code> can be input into the <code>fpeaks()</code> function to calculate amplitude peaks:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pks <span class="ot">&lt;-</span> <span class="fu">fpeaks</span>(spc, <span class="at">nmax =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>         [,1] [,2]
+[1,] 4.860409    1</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="wave-manipulation" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="wave-manipulation"><span class="header-section-number">3</span> Wave manipulation</h2>
+<p>We can cut segments of a “wave” object:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>tico2 <span class="ot">&lt;-</span> <span class="fu">cutw</span>(tico, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Add segments:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>tico3 <span class="ot">&lt;-</span> <span class="fu">pastew</span>(tico, tico2, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Remove segments:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tico4 <span class="ot">&lt;-</span> <span class="fu">deletew</span>(tico3, <span class="at">output =</span> <span class="st">"Wave"</span>, <span class="at">from =</span> <span class="fu">duration</span>(tico), <span class="at">to =</span> <span class="fu">duration</span>(tico3))</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Add segments of silence:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>tico5 <span class="ot">&lt;-</span> <span class="fu">addsilw</span>(tico, <span class="at">at =</span> <span class="st">"end"</span>, <span class="at">d =</span> <span class="dv">1</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">duration</span>(tico)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.794921</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">duration</span>(tico5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.794921</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li>The function <code>rev()</code> can reverse te order of a vector:</li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rev</span>(v1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3 2 1</code></pre>
+</div>
+</div>
+<ul>
+<li>Reverse the amplitude vector of ‘tico’ and generate a spectrogram of the reversed wave object</li>
+</ul>
+</div>
+<p>&nbsp;</p>
+<p>Filter out frequency bands:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># original</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtered</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(<span class="fu">ffilter</span>(tico, <span class="at">from =</span> <span class="dv">4000</span>, <span class="at">to =</span> <span class="dv">6500</span>, <span class="at">output =</span> <span class="st">"Wave"</span>), <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-20-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Change frequency (pitch):</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cut the first</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>tico6 <span class="ot">&lt;-</span> <span class="fu">cutw</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="fl">0.5</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># increase frec</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>tico.lfs <span class="ot">&lt;-</span> <span class="fu">lfs</span>(tico6, <span class="at">shift =</span> <span class="dv">1000</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># decrease frec</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>tico.lfs.neg <span class="ot">&lt;-</span> <span class="fu">lfs</span>(tico6, <span class="at">shift =</span> <span class="sc">-</span><span class="dv">1000</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 column graph</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>()</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="co"># original</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico6, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">main =</span> <span class="st">"original"</span>)</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="co"># modified</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico.lfs, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">main =</span> <span class="st">"1 kHz up"</span>)</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico.lfs.neg, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">main =</span> <span class="st">"1 kHz down"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(opar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="measurements" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="measurements"><span class="header-section-number">4</span> Measurements</h2>
+<p>&nbsp;</p>
+<p>Apart from the measurements of peak frequency (<code>fpeaks()</code>) and duration (<code>timer()</code>), we can measure many other aspects of the acoustic signals using <strong>seewave</strong>. For example, we can estimate the fundamental frequency (which refers to the lowest frequency harmonic in the harmonic stack), with the <code>fund()</code> function:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(sheep, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>ff <span class="ot">&lt;-</span> <span class="fu">fund</span>(sheep, <span class="at">fmax =</span> <span class="dv">300</span>, <span class="at">ann =</span> <span class="cn">FALSE</span>, <span class="at">threshold=</span><span class="dv">6</span>, <span class="at">col =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              x          y
+[1,] 0.00000000         NA
+[2,] 0.06677027         NA
+[3,] 0.13354054         NA
+[4,] 0.20031081         NA
+[5,] 0.26708108 0.10000000
+[6,] 0.33385135 0.07142857</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>This function uses cepstral transformation to detect the dominant frequency. The <code>autoc()</code> function also measures the fundamental frequency, only using autocorrelation.</p>
+<p>Similarly we can measure the dominant frequency (the harmonic with the highest energy):</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">dfreq</span>(sheep, <span class="at">f =</span> <span class="dv">8000</span>, <span class="at">fmax =</span> <span class="dv">300</span>, <span class="at">type =</span> <span class="st">"p"</span>, <span class="at">pch =</span> <span class="dv">24</span>, <span class="at">ann =</span> <span class="cn">FALSE</span>, <span class="at">threshold =</span> <span class="dv">6</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              x        y
+[1,] 0.00000000       NA
+[2,] 0.06677027       NA
+[3,] 0.13354054       NA
+[4,] 0.20031081       NA
+[5,] 0.26708108 0.484375
+[6,] 0.33385135 0.625000</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>Measure statistical descriptors of the amplitude distribution in frequency and time:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cut</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>note2 <span class="ot">&lt;-</span> <span class="fu">cutw</span>(tico, <span class="at">from=</span><span class="fl">0.6</span>, <span class="at">to=</span><span class="fl">0.9</span>, <span class="at">output=</span><span class="st">"Wave"</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>n2.as <span class="ot">&lt;-</span> <span class="fu">acoustat</span>(note2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="seewave_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(n2.as[<span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: right;">time.P1</th>
+<th style="text-align: right;">time.M</th>
+<th style="text-align: right;">time.P2</th>
+<th style="text-align: right;">time.IPR</th>
+<th style="text-align: right;">freq.P1</th>
+<th style="text-align: right;">freq.M</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.0272727</td>
+<td style="text-align: right;">0.1090909</td>
+<td style="text-align: right;">0.2181818</td>
+<td style="text-align: right;">0.1909091</td>
+<td style="text-align: right;">3.445312</td>
+<td style="text-align: right;">4.263574</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>Measure statistical descriptors of frequency spectra:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># measure power spectrum</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>n2.sp <span class="ot">&lt;-</span> <span class="fu">meanspec</span>(note2, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>n2.spcp <span class="ot">&lt;-</span> <span class="fu">specprop</span>(n2.sp, <span class="at">f =</span> note2<span class="sc">@</span>samp.rate)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(n2.spcp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">median</th>
+<th style="text-align: right;">sem</th>
+<th style="text-align: right;">mode</th>
+<th style="text-align: right;">Q25</th>
+<th style="text-align: right;">Q75</th>
+<th style="text-align: right;">IQR</th>
+<th style="text-align: right;">cent</th>
+<th style="text-align: right;">skewness</th>
+<th style="text-align: right;">kurtosis</th>
+<th style="text-align: right;">sfm</th>
+<th style="text-align: right;">sh</th>
+<th style="text-align: right;">prec</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4346.889</td>
+<td style="text-align: right;">694.2615</td>
+<td style="text-align: right;">4306.641</td>
+<td style="text-align: right;">43.39134</td>
+<td style="text-align: right;">4349.707</td>
+<td style="text-align: right;">3789.844</td>
+<td style="text-align: right;">4780.371</td>
+<td style="text-align: right;">990.5273</td>
+<td style="text-align: right;">4346.889</td>
+<td style="text-align: right;">2.224789</td>
+<td style="text-align: right;">6.645413</td>
+<td style="text-align: right;">0.023993</td>
+<td style="text-align: right;">0.6968186</td>
+<td style="text-align: right;">43.06641</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="alert alert-info">
+<p><font size="5">Exercise</font></p>
+<ul>
+<li>Measure the statistical descriptors of the frequency spectra (function <code>specprop()</code>) on the 3 notes (hint: you must cut each note first)</li>
+</ul>
+</div>
+<p>&nbsp;</p>
+<hr>
+<p><font size="4">Session information</font></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 Patched (2022-11-10 r83330)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04.5 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+
+locale:
+ [1] LC_CTYPE=es_ES.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=es_CR.UTF-8        LC_COLLATE=es_ES.UTF-8    
+ [5] LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=es_ES.UTF-8   
+ [7] LC_PAPER=es_CR.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=es_CR.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] seewave_2.2.0
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.31     MASS_7.3-58.2     lifecycle_1.0.3   jsonlite_1.8.4   
+ [5] signal_0.7-7      magrittr_2.0.3    evaluate_0.19     highr_0.9        
+ [9] rlang_1.0.6       stringi_1.7.12    cli_3.6.0         rstudioapi_0.14  
+[13] vctrs_0.5.2       rmarkdown_2.19    tools_4.2.2       tuneR_1.4.1      
+[17] stringr_1.5.0     glue_1.6.2        htmlwidgets_1.5.4 xfun_0.35        
+[21] yaml_2.3.6        fastmap_1.1.0     compiler_4.2.2    htmltools_0.5.4  
+[25] knitr_1.41       </code></pre>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/marce10\.github\.io\/OTS_BIR_2023\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb45" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &lt;font size="7"&gt;&lt;b&gt;Seewave&lt;/b&gt;&lt;/font&gt;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="an">toc-depth:</span><span class="co"> 2</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="an">toc-location:</span><span class="co"> left</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="an">number-sections:</span><span class="co"> true</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="an">highlight-style:</span><span class="co"> pygments</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: kable</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a><span class="co">    css: styles.css</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a><span class="co">    link-external-icon: true</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a><span class="co">    link-external-newwindow: true  </span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>**seewave** provides a wide variety of tools to accurately assess sound properties in the R environment. It is an extensive package with lots of features. The package allows to visualize and measure characteristics of time, frequency and amplitude of sounds. The tools are arranged in a modular way (each analysis in its own function) which allows combining them to generate more elaborate analyzes.</span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>The majority of the functions of **seewave** work on wave objects (but not on audio files in folders). Here we will see examples of some of these tools, focusing on those that are potentially more useful for the study of vocal behavior in animals.</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>First we must load the package:</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seewave)</span>
+<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a>We can see the description of the package **seewave** in this way:</span>
+<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = FALSE}</span></span>
+<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a>?seewave</span>
+<span id="cb45-38"><a href="#cb45-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-39"><a href="#cb45-39" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-40"><a href="#cb45-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-41"><a href="#cb45-41" aria-hidden="true" tabindex="-1"></a><span class="fu">### Example data in seewave</span></span>
+<span id="cb45-42"><a href="#cb45-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-43"><a href="#cb45-43" aria-hidden="true" tabindex="-1"></a>**seewave** brings several objects that we can use as an example to explore its functions. We can call them with the <span class="in">`data ()`</span> function:</span>
+<span id="cb45-44"><a href="#cb45-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-45"><a href="#cb45-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo=TRUE}</span></span>
+<span id="cb45-46"><a href="#cb45-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-47"><a href="#cb45-47" aria-hidden="true" tabindex="-1"></a><span class="co"># cargar ejemplos</span></span>
+<span id="cb45-48"><a href="#cb45-48" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(tico)</span>
+<span id="cb45-49"><a href="#cb45-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-50"><a href="#cb45-50" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(orni)</span>
+<span id="cb45-51"><a href="#cb45-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-52"><a href="#cb45-52" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(sheep)</span>
+<span id="cb45-53"><a href="#cb45-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-54"><a href="#cb45-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-55"><a href="#cb45-55" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-56"><a href="#cb45-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-57"><a href="#cb45-57" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-warning}</span>
+<span id="cb45-58"><a href="#cb45-58" aria-hidden="true" tabindex="-1"></a>⚠ <span class="in">`data()`</span> only works to load examples that come with the packages by default, not to load your own audio files!!</span>
+<span id="cb45-59"><a href="#cb45-59" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb45-60"><a href="#cb45-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-61"><a href="#cb45-61" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-62"><a href="#cb45-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-63"><a href="#cb45-63" aria-hidden="true" tabindex="-1"></a>We can see the information of each of them using <span class="in">`?`</span>:</span>
+<span id="cb45-64"><a href="#cb45-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-65"><a href="#cb45-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb45-66"><a href="#cb45-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-67"><a href="#cb45-67" aria-hidden="true" tabindex="-1"></a>?tico</span>
+<span id="cb45-68"><a href="#cb45-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-69"><a href="#cb45-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-70"><a href="#cb45-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-71"><a href="#cb45-71" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-72"><a href="#cb45-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-73"><a href="#cb45-73" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
+<span id="cb45-74"><a href="#cb45-74" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"5"</span><span class="kw">&gt;</span>Exercise<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb45-75"><a href="#cb45-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-76"><a href="#cb45-76" aria-hidden="true" tabindex="-1"></a>What kind of object is <span class="in">`tico`</span>?</span>
+<span id="cb45-77"><a href="#cb45-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-78"><a href="#cb45-78" aria-hidden="true" tabindex="-1"></a>What is the sampling rate and duration?</span>
+<span id="cb45-79"><a href="#cb45-79" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb45-80"><a href="#cb45-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-81"><a href="#cb45-81" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-82"><a href="#cb45-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-83"><a href="#cb45-83" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oscillograms</span></span>
+<span id="cb45-84"><a href="#cb45-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-85"><a href="#cb45-85" aria-hidden="true" tabindex="-1"></a>You can create the oscillogram of the entire "wave" object like this:</span>
+<span id="cb45-86"><a href="#cb45-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-89"><a href="#cb45-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb45-90"><a href="#cb45-90" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico) </span>
+<span id="cb45-91"><a href="#cb45-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-92"><a href="#cb45-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-93"><a href="#cb45-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-94"><a href="#cb45-94" aria-hidden="true" tabindex="-1"></a>We can also generate it for a segment:</span>
+<span id="cb45-95"><a href="#cb45-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-98"><a href="#cb45-98" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb45-99"><a href="#cb45-99" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>)</span>
+<span id="cb45-100"><a href="#cb45-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-101"><a href="#cb45-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-102"><a href="#cb45-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-103"><a href="#cb45-103" aria-hidden="true" tabindex="-1"></a>The visualizations in **seewave** allow a high degree of customization. For example change the color:</span>
+<span id="cb45-104"><a href="#cb45-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-107"><a href="#cb45-107" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb45-108"><a href="#cb45-108" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span>
+<span id="cb45-109"><a href="#cb45-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-110"><a href="#cb45-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-111"><a href="#cb45-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-112"><a href="#cb45-112" aria-hidden="true" tabindex="-1"></a>As with most **seewave** functions many other components of the chart can be modified, for example:</span>
+<span id="cb45-113"><a href="#cb45-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-116"><a href="#cb45-116" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb45-117"><a href="#cb45-117" aria-hidden="true" tabindex="-1"></a><span class="co"># grey background</span></span>
+<span id="cb45-118"><a href="#cb45-118" aria-hidden="true" tabindex="-1"></a>op <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"grey"</span>)</span>
+<span id="cb45-119"><a href="#cb45-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-120"><a href="#cb45-120" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">k =</span> <span class="dv">4</span> , <span class="at">j =</span> <span class="dv">1</span>,</span>
+<span id="cb45-121"><a href="#cb45-121" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb45-122"><a href="#cb45-122" aria-hidden="true" tabindex="-1"></a>        <span class="at">colwave =</span> <span class="st">"black"</span>, </span>
+<span id="cb45-123"><a href="#cb45-123" aria-hidden="true" tabindex="-1"></a>        <span class="at">coltitle =</span> <span class="st">"yellow"</span>,</span>
+<span id="cb45-124"><a href="#cb45-124" aria-hidden="true" tabindex="-1"></a>        <span class="at">collab =</span> <span class="st">"red"</span>,</span>
+<span id="cb45-125"><a href="#cb45-125" aria-hidden="true" tabindex="-1"></a>        <span class="at">colline =</span> <span class="st">"white"</span>,</span>
+<span id="cb45-126"><a href="#cb45-126" aria-hidden="true" tabindex="-1"></a>        <span class="at">colaxis =</span> <span class="st">"blue"</span>,</span>
+<span id="cb45-127"><a href="#cb45-127" aria-hidden="true" tabindex="-1"></a>        <span class="at">coly0 =</span> <span class="st">"grey50"</span>)</span>
+<span id="cb45-128"><a href="#cb45-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-129"><a href="#cb45-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-130"><a href="#cb45-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-131"><a href="#cb45-131" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-132"><a href="#cb45-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-133"><a href="#cb45-133" aria-hidden="true" tabindex="-1"></a>We can also generate other representations of "amplitude vs. time", such as "amplitude envelopes":</span>
+<span id="cb45-134"><a href="#cb45-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-137"><a href="#cb45-137" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb45-138"><a href="#cb45-138" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span>
+<span id="cb45-139"><a href="#cb45-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-140"><a href="#cb45-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-141"><a href="#cb45-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-142"><a href="#cb45-142" aria-hidden="true" tabindex="-1"></a>We can superimpose it on the oscillogram to facilitate comparison:</span>
+<span id="cb45-143"><a href="#cb45-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-146"><a href="#cb45-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb45-147"><a href="#cb45-147" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>)</span>
+<span id="cb45-148"><a href="#cb45-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-149"><a href="#cb45-149" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
+<span id="cb45-150"><a href="#cb45-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-151"><a href="#cb45-151" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span>
+<span id="cb45-152"><a href="#cb45-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-153"><a href="#cb45-153" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-154"><a href="#cb45-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-155"><a href="#cb45-155" aria-hidden="true" tabindex="-1"></a><span class="in">```{r animation sliding window, eval = F, echo = FALSE}</span></span>
+<span id="cb45-156"><a href="#cb45-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-157"><a href="#cb45-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-158"><a href="#cb45-158" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"animation"</span>)</span>
+<span id="cb45-159"><a href="#cb45-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-160"><a href="#cb45-160" aria-hidden="true" tabindex="-1"></a>sq <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">1200</span>, <span class="at">length.out =</span> <span class="dv">15</span>))</span>
+<span id="cb45-161"><a href="#cb45-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-162"><a href="#cb45-162" aria-hidden="true" tabindex="-1"></a><span class="co"># loop over different number of time windows</span></span>
+<span id="cb45-163"><a href="#cb45-163" aria-hidden="true" tabindex="-1"></a><span class="fu">saveGIF</span>(</span>
+<span id="cb45-164"><a href="#cb45-164" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span>(x <span class="cf">in</span> sq)</span>
+<span id="cb45-165"><a href="#cb45-165" aria-hidden="true" tabindex="-1"></a>  { </span>
+<span id="cb45-166"><a href="#cb45-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#DFF0D8"</span>) </span>
+<span id="cb45-167"><a href="#cb45-167" aria-hidden="true" tabindex="-1"></a>  envlp <span class="ot">&lt;-</span><span class="fu">env</span>(tico, <span class="at">ssmooth =</span> x)</span>
+<span id="cb45-168"><a href="#cb45-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">box</span>()</span>
+<span id="cb45-169"><a href="#cb45-169" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"Window length ="</span>, x))</span>
+<span id="cb45-170"><a href="#cb45-170" aria-hidden="true" tabindex="-1"></a>},</span>
+<span id="cb45-171"><a href="#cb45-171" aria-hidden="true" tabindex="-1"></a><span class="at">movie.name =</span>  <span class="st">"env_sliding_window_ENG.gif"</span>, <span class="at">interval =</span> <span class="fl">0.25</span>, <span class="at">ani.height =</span> <span class="dv">480</span> <span class="sc">/</span> <span class="fl">1.5</span>, <span class="at">res =</span> <span class="dv">70</span>)</span>
+<span id="cb45-172"><a href="#cb45-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-173"><a href="#cb45-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-174"><a href="#cb45-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-175"><a href="#cb45-175" aria-hidden="true" tabindex="-1"></a>wl <span class="ot">&lt;-</span> <span class="dv">1024</span></span>
+<span id="cb45-176"><a href="#cb45-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-177"><a href="#cb45-177" aria-hidden="true" tabindex="-1"></a><span class="co"># run from here</span></span>
+<span id="cb45-178"><a href="#cb45-178" aria-hidden="true" tabindex="-1"></a>envlp <span class="ot">&lt;-</span><span class="fu">env</span>(tico, <span class="at">ssmooth =</span> wl, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb45-179"><a href="#cb45-179" aria-hidden="true" tabindex="-1"></a>envlp <span class="ot">&lt;-</span> envlp<span class="sc">/</span><span class="fu">max</span>(envlp)</span>
+<span id="cb45-180"><a href="#cb45-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-181"><a href="#cb45-181" aria-hidden="true" tabindex="-1"></a>envlp1 <span class="ot">&lt;-</span> <span class="fu">env</span>(tico, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb45-182"><a href="#cb45-182" aria-hidden="true" tabindex="-1"></a>envlp1 <span class="ot">&lt;-</span> envlp1<span class="sc">/</span><span class="fu">max</span>(envlp1)</span>
+<span id="cb45-183"><a href="#cb45-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-184"><a href="#cb45-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-185"><a href="#cb45-185" aria-hidden="true" tabindex="-1"></a><span class="fu">saveGIF</span>(</span>
+<span id="cb45-186"><a href="#cb45-186" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span>(x <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span>,(<span class="fu">nrow</span>(envlp1) <span class="sc">-</span> wl) ,<span class="at">by =</span> <span class="dv">500</span>))</span>
+<span id="cb45-187"><a href="#cb45-187" aria-hidden="true" tabindex="-1"></a>  { </span>
+<span id="cb45-188"><a href="#cb45-188" aria-hidden="true" tabindex="-1"></a>   <span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#DFF0D8"</span>)</span>
+<span id="cb45-189"><a href="#cb45-189" aria-hidden="true" tabindex="-1"></a>   <span class="fu">plot</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">duration</span>(tico)), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">yaxt =</span> <span class="st">"n"</span>, <span class="at">xlab =</span> <span class="st">"Time"</span>, <span class="at">ylab =</span> <span class="st">"Amplitude"</span>)</span>
+<span id="cb45-190"><a href="#cb45-190" aria-hidden="true" tabindex="-1"></a>   <span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"gray"</span>)</span>
+<span id="cb45-191"><a href="#cb45-191" aria-hidden="true" tabindex="-1"></a>   envlp1[<span class="dv">1</span><span class="sc">:</span>x,] <span class="ot">&lt;-</span> envlp[<span class="dv">1</span><span class="sc">:</span>x,]</span>
+<span id="cb45-192"><a href="#cb45-192" aria-hidden="true" tabindex="-1"></a>   <span class="fu">lines</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">duration</span>(tico), <span class="at">length.out =</span> <span class="fu">nrow</span>(envlp1)), <span class="at">y =</span> envlp1[,<span class="dv">1</span>])</span>
+<span id="cb45-193"><a href="#cb45-193" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb45-194"><a href="#cb45-194" aria-hidden="true" tabindex="-1"></a>   <span class="fu">lines</span>(<span class="at">x =</span> (x<span class="sc">:</span>(x <span class="sc">+</span> wl)) <span class="sc">/</span> tico<span class="sc">@</span>samp.rate, <span class="at">y =</span> <span class="fu">rep</span>(<span class="dv">0</span>, wl <span class="sc">+</span> <span class="dv">1</span>), <span class="at">lwd =</span> <span class="dv">7</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb45-195"><a href="#cb45-195" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb45-196"><a href="#cb45-196" aria-hidden="true" tabindex="-1"></a>   <span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"Window length ="</span>, wl))</span>
+<span id="cb45-197"><a href="#cb45-197" aria-hidden="true" tabindex="-1"></a>},</span>
+<span id="cb45-198"><a href="#cb45-198" aria-hidden="true" tabindex="-1"></a><span class="at">movie.name =</span>  <span class="fu">paste0</span>(<span class="st">"env_sliding_window_scheme_ENG"</span>, wl, <span class="st">".gif"</span>), <span class="at">interval =</span> <span class="fl">0.1</span>, <span class="at">ani.height =</span> <span class="dv">480</span> <span class="sc">/</span> <span class="fl">1.5</span>, <span class="at">res =</span> <span class="dv">70</span>)</span>
+<span id="cb45-199"><a href="#cb45-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-200"><a href="#cb45-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-201"><a href="#cb45-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-202"><a href="#cb45-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-203"><a href="#cb45-203" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-204"><a href="#cb45-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-205"><a href="#cb45-205" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-success}</span>
+<span id="cb45-206"><a href="#cb45-206" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"3"</span><span class="kw">&gt;&lt;b&gt;</span>Sliding window for time series<span class="kw">&lt;/b&gt;&lt;/font&gt;</span></span>
+<span id="cb45-207"><a href="#cb45-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-208"><a href="#cb45-208" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-209"><a href="#cb45-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-210"><a href="#cb45-210" aria-hidden="true" tabindex="-1"></a>Sliding windows allow you to smooth out the contours of a time series by calculating an average value around the "neighborhood" of values for a given value. In the case of amplitude envelope the size of the "neighborhood" is given by the length of the window ("wl"). The larger the window length, the greater the smoothing of the curve:</span>
+<span id="cb45-211"><a href="#cb45-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-212"><a href="#cb45-212" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-213"><a href="#cb45-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-214"><a href="#cb45-214" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/env_sliding_window_ENG.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Sliding window"</span><span class="kw">/&gt;</span></span>
+<span id="cb45-215"><a href="#cb45-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-216"><a href="#cb45-216" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-217"><a href="#cb45-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-218"><a href="#cb45-218" aria-hidden="true" tabindex="-1"></a>This animation shows how the amplitude envelope of the "tico" object is smoothed with a 512-point window:</span>
+<span id="cb45-219"><a href="#cb45-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-220"><a href="#cb45-220" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-221"><a href="#cb45-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-222"><a href="#cb45-222" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/env_sliding_window_scheme_ENG512.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Sliding window"</span><span class="kw">/&gt;</span></span>
+<span id="cb45-223"><a href="#cb45-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-224"><a href="#cb45-224" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-225"><a href="#cb45-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-226"><a href="#cb45-226" aria-hidden="true" tabindex="-1"></a>... or a 1024 point window:</span>
+<span id="cb45-227"><a href="#cb45-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-228"><a href="#cb45-228" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-229"><a href="#cb45-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-230"><a href="#cb45-230" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/env_sliding_window_scheme_ENG1024.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Sliding window"</span><span class="kw">/&gt;</span></span>
+<span id="cb45-231"><a href="#cb45-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-232"><a href="#cb45-232" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-233"><a href="#cb45-233" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb45-234"><a href="#cb45-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-235"><a href="#cb45-235" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-236"><a href="#cb45-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-237"><a href="#cb45-237" aria-hidden="true" tabindex="-1"></a>We can use these amplitude "hills" to define segments in the "wave" object using the <span class="in">`timer()`</span> function. The "ssmooth" argument allows us to use a sliding window:</span>
+<span id="cb45-238"><a href="#cb45-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-239"><a href="#cb45-239" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = T}</span></span>
+<span id="cb45-240"><a href="#cb45-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-241"><a href="#cb45-241" aria-hidden="true" tabindex="-1"></a>tmr <span class="ot">&lt;-</span> <span class="fu">timer</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">threshold =</span> <span class="dv">5</span>, <span class="at">ssmooth =</span> <span class="dv">40</span>, </span>
+<span id="cb45-242"><a href="#cb45-242" aria-hidden="true" tabindex="-1"></a>             <span class="at">bty =</span> <span class="st">"l"</span>, <span class="at">colval =</span> <span class="st">"blue"</span>)</span>
+<span id="cb45-243"><a href="#cb45-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-244"><a href="#cb45-244" aria-hidden="true" tabindex="-1"></a>tmr</span>
+<span id="cb45-245"><a href="#cb45-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-246"><a href="#cb45-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-247"><a href="#cb45-247" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-248"><a href="#cb45-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-249"><a href="#cb45-249" aria-hidden="true" tabindex="-1"></a>The output is a list with the following elements:</span>
+<span id="cb45-250"><a href="#cb45-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-251"><a href="#cb45-251" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**s**: duration of detected signals (in s)</span>
+<span id="cb45-252"><a href="#cb45-252" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**p**: duration of pauses (i.e. gaps) between signals</span>
+<span id="cb45-253"><a href="#cb45-253" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**r**: ratio of **s** to **r**</span>
+<span id="cb45-254"><a href="#cb45-254" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**s.start**: start of signals</span>
+<span id="cb45-255"><a href="#cb45-255" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**end**: end of signals</span>
+<span id="cb45-256"><a href="#cb45-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-257"><a href="#cb45-257" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-258"><a href="#cb45-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-259"><a href="#cb45-259" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
+<span id="cb45-260"><a href="#cb45-260" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"5"</span><span class="kw">&gt;</span>Exercise<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb45-261"><a href="#cb45-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-262"><a href="#cb45-262" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>In the previous example using <span class="in">`timer()`</span> the last pulse is divided into 2 detections, one very small at the beginning and another containing the rest of the pulse. Change the "ssmooth" argument until this section is detected as a single pulse.</span>
+<span id="cb45-263"><a href="#cb45-263" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb45-264"><a href="#cb45-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-265"><a href="#cb45-265" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-266"><a href="#cb45-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-267"><a href="#cb45-267" aria-hidden="true" tabindex="-1"></a><span class="fu">## Power Spectra</span></span>
+<span id="cb45-268"><a href="#cb45-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-269"><a href="#cb45-269" aria-hidden="true" tabindex="-1"></a>We can visualize the amplitude in the frequency domain using power spectra. The <span class="in">`meanspec()`</span> function calculates the average distribution of energy in the frequency range (the average power spectrum):</span>
+<span id="cb45-270"><a href="#cb45-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-271"><a href="#cb45-271" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE}</span></span>
+<span id="cb45-272"><a href="#cb45-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-273"><a href="#cb45-273" aria-hidden="true" tabindex="-1"></a>mspc <span class="ot">&lt;-</span> <span class="fu">meanspec</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb45-274"><a href="#cb45-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-275"><a href="#cb45-275" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), mspc), <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb45-276"><a href="#cb45-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-277"><a href="#cb45-277" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(mspc)</span>
+<span id="cb45-278"><a href="#cb45-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-279"><a href="#cb45-279" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-280"><a href="#cb45-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-281"><a href="#cb45-281" aria-hidden="true" tabindex="-1"></a>The <span class="in">`spec()`</span> function, on the other hand, calculates the spectrum for the entire signal:</span>
+<span id="cb45-282"><a href="#cb45-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-283"><a href="#cb45-283" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE}</span></span>
+<span id="cb45-284"><a href="#cb45-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-285"><a href="#cb45-285" aria-hidden="true" tabindex="-1"></a>spc <span class="ot">&lt;-</span> <span class="fu">spec</span>(orni, <span class="at">f=</span><span class="dv">22050</span>, <span class="at">wl=</span><span class="dv">512</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb45-286"><a href="#cb45-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-287"><a href="#cb45-287" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(spc)</span>
+<span id="cb45-288"><a href="#cb45-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-289"><a href="#cb45-289" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-290"><a href="#cb45-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-291"><a href="#cb45-291" aria-hidden="true" tabindex="-1"></a>The result of <span class="in">`spec()`</span> or <span class="in">`meanspec()`</span> can be input into the <span class="in">`fpeaks()`</span> function to calculate amplitude peaks:</span>
+<span id="cb45-292"><a href="#cb45-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-293"><a href="#cb45-293" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-294"><a href="#cb45-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-295"><a href="#cb45-295" aria-hidden="true" tabindex="-1"></a>pks <span class="ot">&lt;-</span> <span class="fu">fpeaks</span>(spc, <span class="at">nmax =</span> <span class="dv">1</span>)</span>
+<span id="cb45-296"><a href="#cb45-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-297"><a href="#cb45-297" aria-hidden="true" tabindex="-1"></a>pks</span>
+<span id="cb45-298"><a href="#cb45-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-299"><a href="#cb45-299" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-300"><a href="#cb45-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-301"><a href="#cb45-301" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-302"><a href="#cb45-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-303"><a href="#cb45-303" aria-hidden="true" tabindex="-1"></a><span class="fu">## Wave manipulation</span></span>
+<span id="cb45-304"><a href="#cb45-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-305"><a href="#cb45-305" aria-hidden="true" tabindex="-1"></a>We can cut segments of a "wave" object:</span>
+<span id="cb45-306"><a href="#cb45-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-307"><a href="#cb45-307" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-308"><a href="#cb45-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-309"><a href="#cb45-309" aria-hidden="true" tabindex="-1"></a>tico2 <span class="ot">&lt;-</span> <span class="fu">cutw</span>(tico, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb45-310"><a href="#cb45-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-311"><a href="#cb45-311" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico2)</span>
+<span id="cb45-312"><a href="#cb45-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-313"><a href="#cb45-313" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-314"><a href="#cb45-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-315"><a href="#cb45-315" aria-hidden="true" tabindex="-1"></a>Add segments:</span>
+<span id="cb45-316"><a href="#cb45-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-317"><a href="#cb45-317" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-318"><a href="#cb45-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-319"><a href="#cb45-319" aria-hidden="true" tabindex="-1"></a>tico3 <span class="ot">&lt;-</span> <span class="fu">pastew</span>(tico, tico2, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb45-320"><a href="#cb45-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-321"><a href="#cb45-321" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico3)</span>
+<span id="cb45-322"><a href="#cb45-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-323"><a href="#cb45-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-324"><a href="#cb45-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-325"><a href="#cb45-325" aria-hidden="true" tabindex="-1"></a>Remove segments:</span>
+<span id="cb45-326"><a href="#cb45-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-327"><a href="#cb45-327" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-328"><a href="#cb45-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-329"><a href="#cb45-329" aria-hidden="true" tabindex="-1"></a>tico4 <span class="ot">&lt;-</span> <span class="fu">deletew</span>(tico3, <span class="at">output =</span> <span class="st">"Wave"</span>, <span class="at">from =</span> <span class="fu">duration</span>(tico), <span class="at">to =</span> <span class="fu">duration</span>(tico3))</span>
+<span id="cb45-330"><a href="#cb45-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-331"><a href="#cb45-331" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico4)</span>
+<span id="cb45-332"><a href="#cb45-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-333"><a href="#cb45-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-334"><a href="#cb45-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-335"><a href="#cb45-335" aria-hidden="true" tabindex="-1"></a>Add segments of silence:</span>
+<span id="cb45-336"><a href="#cb45-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-337"><a href="#cb45-337" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-338"><a href="#cb45-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-339"><a href="#cb45-339" aria-hidden="true" tabindex="-1"></a>tico5 <span class="ot">&lt;-</span> <span class="fu">addsilw</span>(tico, <span class="at">at =</span> <span class="st">"end"</span>, <span class="at">d =</span> <span class="dv">1</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb45-340"><a href="#cb45-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-341"><a href="#cb45-341" aria-hidden="true" tabindex="-1"></a><span class="fu">duration</span>(tico)</span>
+<span id="cb45-342"><a href="#cb45-342" aria-hidden="true" tabindex="-1"></a><span class="fu">duration</span>(tico5)</span>
+<span id="cb45-343"><a href="#cb45-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-344"><a href="#cb45-344" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-345"><a href="#cb45-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-346"><a href="#cb45-346" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-347"><a href="#cb45-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-348"><a href="#cb45-348" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
+<span id="cb45-349"><a href="#cb45-349" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"5"</span><span class="kw">&gt;</span>Exercise<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb45-350"><a href="#cb45-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-351"><a href="#cb45-351" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>The function <span class="in">`rev()`</span> can reverse te order of a vector:</span>
+<span id="cb45-352"><a href="#cb45-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-355"><a href="#cb45-355" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb45-356"><a href="#cb45-356" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb45-357"><a href="#cb45-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-358"><a href="#cb45-358" aria-hidden="true" tabindex="-1"></a><span class="fu">rev</span>(v1)</span>
+<span id="cb45-359"><a href="#cb45-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-360"><a href="#cb45-360" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-361"><a href="#cb45-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-362"><a href="#cb45-362" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Reverse the amplitude vector of 'tico' and generate a spectrogram of the reversed wave object</span>
+<span id="cb45-363"><a href="#cb45-363" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb45-364"><a href="#cb45-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-365"><a href="#cb45-365" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-366"><a href="#cb45-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-367"><a href="#cb45-367" aria-hidden="true" tabindex="-1"></a>Filter out frequency bands:</span>
+<span id="cb45-368"><a href="#cb45-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-369"><a href="#cb45-369" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-370"><a href="#cb45-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-371"><a href="#cb45-371" aria-hidden="true" tabindex="-1"></a><span class="co"># original</span></span>
+<span id="cb45-372"><a href="#cb45-372" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">6</span>))</span>
+<span id="cb45-373"><a href="#cb45-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-374"><a href="#cb45-374" aria-hidden="true" tabindex="-1"></a><span class="co"># filtered</span></span>
+<span id="cb45-375"><a href="#cb45-375" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(<span class="fu">ffilter</span>(tico, <span class="at">from =</span> <span class="dv">4000</span>, <span class="at">to =</span> <span class="dv">6500</span>, <span class="at">output =</span> <span class="st">"Wave"</span>), <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">6</span>))</span>
+<span id="cb45-376"><a href="#cb45-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-377"><a href="#cb45-377" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-378"><a href="#cb45-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-379"><a href="#cb45-379" aria-hidden="true" tabindex="-1"></a>Change frequency (pitch):</span>
+<span id="cb45-380"><a href="#cb45-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-381"><a href="#cb45-381" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-382"><a href="#cb45-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-383"><a href="#cb45-383" aria-hidden="true" tabindex="-1"></a><span class="co"># cut the first</span></span>
+<span id="cb45-384"><a href="#cb45-384" aria-hidden="true" tabindex="-1"></a>tico6 <span class="ot">&lt;-</span> <span class="fu">cutw</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="fl">0.5</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb45-385"><a href="#cb45-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-386"><a href="#cb45-386" aria-hidden="true" tabindex="-1"></a><span class="co"># increase frec</span></span>
+<span id="cb45-387"><a href="#cb45-387" aria-hidden="true" tabindex="-1"></a>tico.lfs <span class="ot">&lt;-</span> <span class="fu">lfs</span>(tico6, <span class="at">shift =</span> <span class="dv">1000</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb45-388"><a href="#cb45-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-389"><a href="#cb45-389" aria-hidden="true" tabindex="-1"></a><span class="co"># decrease frec</span></span>
+<span id="cb45-390"><a href="#cb45-390" aria-hidden="true" tabindex="-1"></a>tico.lfs.neg <span class="ot">&lt;-</span> <span class="fu">lfs</span>(tico6, <span class="at">shift =</span> <span class="sc">-</span><span class="dv">1000</span>, <span class="at">output =</span> <span class="st">"Wave"</span>)</span>
+<span id="cb45-391"><a href="#cb45-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-392"><a href="#cb45-392" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 column graph</span></span>
+<span id="cb45-393"><a href="#cb45-393" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>()</span>
+<span id="cb45-394"><a href="#cb45-394" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb45-395"><a href="#cb45-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-396"><a href="#cb45-396" aria-hidden="true" tabindex="-1"></a><span class="co"># original</span></span>
+<span id="cb45-397"><a href="#cb45-397" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico6, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">main =</span> <span class="st">"original"</span>)</span>
+<span id="cb45-398"><a href="#cb45-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-399"><a href="#cb45-399" aria-hidden="true" tabindex="-1"></a><span class="co"># modified</span></span>
+<span id="cb45-400"><a href="#cb45-400" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico.lfs, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">main =</span> <span class="st">"1 kHz up"</span>)</span>
+<span id="cb45-401"><a href="#cb45-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-402"><a href="#cb45-402" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(tico.lfs.neg, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>, <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">main =</span> <span class="st">"1 kHz down"</span>)</span>
+<span id="cb45-403"><a href="#cb45-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-404"><a href="#cb45-404" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(opar)</span>
+<span id="cb45-405"><a href="#cb45-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-406"><a href="#cb45-406" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-407"><a href="#cb45-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-408"><a href="#cb45-408" aria-hidden="true" tabindex="-1"></a><span class="fu">## Measurements</span></span>
+<span id="cb45-409"><a href="#cb45-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-410"><a href="#cb45-410" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-411"><a href="#cb45-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-412"><a href="#cb45-412" aria-hidden="true" tabindex="-1"></a>Apart from the measurements of peak frequency (<span class="in">`fpeaks()`</span>) and duration (<span class="in">`timer()`</span>), we can measure many other aspects of the acoustic signals using **seewave**. For example, we can estimate the fundamental frequency (which refers to the lowest frequency harmonic in the harmonic stack), with the <span class="in">`fund()`</span> function:</span>
+<span id="cb45-413"><a href="#cb45-413" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-414"><a href="#cb45-414" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-415"><a href="#cb45-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-416"><a href="#cb45-416" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(sheep, <span class="at">scale =</span> <span class="cn">FALSE</span>, <span class="at">grid =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb45-417"><a href="#cb45-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-418"><a href="#cb45-418" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
+<span id="cb45-419"><a href="#cb45-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-420"><a href="#cb45-420" aria-hidden="true" tabindex="-1"></a>ff <span class="ot">&lt;-</span> <span class="fu">fund</span>(sheep, <span class="at">fmax =</span> <span class="dv">300</span>, <span class="at">ann =</span> <span class="cn">FALSE</span>, <span class="at">threshold=</span><span class="dv">6</span>, <span class="at">col =</span> <span class="st">"green"</span>)</span>
+<span id="cb45-421"><a href="#cb45-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-422"><a href="#cb45-422" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ff)</span>
+<span id="cb45-423"><a href="#cb45-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-424"><a href="#cb45-424" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-425"><a href="#cb45-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-426"><a href="#cb45-426" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-427"><a href="#cb45-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-428"><a href="#cb45-428" aria-hidden="true" tabindex="-1"></a>This function uses cepstral transformation to detect the dominant frequency. The <span class="in">`autoc()`</span> function also measures the fundamental frequency, only using autocorrelation.</span>
+<span id="cb45-429"><a href="#cb45-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-430"><a href="#cb45-430" aria-hidden="true" tabindex="-1"></a>Similarly we can measure the dominant frequency (the harmonic with the highest energy):</span>
+<span id="cb45-431"><a href="#cb45-431" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-432"><a href="#cb45-432" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = FALSE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-433"><a href="#cb45-433" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-434"><a href="#cb45-434" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
+<span id="cb45-435"><a href="#cb45-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-436"><a href="#cb45-436" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">dfreq</span>(sheep, <span class="at">f =</span> <span class="dv">8000</span>, <span class="at">fmax =</span> <span class="dv">300</span>, <span class="at">type =</span> <span class="st">"p"</span>, <span class="at">pch =</span> <span class="dv">24</span>, <span class="at">ann =</span> <span class="cn">FALSE</span>, <span class="at">threshold =</span> <span class="dv">6</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb45-437"><a href="#cb45-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-438"><a href="#cb45-438" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span>
+<span id="cb45-439"><a href="#cb45-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-440"><a href="#cb45-440" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-441"><a href="#cb45-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-442"><a href="#cb45-442" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = FALSE, warning = FALSE}</span></span>
+<span id="cb45-443"><a href="#cb45-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-444"><a href="#cb45-444" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(sheep, <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb45-445"><a href="#cb45-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-446"><a href="#cb45-446" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
+<span id="cb45-447"><a href="#cb45-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-448"><a href="#cb45-448" aria-hidden="true" tabindex="-1"></a>ff <span class="ot">&lt;-</span> <span class="fu">fund</span>(sheep, <span class="at">fmax =</span> <span class="dv">300</span>, <span class="at">ann =</span> <span class="cn">FALSE</span>, <span class="at">threshold=</span><span class="dv">6</span>, <span class="at">col =</span> <span class="st">"green"</span>)</span>
+<span id="cb45-449"><a href="#cb45-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-450"><a href="#cb45-450" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
+<span id="cb45-451"><a href="#cb45-451" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-452"><a href="#cb45-452" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">dfreq</span>(sheep, <span class="at">fmax =</span> <span class="dv">300</span>, <span class="at">type =</span> <span class="st">"p"</span>, <span class="at">pch =</span> <span class="dv">24</span>, <span class="at">ann =</span> <span class="cn">FALSE</span>, <span class="at">threshold =</span> <span class="dv">6</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb45-453"><a href="#cb45-453" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-454"><a href="#cb45-454" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span>
+<span id="cb45-455"><a href="#cb45-455" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-456"><a href="#cb45-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-457"><a href="#cb45-457" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-458"><a href="#cb45-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-459"><a href="#cb45-459" aria-hidden="true" tabindex="-1"></a>Measure statistical descriptors of the amplitude distribution in frequency and time:</span>
+<span id="cb45-460"><a href="#cb45-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-461"><a href="#cb45-461" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-462"><a href="#cb45-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-463"><a href="#cb45-463" aria-hidden="true" tabindex="-1"></a><span class="co"># cut</span></span>
+<span id="cb45-464"><a href="#cb45-464" aria-hidden="true" tabindex="-1"></a>note2 <span class="ot">&lt;-</span> <span class="fu">cutw</span>(tico, <span class="at">from=</span><span class="fl">0.6</span>, <span class="at">to=</span><span class="fl">0.9</span>, <span class="at">output=</span><span class="st">"Wave"</span>)</span>
+<span id="cb45-465"><a href="#cb45-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-466"><a href="#cb45-466" aria-hidden="true" tabindex="-1"></a>n2.as <span class="ot">&lt;-</span> <span class="fu">acoustat</span>(note2)</span>
+<span id="cb45-467"><a href="#cb45-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-468"><a href="#cb45-468" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(n2.as[<span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>])</span>
+<span id="cb45-469"><a href="#cb45-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-470"><a href="#cb45-470" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-471"><a href="#cb45-471" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-472"><a href="#cb45-472" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-473"><a href="#cb45-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-474"><a href="#cb45-474" aria-hidden="true" tabindex="-1"></a>Measure statistical descriptors of frequency spectra:</span>
+<span id="cb45-475"><a href="#cb45-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-476"><a href="#cb45-476" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE, warning = FALSE}</span></span>
+<span id="cb45-477"><a href="#cb45-477" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-478"><a href="#cb45-478" aria-hidden="true" tabindex="-1"></a><span class="co"># measure power spectrum</span></span>
+<span id="cb45-479"><a href="#cb45-479" aria-hidden="true" tabindex="-1"></a>n2.sp <span class="ot">&lt;-</span> <span class="fu">meanspec</span>(note2, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb45-480"><a href="#cb45-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-481"><a href="#cb45-481" aria-hidden="true" tabindex="-1"></a>n2.spcp <span class="ot">&lt;-</span> <span class="fu">specprop</span>(n2.sp, <span class="at">f =</span> note2<span class="sc">@</span>samp.rate)</span>
+<span id="cb45-482"><a href="#cb45-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-483"><a href="#cb45-483" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(n2.spcp)</span>
+<span id="cb45-484"><a href="#cb45-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-485"><a href="#cb45-485" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb45-486"><a href="#cb45-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-487"><a href="#cb45-487" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-488"><a href="#cb45-488" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-489"><a href="#cb45-489" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
+<span id="cb45-490"><a href="#cb45-490" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"5"</span><span class="kw">&gt;</span>Exercise<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb45-491"><a href="#cb45-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-492"><a href="#cb45-492" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Measure the statistical descriptors of the frequency spectra (function <span class="in">`specprop()`</span>) on the 3 notes (hint: you must cut each note first)</span>
+<span id="cb45-493"><a href="#cb45-493" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb45-494"><a href="#cb45-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-495"><a href="#cb45-495" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb45-496"><a href="#cb45-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-497"><a href="#cb45-497" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb45-498"><a href="#cb45-498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-499"><a href="#cb45-499" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"4"</span><span class="kw">&gt;</span>Session information<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb45-500"><a href="#cb45-500" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-501"><a href="#cb45-501" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info, echo=F}</span></span>
+<span id="cb45-502"><a href="#cb45-502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-503"><a href="#cb45-503" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb45-504"><a href="#cb45-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-505"><a href="#cb45-505" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>
