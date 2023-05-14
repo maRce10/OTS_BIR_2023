@@ -4,7 +4,7 @@ format:
   revealjs:
     self-contained: false
     incremental: false
-    footer: "Bioacoustics in R 2023 | OTS"
+    footer: "Marcelo Araya-Salas | Bioacoustics in R 2023 | OTS"
     theme: ["custom.scss"]
     slide-number: c/t
     show-slide-number: all
@@ -12,15 +12,15 @@ format:
     preview-links: false
 ---
 
-## Why animal sounds and why R? {.center .aboutmeslide}
+# Why animal sounds? <br> and why R?
 
 &nbsp; 
 
 <center><font size="6">Marcelo Araya-Salas PhD</font></center>
 
-<center><font size="6">Neuroscience Research Center</font></center>
+<center><font size="6">_Neuroscience Research Center_</font></center>
 
-<center><font size="6">University of Costa Rica</font></center>
+<center><font size="6">_University of Costa Rica_</font></center>
 
 
 &nbsp; 
@@ -40,14 +40,14 @@ format:
 
 
 
-## __Animal acoustic signals__ {.center}
+## __Animal acoustic signals__ 
 
 <center><iframe width="100%" height="500" src="images/house-wren.mp4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
 ---
 
 
-## __Common research questions__ {.center}
+## __Common research questions__ 
 
 ::: {.incremental}
 
@@ -65,7 +65,7 @@ format:
 
 
 
-## __Acoustic analysis workflow__ {.center}
+## __Acoustic analysis workflow__ 
 
 <center><img src="images/bioacoustic_research_diagram.png" height="100%" width="800px"/></center>
   
@@ -73,7 +73,7 @@ format:
 
 
 
-## __Why bioacoustics in R?__ {.center}
+## __Why bioacoustics in R?__ 
 
 ::: {.incremental}
 
@@ -91,7 +91,7 @@ format:
 
 
 
-## __Course outline__ {.center}
+## __Course outline__ {background-color="#e0f3a8" .center}
 
 ::: {.incremental}
 
