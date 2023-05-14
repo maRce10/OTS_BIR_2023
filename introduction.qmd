@@ -12,7 +12,7 @@ format:
     preview-links: false
 ---
 
-# Why animal sounds? <br> and why R? {background-color="#dfecbb"}
+# __Why animal sounds? <br> ... and why R?__ {background-color="#e0f3a8"}
 
 
 &nbsp; 
@@ -92,7 +92,7 @@ format:
 
 
 
-## __Course outline__ {background-color="#e0f3a8" .center}
+## __Course outline__ {background-color="#e0f3a8"}
 
 ::: {.incremental}
 
