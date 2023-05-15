@@ -67,7 +67,7 @@ format:
 
  
 
-**Introduction** <a href="introduction.Rmd" class="btn btn-warning btn-xs" role="button">Introduction</a>
+**Introduction** <a href="introduction.qmd" class="btn btn-warning btn-xs" role="button">Introduction</a>
 
 -   How animal acoustic signals look like?
 -   Analytical workflow in bioacoustics research
