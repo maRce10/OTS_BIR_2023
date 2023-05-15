@@ -61,9 +61,9 @@ Integrated development environment (IDE) for R. Includes:
 -   Lists
 -   Matrices
 -   Data Frames
--   Tables
 -   Functions (including operators)
 -   Attributes
+-   ~~Tables~~
 -   ~~Arrays~~
 -   ~~Environments~~
 
@@ -237,17 +237,6 @@ str(y)
 
  
 
-`structure()` returns a new object with modified attributes:
-
-```{r}
-
-y <- structure(1:10, my_attribute = "This is an attribute")
-attributes(y)
-
-```
-
- 
-
 Most attributes are lost when modifying a vector:
 
 ```{r}
@@ -362,35 +351,15 @@ m
 
  
 
-Can be created by modifying the dimension attribute:
-
-```{r}
-
-c <- 1:6
-
-is.matrix(c)
-
-attributes(c)
-
-dim(c) <- c(3, 2)
-
-c
-
-is.matrix(c)
-
-attributes(c)
-
-```
-
- 
-
 <font size="5">Data frames</font>
 
 Special case of lists. Can contain entries of different types:
 
 ```{r}
 
-m <- data.frame(ID = c("a", "b", "c", "d", "e"), size = c(1, 2, 3, 4, 5), observed = c(FALSE, TRUE, FALSE, FALSE, FALSE))
+m <- data.frame(ID = c("a", "b", "c", "d", "e"), 
+                size = c(1, 2, 3, 4, 5), 
+                observed = c(FALSE, TRUE, FALSE, FALSE, FALSE))
 
 dim(m)
 
@@ -412,7 +381,9 @@ But vectors should have the same length:
 
 ```{r, error = TRUE}
 
-m <- data.frame(ID = c("a", "b", "c", "d", "e"), size = c(1, 2, 3, 4, 5, 6), observed = c(FALSE, TRUE, FALSE, FALSE, FALSE))
+m <- data.frame(ID = c("a", "b", "c", "d", "e"), 
+                size = c(1, 2, 3, 4, 5, 6), 
+                observed = c(FALSE, TRUE, FALSE, FALSE, FALSE))
 
 ```
 
@@ -624,9 +595,9 @@ Arithmetic operators:
 
 ```{r, echo=F}
 d <- data.frame(
-c("\\+" , "addition"),
-c("\\-", 	"subtraction"),
-c("\\*" ,	"multiplication"),
+c("+" , "addition"),
+c("-", 	"subtraction"),
+c("*" ,	"multiplication"),
 c("/",	"division"),
 c("^ or **",	"exponent"),
 c("x %% y",	"modulus (x mod y)"),
