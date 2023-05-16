@@ -15,6 +15,20 @@ format:
     link-external-newwindow: true  
 ---
 
+ 
+
+::: {.alert .alert-info}
+
+## **Objetives** {.unnumbered .unlisted}
+
+- Learn the basic aspects of sound as a physical phenomenom
+
+- Get familiar with how sound is represented as a digital object in R 
+
+:::
+
+ 
+
 ```{r, echo = FALSE}
 
 library(seewave)
@@ -681,6 +695,8 @@ class(rsf1)
 rsf2 <- read_sound_file("Phaethornis-striigularis-154074.mp3", path = "./examples")
 
 class(rsf2)
+
+warbleR_options(flac.path = "flac")
 
 # flac
 rsf3 <- read_sound_file("Phae.long1.flac", path = "./examples")

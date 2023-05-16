@@ -17,6 +17,16 @@ editor_options:
   chunk_output_type: console
 ---
 
+::: {.alert .alert-info}
+
+## **Objetive** {.unnumbered .unlisted}
+
+- Get familiar with concepts and data formatting practices related to automatic acoustic signals detection 
+
+- Learn how to run automatic detection using the package ohun
+
+:::
+
  
 
 [ohun](https://github.com/maRce10/ohun) is intended to facilitate the automated detection of sound events, providing functions to diagnose and optimize detection routines. Detections from other software can also be explored and optimized.

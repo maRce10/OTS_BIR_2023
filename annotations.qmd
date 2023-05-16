@@ -17,6 +17,16 @@ format:
 
  
 
+::: {.alert .alert-info}
+## **Objetives** {.unnumbered .unlisted}
+
+-   Learn various methods to import and export annotations in R
+
+-   Get familiar with the data structure used for representing annotations in R
+:::
+
+ 
+
 ## Annotation tables
 
 An annotation table (or selection table in Raven's terminology and **warbleR**) is a spreadsheet that contains information about the location (and frequency) of the sounds of interest in one or more sound files. Therefore, the basic annotation table should contain at least 3 columns:

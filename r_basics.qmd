@@ -24,6 +24,16 @@ options("digits.secs"=3)
 
  
 
+::: {.alert .alert-info}
+
+## **Objetive** {.unnumbered .unlisted}
+
+- Revisit the basic syntax and data structures in R
+
+:::
+
+ 
+
 ## What is R?
 
 -   A **free** [Domain-Specific-Language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language) for statistics and data analysis

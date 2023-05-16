@@ -13,6 +13,14 @@ format:
     css: styles.css
 ---
 
+::: {.alert .alert-info}
+
+## **Objetive** {.unnumbered .unlisted}
+
+- Demonstrate how to articulate functions used during the course to obtain, explore and quantify acoustic data
+
+:::
+
  
 
 ## Download Xeno-Canto data

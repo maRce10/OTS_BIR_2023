@@ -17,6 +17,19 @@ format:
 
  
 
+::: {.alert .alert-info}
+
+## **Objetives** {.unnumbered .unlisted}
+
+- Learn how to compare methods to measure acoustic structure
+
+- Get familiar with the use of acoustic spaces to summarize results form acoustic analyses
+
+:::
+
+ 
+
+
 Bioacoustic research is based on quantifying the structure of acoustic signals and comparing that structure between different behavioral / social / ecological contexts, groups or species. However, measuring the signal structure in a way that takes into account the most relevant variation in signal structure could be a difficult task. Some of the differences that are evident by visual inspection of spectrograms may not be detected by some analyzes. Therefore, choosing the most appropriate analytical approach is a critical step.
 
 The `compare_methods()` function from **warbleR** attempts to facilitate the selection of the method. This function produces graphics (such as image files in the working directory) with spectrograms of 4 signals at a time, which allow visual inspection of the performance of acoustic analysis methods when comparing those signals. The signals are chosen randomly from the data frame or selection table provided (argument 'X'). The function compares 2 methods at a time. The available methods are:

@@ -15,6 +15,18 @@ format:
     link-external-newwindow: true  
 ---
 
+ 
+
+::: {.alert .alert-info}
+
+## **Objetive** {.unnumbered .unlisted}
+
+- Provide tools for double-checking the quality of the acoustic data and derived analyses along the acoustic analysis workflow 
+
+:::
+
+ 
+
 ```{r, echo = FALSE}
 library(knitr)
 # options to customize chunk outputs

@@ -17,6 +17,20 @@ format:
 
  
 
+::: {.alert .alert-info}
+
+## **Objetives** {.unnumbered .unlisted}
+
+- Learn the different methods available to quantify acoustic structure
+
+- Understand their pros and cons
+
+- Learn how to apply them in R 
+
+:::
+
+ 
+
 Acoustic signals are multidimensional traits; they vary complexly in time, frequency, amplitude and combinations of these dimensions. Generally, in biology we want to measure aspects of acoustic signals that vary in response to the factors predicted by our hypotheses. In some cases we even lack predictions for specific acoustic parameters and we need to evaluate the relative similarity between the variants of a signal in a population. These analyses require a diversity of tools for quantifying the multiple dimensions in which we can decompose the signals.
 
 The **warbleR** package is designed to quantify the acoustic structure of a population of signals using 4 main methods of analysis. 2 of them are absolute measures of the structure:
