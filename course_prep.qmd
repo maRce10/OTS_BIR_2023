@@ -52,6 +52,7 @@ install.packages("remotes")
 remotes::install_github("maRce10/warbleR")
 remotes::install_github("maRce10/Rraven")
 remotes::install_github("maRce10/ohun")
+remotes::install_github("spatstat/spatstat.core") 
 remotes::install_github("maRce10/PhenotypeSpace")
 remotes::install_github("maRce10/baRulho")
 remotes::install_github("maRce10/dynaSpec")
@@ -73,7 +74,7 @@ install.packages("soundgen")
 
 h[ttp://ravensoundsoftware.com/raven-pricing/](http://ravensoundsoftware.com/raven-pricing/)
 
-10) Install ffmpeg (only needed for dynaSpec package):
+10) Install ffmpeg (only needed for dynaSpec package, not critical):
 
 <https://ffmpeg.org/download.html>
 
@@ -85,9 +86,13 @@ take a look at this link if you have issues installing ffmpeg on windows:
 
 <https://www.audacityteam.org/download/>
 
-12) Install SOX. It can be downloaded from here (not critical but could be useful): [http://sox.sourceforge.net](http://sox.sourceforge.net/)
+12) Install SOX. It can be downloaded from here (not critical but could be useful): [http://sox.sourceforge.net](http://sox.sourceforge.net/) (*Not critical*)
 
-13) Install FLAC. It can be downloaded from here (also not critical): [https://xiph.org/flac/download.html](http://sox.sourceforge.net/)
+13) Install FLAC. It can be downloaded from here (also not critical): [https://xiph.org/flac/download.html](http://sox.sourceforge.net/) (*Not critical*)
+
+
+14) Note that you can also run the code using google colab. Take a look at this notebook: [https://colab.research.google.com/](https://colab.research.google.com/drive/1KKmndmWB73ZDLfT0eVBArEZX4eVGsVMc?usp=sharing#scrollTo=05bsvm_f7UNt)
+
 
  
 

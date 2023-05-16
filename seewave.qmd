@@ -21,14 +21,13 @@ format:
 
 ## **Objetives** {.unnumbered .unlisted}
 
-- Understand the most common metrics of acoustic structure
+-   Understand the most common metrics of acoustic structure
 
-- Get familiar with manipulating and formatting sound in the R environment 
+-   Get familiar with manipulating and formatting sound in the R environment
 
 :::
 
  
-
 
 **seewave** provides a wide variety of tools to accurately assess sound properties in the R environment. It is an extensive package with lots of features. The package allows to visualize and measure characteristics of time, frequency and amplitude of sounds. The tools are arranged in a modular way (each analysis in its own function) which allows combining them to generate more elaborate analyzes.
 

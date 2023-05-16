@@ -15,6 +15,21 @@ format:
     link-external-newwindow: true  
 ---
 
+
+ 
+
+::: {.alert .alert-info}
+
+## **Objetives** {.unnumbered .unlisted}
+
+-   Understand how spectrograms are created
+
+-   Learn to create and customize spectrograms in R
+
+:::
+
+ 
+
 ```{r, echo = FALSE}
 library(knitr)
 
@@ -22,7 +37,6 @@ opts_chunk$set(tidy = TRUE, warning = FALSE, message = FALSE)
 
 ```
 
- 
 
 The spectrogram is a fundamental tool in the study of acoustic communication in vertebrates. They are basically a visual representation of the sound where the variation in energy (or power spectral density) is shown on both the frequency and the time domains. Spectrograms allow us to visually explore acoustic variation in our study systems, which makes it easy to distinguish structural differences at small temporal/spectral scales that our ears cannot detect.
 

@@ -44,8 +44,14 @@ website:
           href: quality_checks.qmd
         - text: "Measure structure on XC recordings"
           href: measure_structure_green_hermit.qmd
+      - text: "Colab notebooks"
+        menu: 
+          - text: "General"
+            href: general_redirect.html  
       - text: "Course prep"
         href: course_prep.qmd
+      - text: "Code sharing"
+        href: code_redirect.html
       - text: "Instructor"
         href: instructor.qmd
 

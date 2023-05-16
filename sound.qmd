@@ -39,7 +39,7 @@ opts_chunk$set(tidy = TRUE, warning = FALSE, message = FALSE)
 
 Sound waves are characterized by compression and expansion of the medium as sound energy moves through it. There is also back and forth motion of the particles making up the medium:
 
-<img src="images/wave_white_bg.gif" alt="wave animation" width="600"/>
+<img src="images/wave_white_bg.gif" alt="wave animation" width="700"/>
 
 <font size="3"> taken from https://dosits.org</font>
 
@@ -138,6 +138,8 @@ Digitizing implies discretizing, which requires some sort of regular sampling. S
 
 ```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}
 
+source("~/Dropbox/R_package_testing/warbleR/R/read_sound_file.R")
+source("~/Dropbox/R_package_testing/warbleR/R/warbleR_options.R")
 opar <- par()
 
 par(mar = c(4, 4, 1, 1), bg = "#daeace")
@@ -694,7 +696,6 @@ rsf2 <- read_sound_file("Phaethornis-striigularis-154074.mp3", path = "./example
 
 class(rsf2)
 
-warbleR_options(flac.path = "flac")
 
 # flac
 rsf3 <- read_sound_file("Phae.long1.flac", path = "./examples")
