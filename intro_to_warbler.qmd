@@ -58,7 +58,7 @@ Most functions allow the parallelization of tasks, which distributes the tasks a
 
 **warbleR** is a young package (officially published in 2017) currently in a maturation stage:
 
-<img src="images/lifecycle.jpeg" alt="life cycle"/>
+<img src="images/lifecycle.jpeg" alt="life cycle" width="700"/>
 
  
 
@@ -82,40 +82,25 @@ out <- sapply(paste('package:', names(sessionInfo()$otherPkgs), sep = ""), funct
 
 #load packages
 library(warbleR)
-library(knitr)
-library(kableExtra)
+# library(knitr)
+# library(kableExtra)
 
 
 cf <- read.csv("./data/cuadro de funciones warbleR.csv", stringsAsFactors = FALSE)
 
 warbleR_options(wav.path = "./examples") 
 
-options(knitr.table.format = "html") 
-opts_chunk$set(comment = "")
-opts_knit$set(root.dir = tempdir())
-options(width = 100, max.print = 100)
+# options(knitr.table.format = "html") 
+# opts_chunk$set(comment = "")
+# opts_knit$set(root.dir = tempdir())
+# options(width = 100, max.print = 100)
 
 ```
 
-```{r extn_sel_4.1, eval=FALSE}
-
+```{r}
 data("lbh_selec_table")
 
 lbh_selec_table
-
-```
-
-```{r extn_sel_4.2, echo=FALSE}
-
-kbl <- kable(lbh_selec_table, align = "c", row.names = F,  format = "html")
-
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl <- scroll_box(kbl, width = "740px",
-box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
-
-kbl
-
 ```
 
  
@@ -407,7 +392,7 @@ These objects can be used as input for most **warbleR** functions. Here are some
 
 #### Spectral parameters
 
-```{r extn_sel_12.1, eval=FALSE}
+```{r extn_sel_12.1, eval=TRUE}
 
 #  spectrographic parameters
 sp <- spectro_analysis(ext_st)
@@ -415,46 +400,16 @@ sp <- spectro_analysis(ext_st)
 sp
 ```
 
-```{r, extn_sel_12.2, echo= FALSE}
-
-sp <- spectro_analysis(ext_st)
-
-kbl <- kable(sp, align = "c", row.names = F,  format = "html")
-
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl <- scroll_box(kbl, width = "740px",
-box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
-
-kbl
-
-
-```
 
  
 
 #### Signal-to-noise ratio
 
-```{r extn_sel_12.5, eval=FALSE}
+```{r extn_sel_12.5, eval=TRUE}
 
 snr <- sig2noise(ext_st, mar = 0.05)
 
 snr
-```
-
-```{r, extn_sel_12.6, echo= FALSE}
-
-snr <- sig2noise(ext_st, mar = 0.05)
-
-kbl <- kable(snr, align = "c", row.names = F,  format = "html")
-
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl <- scroll_box(kbl, width = "740px",
-box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
-
-kbl
-
 ```
 
  
@@ -469,21 +424,13 @@ dtw.dist
 
 ```
 
-```{r, extn_sel_12.8, echo= FALSE}
+```{r extn_sel_12.8, echo=TRUE}
 
 dtw.dist <- freq_DTW(ext_st, img = FALSE)
 
-kbl <- kable(dtw.dist, align = "c", row.names = T,  format = "html")
-
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl <- scroll_box(kbl, width = "740px",
-box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
-
-kbl
+as.data.frame(dtw.dist)
 
 ```
-
  
 
 ### Performance
@@ -530,14 +477,7 @@ The data looks like this:
 
 ```{r, extn_sel_15, echo= FALSE}
 
-kbl <- kable(lbh_selec_table, align = "c", row.names = F,  format = "html")
-
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl <- scroll_box(kbl, width = "740px",
-box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
-
-kbl
+lbh_selec_table
 
 ```
 
@@ -571,20 +511,9 @@ Again, these objects can also be used in any analyzes:
 # signal to noise ratio
 bs_snr <- sig2noise(bs_ext_st, mar = 0.05)
 
+bs_snr
 ```
 
-```{r, extn_sel_18.2, echo= FALSE}
-
-kbl <- kable(bs_snr, align = "c", row.names = F,  format = "html")
-
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl <- scroll_box(kbl, width = "740px",
-box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
-
-kbl
-
-```
 
  
 
@@ -602,7 +531,7 @@ kbl
 
 This new object class allows to share complete data sets, including acoustic data. For example, the following code downloads a subset of the data used in [Araya-Salas *et al* (2017)](https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/araya-salas_smith-vidaurre___webster_2017._table_s1._recording_metadata.xlsx) (can also be downloaded from [here](https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/extended.selection.%20table.araya-salas.et.al.2017.bioacoustics.100.sels.rds)):
 
-```{r extn.sel_19}
+```{r extn.sel_19, eval = FALSE}
 
 URL <- "https://github.com/maRce10/OTS_BIR_2023/raw/master/data/extended.selection.table.araya-salas.et.al.2017.bioacoustics.100.sels.rds"
 
@@ -614,30 +543,25 @@ format(object.size(dat), units = "auto")
 
 ```
 
+```{r extn.sel_19-2, echo = FALSE}
+
+dat <- readRDS("./data/extended.selection.table.araya-salas.et.al.2017.bioacoustics.100.sels.rds")
+
+nrow(dat)
+
+format(object.size(dat), units = "auto")
+
+```
 The total size of the 100 sound files from which these selections were taken adds up to 1.1 GB. The size of the extended selection table is only 10.1 MB.
 
 This data is ready to be used:
 
-```{r, eval = F}
+```{r, eval = TRUE}
 sp <- spectro_analysis(dat, bp = c(2, 10))
 
 head(sp)
 ```
 
-```{r, extn_sel_20, echo= FALSE}
-
-sp <- spectro_analysis(dat, bp = c(2, 10))
-
-kbl <- kable(sp[1:6, ], align = "c", row.names = F,  format = "html")
-
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl <- scroll_box(kbl, width = "740px",
-box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
-
-kbl
-
-```
 
 ... and the spectrograms can be visualized as follows:
 
@@ -737,21 +661,17 @@ The `query_xc()` function allows you to search and download sounds from the free
 
 ```{r, echo = FALSE}
 
-library(kableExtra)
-
-# names(cf) <- gsub("\\.", " ", names(cf))
-
 cf2 <- cf[cf$Obtener.preparar.grabaciones == "x", c("Function", "Description", "Works.on", "Output")]
 
-cf2$Function <- cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
+cf2$Function <- kableExtra::cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
 
-kbl <- kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- knitr::kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
 
-kbl <- column_spec(kbl, 1, bold = TRUE)
+kbl <- kableExtra::column_spec(kbl, 1, bold = TRUE)
 
-kbl <- column_spec(kbl, 2:4, italic = TRUE)
+kbl <- kableExtra::column_spec(kbl, 2:4, italic = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -767,39 +687,15 @@ It is recommended to make annotations in other programs and then import them int
 
 cf2 <- cf[cf$Anotar == "x",  c("Function", "Description", "Works.on", "Output")]
 
-cf2$Function <- cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
+cf2$Function <- kableExtra::cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
 
-kbl <- kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- knitr::kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
 
-kbl <- column_spec(kbl, 1, bold = TRUE)
+kbl <- kableExtra::column_spec(kbl, 1, bold = TRUE)
 
-kbl <- column_spec(kbl, 2:4, italic = TRUE)
+kbl <- kableExtra::column_spec(kbl, 2:4, italic = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl
-
-```
-
- 
-
-### Automatic detections
-
-Automatic detection can significantly speed up acoustic analysis. warbleR offers two main methods for automatic signal detection (cross-correlation and amplitude threshold filter) as well as functions to explore detections:
-
-```{r, echo = FALSE}
-
-cf2 <- cf[cf$`Anotar` == "x",  c("Function", "Description", "Works.on", "Output")]
-
-cf2$Function <- cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
-
-kbl <- kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
-
-kbl <- column_spec(kbl, 1, bold = TRUE)
-
-kbl <- column_spec(kbl, 2:4, italic = TRUE)
-
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -813,17 +709,17 @@ The annotations (or selection tables) can be manipulated and refined with a vari
 
 ```{r, echo = FALSE}
 
-cf2 <- cf[cf$`Organizar.anotaciones` == "x",  c("Function", "Description", "Works.on", "Output")]
+cf2 <- cf[cf$`Anotar` == "x",  c("Function", "Description", "Works.on", "Output")]
 
-cf2$Function <- cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
+cf2$Function <- kableExtra::cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
 
-kbl <- kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- knitr::kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
 
-kbl <- column_spec(kbl, 1, bold = TRUE)
+kbl <- kableExtra::column_spec(kbl, 1, bold = TRUE)
 
-kbl <- column_spec(kbl, 2:4, italic = TRUE)
+kbl <- kableExtra::column_spec(kbl, 2:4, italic = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <- kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -846,15 +742,15 @@ Most functions gravitate around these methods, or variations of these methods:
 
 cf2 <- cf[cf$`Medir.estructura` == "x",  c("Function", "Description", "Works.on", "Output")]
 
-cf2$Function <- cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
+cf2$Function <- kableExtra::cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
 
-kbl <- kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- knitr::kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
 
-kbl <- column_spec(kbl, 1, bold = TRUE)
+kbl <- kableExtra::column_spec(kbl, 1, bold = TRUE)
 
-kbl <- column_spec(kbl, 2:4, italic = TRUE)
+kbl <- kableExtra::column_spec(kbl, 2:4, italic = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -880,15 +776,15 @@ Functions are provided to detect inconsistencies in the selection tables or modi
 
 cf2 <- cf[cf$Verificar == "x",  c("Function", "Description", "Works.on", "Output")]
 
-cf2$Function <- cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
+cf2$Function <- kableExtra::cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
 
-kbl <- kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- knitr::kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
 
-kbl <- column_spec(kbl, 1, bold = TRUE)
+kbl <- kableExtra::column_spec(kbl, 1, bold = TRUE)
 
-kbl <- column_spec(kbl, 2:4, italic = TRUE)
+kbl <- kableExtra::column_spec(kbl, 2:4, italic = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -902,17 +798,18 @@ kbl
 
 cf2 <- cf[cf$`Inspeccion.visual` == "x",  c("Function", "Description", "Works.on", "Output")]
 
-cf2$Function <- cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
+cf2$Function <- kableExtra::cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
 
-kbl <- kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- knitr::kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
 
-kbl <- column_spec(kbl, 1, bold = TRUE)
+kbl <- kableExtra::column_spec(kbl, 1, bold = TRUE)
 
-kbl <- column_spec(kbl, 2:4, italic = TRUE)
+kbl <- kableExtra::column_spec(kbl, 2:4, italic = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
+
 
 ```
 
@@ -926,15 +823,15 @@ Finally, **warbleR** offers functions to simplify the use of extended selection 
 
 cf2 <- cf[cf$Analisis.estadistico == "x" | cf$Otros == "x",  c("Function", "Description", "Works.on", "Output")]
 
-cf2$Function <- cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
+cf2$Function <- kableExtra::cell_spec(x = cf2$Function, link = paste0("https://marce10.github.io/warbleR/reference/", cf2$Function, ".html"))
 
-kbl <- kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- knitr::kable(cf2, align = "c", row.names = F,  format = "html", escape = F)
 
-kbl <- column_spec(kbl, 1, bold = TRUE)
+kbl <- kableExtra::column_spec(kbl, 1, bold = TRUE)
 
-kbl <- column_spec(kbl, 2:4, italic = TRUE)
+kbl <- kableExtra::column_spec(kbl, 2:4, italic = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <- kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 

@@ -216,7 +216,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/maRce10/OTS_BIR_2023/"><i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -341,7 +341,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">colwave =</span> <span class="st">"#8fcc78"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="seewave_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
@@ -372,7 +372,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"#8fcc78"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="seewave_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
@@ -386,7 +386,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"#8fcc78"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="seewave_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
@@ -401,15 +401,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>&nbsp;</p>
 <p>Sliding windows allow you to smooth out the contours of a time series by calculating an average value around the “neighborhood” of values for a given value. In the case of amplitude envelope the size of the “neighborhood” is given by the length of the window (“wl”). The larger the window length, the greater the smoothing of the curve:</p>
 <p>&nbsp;</p>
-<p><img src="images/env_sliding_window_ENG.gif" alt="Sliding window"></p>
+<p><img src="images/env_sliding_window_ENG_v2.gif" alt="Sliding window"></p>
 <p>&nbsp;</p>
 <p>This animation shows how the amplitude envelope of the “tico” object is smoothed with a 512-point window:</p>
 <p>&nbsp;</p>
-<p><img src="images/env_sliding_window_scheme_ENG512.gif" alt="Sliding window"></p>
+<p><img src="images/env_sliding_window_scheme_ENG_v2_512.gif" alt="Sliding window"></p>
 <p>&nbsp;</p>
 <p>… or a 1024 point window:</p>
 <p>&nbsp;</p>
-<p><img src="images/env_sliding_window_scheme_ENG1024.gif" alt="Sliding window"></p>
+<p><img src="images/env_sliding_window_scheme_ENG_v2_512.gif" alt="Sliding window"></p>
 <p>&nbsp;</p>
 </div>
 <p>&nbsp;</p>
@@ -418,7 +418,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tmr <span class="ot">&lt;-</span> <span class="fu">timer</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">threshold =</span> <span class="dv">5</span>, <span class="at">ssmooth =</span> <span class="dv">40</span>, </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">bty =</span> <span class="st">"l"</span>, <span class="at">colval =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">bty =</span> <span class="st">"l"</span>, <span class="at">colval =</span> <span class="st">"#51c724"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="seewave_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
@@ -475,9 +475,9 @@ $first
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mspc <span class="ot">&lt;-</span> <span class="fu">meanspec</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mspc <span class="ot">&lt;-</span> <span class="fu">meanspec</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">col =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), mspc), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), mspc), <span class="at">col =</span> <span class="st">"#daeace"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="seewave_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
@@ -494,7 +494,7 @@ $first
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>spc <span class="ot">&lt;-</span> <span class="fu">spec</span>(orni, <span class="at">f=</span><span class="dv">22050</span>, <span class="at">wl=</span><span class="dv">512</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>spc <span class="ot">&lt;-</span> <span class="fu">spec</span>(orni, <span class="at">f=</span><span class="dv">22050</span>, <span class="at">wl=</span><span class="dv">512</span>, <span class="at">col =</span> <span class="st">"#8fcc78"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="seewave_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
@@ -1181,7 +1181,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-103"><a href="#cb45-103" aria-hidden="true" tabindex="-1"></a>The visualizations in **seewave** allow a high degree of customization. For example change the color:</span>
 <span id="cb45-104"><a href="#cb45-104" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-107"><a href="#cb45-107" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb45-108"><a href="#cb45-108" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span>
+<span id="cb45-108"><a href="#cb45-108" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(tico, <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">colwave =</span> <span class="st">"#8fcc78"</span>)</span>
 <span id="cb45-109"><a href="#cb45-109" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-110"><a href="#cb45-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb45-111"><a href="#cb45-111" aria-hidden="true" tabindex="-1"></a></span>
@@ -1207,7 +1207,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-133"><a href="#cb45-133" aria-hidden="true" tabindex="-1"></a>We can also generate other representations of "amplitude vs. time", such as "amplitude envelopes":</span>
 <span id="cb45-134"><a href="#cb45-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-137"><a href="#cb45-137" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb45-138"><a href="#cb45-138" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span>
+<span id="cb45-138"><a href="#cb45-138" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"#8fcc78"</span>)</span>
 <span id="cb45-139"><a href="#cb45-139" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-140"><a href="#cb45-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb45-141"><a href="#cb45-141" aria-hidden="true" tabindex="-1"></a></span>
@@ -1218,7 +1218,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-148"><a href="#cb45-148" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-149"><a href="#cb45-149" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new=</span><span class="cn">TRUE</span>)</span>
 <span id="cb45-150"><a href="#cb45-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-151"><a href="#cb45-151" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"blue"</span>)</span>
+<span id="cb45-151"><a href="#cb45-151" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span>(tico, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">colwave =</span> <span class="st">"#8fcc78"</span>)</span>
 <span id="cb45-152"><a href="#cb45-152" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-153"><a href="#cb45-153" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb45-154"><a href="#cb45-154" aria-hidden="true" tabindex="-1"></a></span>
@@ -1233,16 +1233,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-163"><a href="#cb45-163" aria-hidden="true" tabindex="-1"></a><span class="fu">saveGIF</span>(</span>
 <span id="cb45-164"><a href="#cb45-164" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span>(x <span class="cf">in</span> sq)</span>
 <span id="cb45-165"><a href="#cb45-165" aria-hidden="true" tabindex="-1"></a>  { </span>
-<span id="cb45-166"><a href="#cb45-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#DFF0D8"</span>) </span>
+<span id="cb45-166"><a href="#cb45-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#daeace"</span>) </span>
 <span id="cb45-167"><a href="#cb45-167" aria-hidden="true" tabindex="-1"></a>  envlp <span class="ot">&lt;-</span><span class="fu">env</span>(tico, <span class="at">ssmooth =</span> x)</span>
 <span id="cb45-168"><a href="#cb45-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">box</span>()</span>
 <span id="cb45-169"><a href="#cb45-169" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"Window length ="</span>, x))</span>
 <span id="cb45-170"><a href="#cb45-170" aria-hidden="true" tabindex="-1"></a>},</span>
-<span id="cb45-171"><a href="#cb45-171" aria-hidden="true" tabindex="-1"></a><span class="at">movie.name =</span>  <span class="st">"env_sliding_window_ENG.gif"</span>, <span class="at">interval =</span> <span class="fl">0.25</span>, <span class="at">ani.height =</span> <span class="dv">480</span> <span class="sc">/</span> <span class="fl">1.5</span>, <span class="at">res =</span> <span class="dv">70</span>)</span>
+<span id="cb45-171"><a href="#cb45-171" aria-hidden="true" tabindex="-1"></a><span class="at">movie.name =</span>  <span class="st">"env_sliding_window_ENG_v2.gif"</span>, <span class="at">interval =</span> <span class="fl">0.5</span>, <span class="at">ani.height =</span> <span class="dv">480</span> <span class="sc">/</span> <span class="fl">1.5</span>, <span class="at">res =</span> <span class="dv">70</span>)</span>
 <span id="cb45-172"><a href="#cb45-172" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-173"><a href="#cb45-173" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-174"><a href="#cb45-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-175"><a href="#cb45-175" aria-hidden="true" tabindex="-1"></a>wl <span class="ot">&lt;-</span> <span class="dv">1024</span></span>
+<span id="cb45-175"><a href="#cb45-175" aria-hidden="true" tabindex="-1"></a>wl <span class="ot">&lt;-</span> <span class="dv">512</span></span>
 <span id="cb45-176"><a href="#cb45-176" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-177"><a href="#cb45-177" aria-hidden="true" tabindex="-1"></a><span class="co"># run from here</span></span>
 <span id="cb45-178"><a href="#cb45-178" aria-hidden="true" tabindex="-1"></a>envlp <span class="ot">&lt;-</span><span class="fu">env</span>(tico, <span class="at">ssmooth =</span> wl, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
@@ -1255,7 +1255,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-185"><a href="#cb45-185" aria-hidden="true" tabindex="-1"></a><span class="fu">saveGIF</span>(</span>
 <span id="cb45-186"><a href="#cb45-186" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span>(x <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span>,(<span class="fu">nrow</span>(envlp1) <span class="sc">-</span> wl) ,<span class="at">by =</span> <span class="dv">500</span>))</span>
 <span id="cb45-187"><a href="#cb45-187" aria-hidden="true" tabindex="-1"></a>  { </span>
-<span id="cb45-188"><a href="#cb45-188" aria-hidden="true" tabindex="-1"></a>   <span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#DFF0D8"</span>)</span>
+<span id="cb45-188"><a href="#cb45-188" aria-hidden="true" tabindex="-1"></a>   <span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb45-189"><a href="#cb45-189" aria-hidden="true" tabindex="-1"></a>   <span class="fu">plot</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">duration</span>(tico)), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">yaxt =</span> <span class="st">"n"</span>, <span class="at">xlab =</span> <span class="st">"Time"</span>, <span class="at">ylab =</span> <span class="st">"Amplitude"</span>)</span>
 <span id="cb45-190"><a href="#cb45-190" aria-hidden="true" tabindex="-1"></a>   <span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"gray"</span>)</span>
 <span id="cb45-191"><a href="#cb45-191" aria-hidden="true" tabindex="-1"></a>   envlp1[<span class="dv">1</span><span class="sc">:</span>x,] <span class="ot">&lt;-</span> envlp[<span class="dv">1</span><span class="sc">:</span>x,]</span>
@@ -1265,7 +1265,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-195"><a href="#cb45-195" aria-hidden="true" tabindex="-1"></a>   </span>
 <span id="cb45-196"><a href="#cb45-196" aria-hidden="true" tabindex="-1"></a>   <span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"Window length ="</span>, wl))</span>
 <span id="cb45-197"><a href="#cb45-197" aria-hidden="true" tabindex="-1"></a>},</span>
-<span id="cb45-198"><a href="#cb45-198" aria-hidden="true" tabindex="-1"></a><span class="at">movie.name =</span>  <span class="fu">paste0</span>(<span class="st">"env_sliding_window_scheme_ENG"</span>, wl, <span class="st">".gif"</span>), <span class="at">interval =</span> <span class="fl">0.1</span>, <span class="at">ani.height =</span> <span class="dv">480</span> <span class="sc">/</span> <span class="fl">1.5</span>, <span class="at">res =</span> <span class="dv">70</span>)</span>
+<span id="cb45-198"><a href="#cb45-198" aria-hidden="true" tabindex="-1"></a><span class="at">movie.name =</span>  <span class="fu">paste0</span>(<span class="st">"env_sliding_window_scheme_ENG_v2_"</span>, wl, <span class="st">".gif"</span>), <span class="at">interval =</span> <span class="fl">0.2</span>, <span class="at">ani.height =</span> <span class="dv">480</span> <span class="sc">/</span> <span class="fl">1.5</span>, <span class="at">res =</span> <span class="dv">70</span>)</span>
 <span id="cb45-199"><a href="#cb45-199" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-200"><a href="#cb45-200" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-201"><a href="#cb45-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1281,7 +1281,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-211"><a href="#cb45-211" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-212"><a href="#cb45-212" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb45-213"><a href="#cb45-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-214"><a href="#cb45-214" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/env_sliding_window_ENG.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Sliding window"</span><span class="kw">/&gt;</span></span>
+<span id="cb45-214"><a href="#cb45-214" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/env_sliding_window_ENG_v2.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Sliding window"</span><span class="kw">/&gt;</span></span>
 <span id="cb45-215"><a href="#cb45-215" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-216"><a href="#cb45-216" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb45-217"><a href="#cb45-217" aria-hidden="true" tabindex="-1"></a></span>
@@ -1289,7 +1289,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-219"><a href="#cb45-219" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-220"><a href="#cb45-220" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb45-221"><a href="#cb45-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-222"><a href="#cb45-222" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/env_sliding_window_scheme_ENG512.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Sliding window"</span><span class="kw">/&gt;</span></span>
+<span id="cb45-222"><a href="#cb45-222" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/env_sliding_window_scheme_ENG_v2_512.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Sliding window"</span><span class="kw">/&gt;</span></span>
 <span id="cb45-223"><a href="#cb45-223" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-224"><a href="#cb45-224" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb45-225"><a href="#cb45-225" aria-hidden="true" tabindex="-1"></a></span>
@@ -1297,7 +1297,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-227"><a href="#cb45-227" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-228"><a href="#cb45-228" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb45-229"><a href="#cb45-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-230"><a href="#cb45-230" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/env_sliding_window_scheme_ENG1024.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Sliding window"</span><span class="kw">/&gt;</span></span>
+<span id="cb45-230"><a href="#cb45-230" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/env_sliding_window_scheme_ENG_v2_512.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"Sliding window"</span><span class="kw">/&gt;</span></span>
 <span id="cb45-231"><a href="#cb45-231" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-232"><a href="#cb45-232" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb45-233"><a href="#cb45-233" aria-hidden="true" tabindex="-1"></a>:::</span>
@@ -1309,7 +1309,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-239"><a href="#cb45-239" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = T, echo = T}</span></span>
 <span id="cb45-240"><a href="#cb45-240" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-241"><a href="#cb45-241" aria-hidden="true" tabindex="-1"></a>tmr <span class="ot">&lt;-</span> <span class="fu">timer</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">threshold =</span> <span class="dv">5</span>, <span class="at">ssmooth =</span> <span class="dv">40</span>, </span>
-<span id="cb45-242"><a href="#cb45-242" aria-hidden="true" tabindex="-1"></a>             <span class="at">bty =</span> <span class="st">"l"</span>, <span class="at">colval =</span> <span class="st">"blue"</span>)</span>
+<span id="cb45-242"><a href="#cb45-242" aria-hidden="true" tabindex="-1"></a>             <span class="at">bty =</span> <span class="st">"l"</span>, <span class="at">colval =</span> <span class="st">"#51c724"</span>)</span>
 <span id="cb45-243"><a href="#cb45-243" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-244"><a href="#cb45-244" aria-hidden="true" tabindex="-1"></a>tmr</span>
 <span id="cb45-245"><a href="#cb45-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1340,9 +1340,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-270"><a href="#cb45-270" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-271"><a href="#cb45-271" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE}</span></span>
 <span id="cb45-272"><a href="#cb45-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-273"><a href="#cb45-273" aria-hidden="true" tabindex="-1"></a>mspc <span class="ot">&lt;-</span> <span class="fu">meanspec</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb45-273"><a href="#cb45-273" aria-hidden="true" tabindex="-1"></a>mspc <span class="ot">&lt;-</span> <span class="fu">meanspec</span>(orni, <span class="at">f =</span> <span class="dv">22050</span>, <span class="at">wl =</span> <span class="dv">512</span>, <span class="at">col =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb45-274"><a href="#cb45-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-275"><a href="#cb45-275" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), mspc), <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb45-275"><a href="#cb45-275" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), mspc), <span class="at">col =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb45-276"><a href="#cb45-276" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-277"><a href="#cb45-277" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(mspc)</span>
 <span id="cb45-278"><a href="#cb45-278" aria-hidden="true" tabindex="-1"></a></span>
@@ -1352,7 +1352,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb45-282"><a href="#cb45-282" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-283"><a href="#cb45-283" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, echo = TRUE}</span></span>
 <span id="cb45-284"><a href="#cb45-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-285"><a href="#cb45-285" aria-hidden="true" tabindex="-1"></a>spc <span class="ot">&lt;-</span> <span class="fu">spec</span>(orni, <span class="at">f=</span><span class="dv">22050</span>, <span class="at">wl=</span><span class="dv">512</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb45-285"><a href="#cb45-285" aria-hidden="true" tabindex="-1"></a>spc <span class="ot">&lt;-</span> <span class="fu">spec</span>(orni, <span class="at">f=</span><span class="dv">22050</span>, <span class="at">wl=</span><span class="dv">512</span>, <span class="at">col =</span> <span class="st">"#8fcc78"</span>)</span>
 <span id="cb45-286"><a href="#cb45-286" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-287"><a href="#cb45-287" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(spc)</span>
 <span id="cb45-288"><a href="#cb45-288" aria-hidden="true" tabindex="-1"></a></span>

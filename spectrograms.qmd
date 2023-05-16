@@ -472,7 +472,7 @@ plot(res$res.t, res$res.f, type =  "l", col = "blue", lwd = 4, xlab = "Time wind
 
 ## Creating spectrograms in R
 
-There are several R packages with functions that produce spectrograms in the graphical device. This chart (taken from Sueur 2018) summarizes the functions and their arguments: <img src="images/r-spectrogram-funs.png" alt="Spectrogram functions"/>
+There are several R packages with functions that produce spectrograms in the graphical device. This chart (taken from Sueur 2018) summarizes the functions and their arguments: <img src="images/r-spectrogram-funs.png" alt="Spectrogram functions" width="700"/>
 
  
 

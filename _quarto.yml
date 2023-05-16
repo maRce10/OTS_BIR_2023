@@ -3,6 +3,7 @@ project:
   output-dir: docs
   
 website:
+  page-footer: Copyright 2023 | <a href="https://marce10.github.io">Marcelo Araya-Salas</a>
   title: "OTS Bioacoustic Analysis in R 2023"
   search: true
   site-url: https://marce10.github.io/OTS_BIR_2023/
@@ -10,7 +11,7 @@ website:
   navbar:
     right:
       - icon: github
-        href: https://github.com/
+        href: https://github.com/maRce10/OTS_BIR_2023/
         aria-label: GitHub
     left:
       - href: index.qmd
@@ -55,4 +56,3 @@ format:
     toc: true
     
 editor: visual
-

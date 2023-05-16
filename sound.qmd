@@ -27,7 +27,7 @@ opts_chunk$set(tidy = TRUE, warning = FALSE, message = FALSE)
 
 Sound waves are characterized by compression and expansion of the medium as sound energy moves through it. There is also back and forth motion of the particles making up the medium:
 
-<img src="images/wave.gif" alt="wave animation" width="700"/>
+<img src="images/wave_white_bg.gif" alt="wave animation" width="700"/>
 
 <font size="3"> taken from https://dosits.org</font>
 
@@ -122,13 +122,13 @@ par(opar)
 
 ## Sampling frequency
 
-Digitizing implies discretizing, which requires some sort of regular sampling. Sampling frequency refers to how many samples of the pressure level of the environment are taken per second. A 440 Hz sine wave recorded at 44100 Hz would have around 10 samples per cycle. This plot shows 2 cycles of a 440 Hz sine wave sampled (vertical dotted lines) at 44100 kHz:
+Digitizing implies discretizing, which requires some sort of regular sampling. Sampling frequency refers to how many samples of the pressure level of the environment are taken per second. A 440 Hz sine wave recorded at 44100 Hz would have around 100 samples per cycle. This plot shows 2 cycles of a 440 Hz sine wave sampled (vertical dotted lines) at 44100 Hz:
 
 ```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}
 
 opar <- par()
 
-par(mar = c(4, 4, 1, 1), bg = "#dff0d8")
+par(mar = c(4, 4, 1, 1), bg = "#daeace")
 # generate sine wave
 sn.wv <- tuneR::sine(freq = 440, duration = 200, xunit = "samples", samp.rate = 44100)
 
@@ -153,7 +153,7 @@ Sampling should be good enough so the regularity of the sine wave can be reconst
 ```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}
 
 
-par(mar = c(4, 4, 1, 1), bg = "#dff0d8")
+par(mar = c(4, 4, 1, 1), bg = "#daeace")
 # generate sine wave
 sn.wv <- tuneR::sine(freq = 440, duration = 50, xunit = "samples", samp.rate = 11025)
 
@@ -171,7 +171,7 @@ points(y = sn.wv@left[seq(0, length(sn.wv), 10)], x = seq(0, duration(sn.wv), le
 
  
 
-As you can see way less samples are taken per unit of time. The threshold at which samples cannot provide a reliable estimate of the regularity of a sine wave is called **Nyquist frequency** and corresponds to half of the frequency of the sine wave. This is how the 2 cycles of the 440 Hz would look like when sampled at its Nyquist frequency:
+As you can see way less samples are taken per unit of time. The threshold at which samples cannot provide a reliable estimate of the regularity of a sine wave is called **Nyquist frequency** and corresponds to half of the frequency of the sine wave. This is how the 2 cycles of the 440 Hz would look like when sampled at its Nyquist frequency (sampling frequency of 880 Hz):
 
 ```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}
 
@@ -211,7 +211,7 @@ opar <- par()
 
 intervals <- 4
 
-par(mar = c(4, 4, 1, 1), bg = "#dff0d8")
+par(mar = c(4, 4, 1, 1), bg = "#daeace")
 # generate sine wave
 sn.wv <- tuneR::sine(freq = 440, duration = 200, xunit = "samples", samp.rate = 44100)
 
@@ -245,7 +245,7 @@ opar <- par()
 
 intervals <- 4
 
-par(mar = c(4, 4, 1, 1), bg = "#dff0d8")
+par(mar = c(4, 4, 1, 1), bg = "#daeace")
 # generate sine wave
 sn.wv <- tuneR::sine(freq = 440, duration = 200, xunit = "samples", samp.rate = 44100)
 
@@ -280,7 +280,7 @@ opar <- par()
 
 intervals <- 8
 
-par(mar = c(4, 4, 1, 1), bg = "#dff0d8")
+par(mar = c(4, 4, 1, 1), bg = "#daeace")
 # generate sine wave
 sn.wv <- tuneR::sine(freq = 440, duration = 200, xunit = "samples", samp.rate = 44100)
 
@@ -314,7 +314,7 @@ opar <- par()
 
 intervals <- 2 ^ 4
 
-par(mar = c(4, 4, 1, 1), bg = "#dff0d8")
+par(mar = c(4, 4, 1, 1), bg = "#daeace")
 # generate sine wave
 sn.wv <- tuneR::sine(freq = 440, duration = 200, xunit = "samples", samp.rate = 44100)
 
@@ -348,7 +348,7 @@ opar <- par()
 
 intervals <- 2 ^ 8
 
-par(mar = c(4, 4, 1, 1), bg = "#dff0d8")
+par(mar = c(4, 4, 1, 1), bg = "#daeace")
 # generate sine wave
 sn.wv <- tuneR::sine(freq = 440, duration = 200, xunit = "samples", samp.rate = 44100)
 
@@ -379,7 +379,7 @@ At this point quantization involves very little information loss. 16 bits is pro
 
  
 
-# Sounds in R
+# Sound in R
 
 Sound waves can be represented by 3 kinds of R objects:
 
@@ -842,7 +842,8 @@ The following code creates a plot similar to `oscillo` but using dots instead of
 ```{r, eval = FALSE}
 
 # generate sine wave
-wav <- sine(freq = 440, duration = 500, xunit = "samples", samp.rate = 44100)
+wav <- sine(freq = 440, duration = 500, 
+            xunit = "samples", samp.rate = 44100)
 
 # plot
 plot(wav@left) 
@@ -852,9 +853,10 @@ plot(wav@left)
 ```{r, echo = FALSE}
 
 # generate sine wave
-wav <- sine(freq = 440, duration = 500, xunit = "samples", samp.rate = 44100)
+wav <- sine(freq = 440, duration = 500, 
+            xunit = "samples", samp.rate = 44100)
 
-par(bg = "#D9EDF7", mar = c(5, 4, 1, 0) + 0.1)
+par(bg = "#ccebf5", mar = c(5, 4, 1, 0) + 0.1)
 
 # plot
 plot(wav@left) 

@@ -28,7 +28,7 @@ format:
 
 <center><font size="4">May 15 - 19, 2023</font></center>
 
-<center><img src="images/measures-parrot-call-spectro3.jpg" alt="acousti measurements"/></center>
+<center><img src="images/measures-parrot-call-spectro3.jpg" alt="acoustic measurements"/></center>
 
  
 

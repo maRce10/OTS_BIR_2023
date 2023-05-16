@@ -16,13 +16,10 @@ format:
 ---
 
 ```{r,echo=FALSE,message=FALSE}
+
 options("digits"=5)
 options("digits.secs"=3)
- 
-library(knitr)
-library(kableExtra)
 
-options(knitr.table.format = "html") 
 ```
 
  
@@ -80,21 +77,23 @@ They have three common properties:
 They differ in the types of their elements: all elements of an atomic vector must be the same type, whereas the elements of a list can have different types.
 
 ```{r, echo=F}
-d <- data.frame(
+
+d2 <- data.frame(
  	c("Atomic vector", "List"),
 	c("Matrix", "Data frame"),
 c("Array", ""))
 
 
-d <- t(d)
+d2 <- t(d2)
 
-colnames(d) <-c("Homogeneous",	"Heterogeneous")
+colnames(d2) <-c("Homogeneous",	"Heterogeneous")
 
-rownames(d) <-c("1d",	"2d", "nd")
+rownames(d2) <-c("1d",	"2d", "nd")
 
-knitr::kable(d, row.names = T, escape = FALSE) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 18)
+d2 <- as.data.frame(d2)
 
+x <- d2
+x
 ```
 
  
@@ -584,8 +583,7 @@ d <- t(d)
 
 colnames(d) <- c("Operator      ", "Description   ")
 
-knitr::kable(d, row.names = F, escape = FALSE) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 18)
+d
 
 ```
 
@@ -623,8 +621,7 @@ d <- t(d)
 
 colnames(d) <- c("Operator   ", "Description   ")
 
-knitr::kable(d, row.names = F, escape = FALSE) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 18)
+d
 
 ```
 

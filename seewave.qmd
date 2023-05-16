@@ -101,7 +101,7 @@ The visualizations in **seewave** allow a high degree of customization. For exam
 
 ```{r}
 
-oscillo(tico, from = 0, to = 1, colwave = "blue")
+oscillo(tico, from = 0, to = 1, colwave = "#8fcc78")
 
 ```
 
@@ -129,7 +129,7 @@ We can also generate other representations of "amplitude vs. time", such as "amp
 
 ```{r}
 
-env(tico, f = 22050, colwave = "blue")
+env(tico, f = 22050, colwave = "#8fcc78")
 
 ```
 
@@ -141,7 +141,7 @@ oscillo(tico, f = 22050)
 
 par(new=TRUE)
 
-env(tico, f = 22050, colwave = "blue")
+env(tico, f = 22050, colwave = "#8fcc78")
 
 ```
 
@@ -156,16 +156,16 @@ sq <- round(seq(1, 1200, length.out = 15))
 saveGIF(
  for(x in sq)
   { 
-  par(bg = "#DFF0D8") 
+  par(bg = "#daeace") 
   envlp <-env(tico, ssmooth = x)
   box()
   title(paste("Window length =", x))
 },
-movie.name =  "env_sliding_window_ENG.gif", interval = 0.25, ani.height = 480 / 1.5, res = 70)
+movie.name =  "env_sliding_window_ENG_v2.gif", interval = 0.5, ani.height = 480 / 1.5, res = 70)
 
 
 
-wl <- 1024
+wl <- 512
 
 # run from here
 envlp <-env(tico, ssmooth = wl, plot = FALSE)
@@ -178,7 +178,7 @@ envlp1 <- envlp1/max(envlp1)
 saveGIF(
  for(x in seq(1,(nrow(envlp1) - wl) ,by = 500))
   { 
-   par(bg = "#DFF0D8")
+   par(bg = "#daeace")
    plot(0, 0, xlim = c(0, duration(tico)), ylim = c(-1, 1), col = "white", yaxt = "n", xlab = "Time", ylab = "Amplitude")
    abline(h = 0, lty = 2, col = "gray")
    envlp1[1:x,] <- envlp[1:x,]
@@ -188,7 +188,7 @@ saveGIF(
    
    title(paste("Window length =", wl))
 },
-movie.name =  paste0("env_sliding_window_scheme_ENG", wl, ".gif"), interval = 0.1, ani.height = 480 / 1.5, res = 70)
+movie.name =  paste0("env_sliding_window_scheme_ENG_v2_", wl, ".gif"), interval = 0.2, ani.height = 480 / 1.5, res = 70)
 
 
 ```
@@ -204,7 +204,7 @@ Sliding windows allow you to smooth out the contours of a time series by calcula
 
  
 
-<img src="images/env_sliding_window_ENG.gif" alt="Sliding window"/>
+<img src="images/env_sliding_window_ENG_v2.gif" alt="Sliding window"/>
 
  
 
@@ -212,7 +212,7 @@ This animation shows how the amplitude envelope of the "tico" object is smoothed
 
  
 
-<img src="images/env_sliding_window_scheme_ENG512.gif" alt="Sliding window"/>
+<img src="images/env_sliding_window_scheme_ENG_v2_512.gif" alt="Sliding window"/>
 
  
 
@@ -220,7 +220,7 @@ This animation shows how the amplitude envelope of the "tico" object is smoothed
 
  
 
-<img src="images/env_sliding_window_scheme_ENG1024.gif" alt="Sliding window"/>
+<img src="images/env_sliding_window_scheme_ENG_v2_512.gif" alt="Sliding window"/>
 
  
 :::
@@ -232,7 +232,7 @@ We can use these amplitude "hills" to define segments in the "wave" object using
 ```{r, eval = T, echo = T}
 
 tmr <- timer(orni, f = 22050, threshold = 5, ssmooth = 40, 
-             bty = "l", colval = "blue")
+             bty = "l", colval = "#51c724")
 
 tmr
 ```
@@ -263,9 +263,9 @@ We can visualize the amplitude in the frequency domain using power spectra. The 
 
 ```{r, eval = TRUE, echo = TRUE}
 
-mspc <- meanspec(orni, f = 22050, wl = 512, col = "red")
+mspc <- meanspec(orni, f = 22050, wl = 512, col = "#daeace")
 
-polygon(rbind(c(0, 0), mspc), col = "red")
+polygon(rbind(c(0, 0), mspc), col = "#daeace")
 
 nrow(mspc)
 
@@ -275,7 +275,7 @@ The `spec()` function, on the other hand, calculates the spectrum for the entire
 
 ```{r, eval = TRUE, echo = TRUE}
 
-spc <- spec(orni, f=22050, wl=512, col = "red")
+spc <- spec(orni, f=22050, wl=512, col = "#8fcc78")
 
 nrow(spc)
 

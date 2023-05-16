@@ -217,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/maRce10/OTS_BIR_2023/"><i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -235,7 +235,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#sounds-in-r" id="toc-sounds-in-r" class="nav-link active" data-scroll-target="#sounds-in-r"><span class="toc-section-number">1</span>  Sounds in R</a>
+  <li><a href="#sound-in-r" id="toc-sound-in-r" class="nav-link active" data-scroll-target="#sound-in-r"><span class="toc-section-number">1</span>  Sound in R</a>
   <ul class="collapse">
   <li><a href="#non-specific-classes" id="toc-non-specific-classes" class="nav-link" data-scroll-target="#non-specific-classes"><span class="toc-section-number">1.1</span>  Non-specific classes</a></li>
   <li><a href="#dedicated-r-classes-for-sound" id="toc-dedicated-r-classes-for-sound" class="nav-link" data-scroll-target="#dedicated-r-classes-for-sound"><span class="toc-section-number">1.2</span>  Dedicated R classes for sound</a></li>
@@ -277,7 +277,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>&nbsp;</p>
 <p>Sound waves are characterized by compression and expansion of the medium as sound energy moves through it. There is also back and forth motion of the particles making up the medium:</p>
-<p><img src="images/wave.gif" alt="wave animation" width="700"></p>
+<p><img src="images/wave_white_bg.gif" alt="wave animation" width="700"></p>
 <p><font size="3"> taken from https://dosits.org</font></p>
 <p>&nbsp;</p>
 <p>The variation in pressure that is perceived at a fixed point in space can be represented by a graph of pressure (amplitude) by time:</p>
@@ -300,7 +300,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>&nbsp;</p>
 <section id="sampling-frequency" class="level2" data-number="0.1">
 <h2 data-number="0.1" class="anchored" data-anchor-id="sampling-frequency"><span class="header-section-number">0.1</span> Sampling frequency</h2>
-<p>Digitizing implies discretizing, which requires some sort of regular sampling. Sampling frequency refers to how many samples of the pressure level of the environment are taken per second. A 440 Hz sine wave recorded at 44100 Hz would have around 10 samples per cycle. This plot shows 2 cycles of a 440 Hz sine wave sampled (vertical dotted lines) at 44100 kHz:</p>
+<p>Digitizing implies discretizing, which requires some sort of regular sampling. Sampling frequency refers to how many samples of the pressure level of the environment are taken per second. A 440 Hz sine wave recorded at 44100 Hz would have around 100 samples per cycle. This plot shows 2 cycles of a 440 Hz sine wave sampled (vertical dotted lines) at 44100 Hz:</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="sound_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" style="width:100.0%"></p>
@@ -316,7 +316,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>&nbsp;</p>
-<p>As you can see way less samples are taken per unit of time. The threshold at which samples cannot provide a reliable estimate of the regularity of a sine wave is called <strong>Nyquist frequency</strong> and corresponds to half of the frequency of the sine wave. This is how the 2 cycles of the 440 Hz would look like when sampled at its Nyquist frequency:</p>
+<p>As you can see way less samples are taken per unit of time. The threshold at which samples cannot provide a reliable estimate of the regularity of a sine wave is called <strong>Nyquist frequency</strong> and corresponds to half of the frequency of the sine wave. This is how the 2 cycles of the 440 Hz would look like when sampled at its Nyquist frequency (sampling frequency of 880 Hz):</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="sound_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" style="width:100.0%"></p>
@@ -365,8 +365,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 </div>
 <p>&nbsp;</p>
-<section id="sounds-in-r" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Sounds in R</h1>
+<section id="sound-in-r" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Sound in R</h1>
 <p>Sound waves can be represented by 3 kinds of R objects:</p>
 <ul>
 <li>Common classes (numerical vector, numerical matrix)</li>
@@ -496,7 +496,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(s4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> Time-Series [1:4001] from 0 to 0.5: 0.00307 -0.19481 -0.66258 0.5587 -0.36164 ...</code></pre>
+<pre><code> Time-Series [1:4001] from 0 to 0.5: 0.538 -0.142 0.573 -0.951 -0.88 ...</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -1271,7 +1271,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-27"><a href="#cb80-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-28"><a href="#cb80-28" aria-hidden="true" tabindex="-1"></a>Sound waves are characterized by compression and expansion of the medium as sound energy moves through it. There is also back and forth motion of the particles making up the medium:</span>
 <span id="cb80-29"><a href="#cb80-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-30"><a href="#cb80-30" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/wave.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"wave animation"</span> <span class="er">width</span><span class="ot">=</span><span class="st">"700"</span><span class="kw">/&gt;</span></span>
+<span id="cb80-30"><a href="#cb80-30" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"images/wave_white_bg.gif"</span> <span class="er">alt</span><span class="ot">=</span><span class="st">"wave animation"</span> <span class="er">width</span><span class="ot">=</span><span class="st">"700"</span><span class="kw">/&gt;</span></span>
 <span id="cb80-31"><a href="#cb80-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-32"><a href="#cb80-32" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"3"</span><span class="kw">&gt;</span> taken from https://dosits.org<span class="kw">&lt;/font&gt;</span></span>
 <span id="cb80-33"><a href="#cb80-33" aria-hidden="true" tabindex="-1"></a></span>
@@ -1366,13 +1366,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-122"><a href="#cb80-122" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-123"><a href="#cb80-123" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sampling frequency</span></span>
 <span id="cb80-124"><a href="#cb80-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-125"><a href="#cb80-125" aria-hidden="true" tabindex="-1"></a>Digitizing implies discretizing, which requires some sort of regular sampling. Sampling frequency refers to how many samples of the pressure level of the environment are taken per second. A 440 Hz sine wave recorded at 44100 Hz would have around 10 samples per cycle. This plot shows 2 cycles of a 440 Hz sine wave sampled (vertical dotted lines) at 44100 kHz:</span>
+<span id="cb80-125"><a href="#cb80-125" aria-hidden="true" tabindex="-1"></a>Digitizing implies discretizing, which requires some sort of regular sampling. Sampling frequency refers to how many samples of the pressure level of the environment are taken per second. A 440 Hz sine wave recorded at 44100 Hz would have around 100 samples per cycle. This plot shows 2 cycles of a 440 Hz sine wave sampled (vertical dotted lines) at 44100 Hz:</span>
 <span id="cb80-126"><a href="#cb80-126" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-127"><a href="#cb80-127" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}</span></span>
 <span id="cb80-128"><a href="#cb80-128" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-129"><a href="#cb80-129" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>()</span>
 <span id="cb80-130"><a href="#cb80-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-131"><a href="#cb80-131" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#dff0d8"</span>)</span>
+<span id="cb80-131"><a href="#cb80-131" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb80-132"><a href="#cb80-132" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
 <span id="cb80-133"><a href="#cb80-133" aria-hidden="true" tabindex="-1"></a>sn.wv <span class="ot">&lt;-</span> tuneR<span class="sc">::</span><span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">200</span>, <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
 <span id="cb80-134"><a href="#cb80-134" aria-hidden="true" tabindex="-1"></a></span>
@@ -1397,7 +1397,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-153"><a href="#cb80-153" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}</span></span>
 <span id="cb80-154"><a href="#cb80-154" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-155"><a href="#cb80-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-156"><a href="#cb80-156" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#dff0d8"</span>)</span>
+<span id="cb80-156"><a href="#cb80-156" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb80-157"><a href="#cb80-157" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
 <span id="cb80-158"><a href="#cb80-158" aria-hidden="true" tabindex="-1"></a>sn.wv <span class="ot">&lt;-</span> tuneR<span class="sc">::</span><span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">50</span>, <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">11025</span>)</span>
 <span id="cb80-159"><a href="#cb80-159" aria-hidden="true" tabindex="-1"></a></span>
@@ -1415,7 +1415,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-171"><a href="#cb80-171" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-172"><a href="#cb80-172" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb80-173"><a href="#cb80-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-174"><a href="#cb80-174" aria-hidden="true" tabindex="-1"></a>As you can see way less samples are taken per unit of time. The threshold at which samples cannot provide a reliable estimate of the regularity of a sine wave is called **Nyquist frequency** and corresponds to half of the frequency of the sine wave. This is how the 2 cycles of the 440 Hz would look like when sampled at its Nyquist frequency:</span>
+<span id="cb80-174"><a href="#cb80-174" aria-hidden="true" tabindex="-1"></a>As you can see way less samples are taken per unit of time. The threshold at which samples cannot provide a reliable estimate of the regularity of a sine wave is called **Nyquist frequency** and corresponds to half of the frequency of the sine wave. This is how the 2 cycles of the 440 Hz would look like when sampled at its Nyquist frequency (sampling frequency of 880 Hz):</span>
 <span id="cb80-175"><a href="#cb80-175" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-176"><a href="#cb80-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE, out.width="100%", fig.height= 3, warning=FALSE, message=FALSE}</span></span>
 <span id="cb80-177"><a href="#cb80-177" aria-hidden="true" tabindex="-1"></a></span>
@@ -1455,7 +1455,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-211"><a href="#cb80-211" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-212"><a href="#cb80-212" aria-hidden="true" tabindex="-1"></a>intervals <span class="ot">&lt;-</span> <span class="dv">4</span></span>
 <span id="cb80-213"><a href="#cb80-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-214"><a href="#cb80-214" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#dff0d8"</span>)</span>
+<span id="cb80-214"><a href="#cb80-214" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb80-215"><a href="#cb80-215" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
 <span id="cb80-216"><a href="#cb80-216" aria-hidden="true" tabindex="-1"></a>sn.wv <span class="ot">&lt;-</span> tuneR<span class="sc">::</span><span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">200</span>, <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
 <span id="cb80-217"><a href="#cb80-217" aria-hidden="true" tabindex="-1"></a></span>
@@ -1489,7 +1489,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-245"><a href="#cb80-245" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-246"><a href="#cb80-246" aria-hidden="true" tabindex="-1"></a>intervals <span class="ot">&lt;-</span> <span class="dv">4</span></span>
 <span id="cb80-247"><a href="#cb80-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-248"><a href="#cb80-248" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#dff0d8"</span>)</span>
+<span id="cb80-248"><a href="#cb80-248" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb80-249"><a href="#cb80-249" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
 <span id="cb80-250"><a href="#cb80-250" aria-hidden="true" tabindex="-1"></a>sn.wv <span class="ot">&lt;-</span> tuneR<span class="sc">::</span><span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">200</span>, <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
 <span id="cb80-251"><a href="#cb80-251" aria-hidden="true" tabindex="-1"></a></span>
@@ -1524,7 +1524,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-280"><a href="#cb80-280" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-281"><a href="#cb80-281" aria-hidden="true" tabindex="-1"></a>intervals <span class="ot">&lt;-</span> <span class="dv">8</span></span>
 <span id="cb80-282"><a href="#cb80-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-283"><a href="#cb80-283" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#dff0d8"</span>)</span>
+<span id="cb80-283"><a href="#cb80-283" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb80-284"><a href="#cb80-284" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
 <span id="cb80-285"><a href="#cb80-285" aria-hidden="true" tabindex="-1"></a>sn.wv <span class="ot">&lt;-</span> tuneR<span class="sc">::</span><span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">200</span>, <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
 <span id="cb80-286"><a href="#cb80-286" aria-hidden="true" tabindex="-1"></a></span>
@@ -1558,7 +1558,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-314"><a href="#cb80-314" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-315"><a href="#cb80-315" aria-hidden="true" tabindex="-1"></a>intervals <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">^</span> <span class="dv">4</span></span>
 <span id="cb80-316"><a href="#cb80-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-317"><a href="#cb80-317" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#dff0d8"</span>)</span>
+<span id="cb80-317"><a href="#cb80-317" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb80-318"><a href="#cb80-318" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
 <span id="cb80-319"><a href="#cb80-319" aria-hidden="true" tabindex="-1"></a>sn.wv <span class="ot">&lt;-</span> tuneR<span class="sc">::</span><span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">200</span>, <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
 <span id="cb80-320"><a href="#cb80-320" aria-hidden="true" tabindex="-1"></a></span>
@@ -1592,7 +1592,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-348"><a href="#cb80-348" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-349"><a href="#cb80-349" aria-hidden="true" tabindex="-1"></a>intervals <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">^</span> <span class="dv">8</span></span>
 <span id="cb80-350"><a href="#cb80-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-351"><a href="#cb80-351" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#dff0d8"</span>)</span>
+<span id="cb80-351"><a href="#cb80-351" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"#daeace"</span>)</span>
 <span id="cb80-352"><a href="#cb80-352" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
 <span id="cb80-353"><a href="#cb80-353" aria-hidden="true" tabindex="-1"></a>sn.wv <span class="ot">&lt;-</span> tuneR<span class="sc">::</span><span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">200</span>, <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
 <span id="cb80-354"><a href="#cb80-354" aria-hidden="true" tabindex="-1"></a></span>
@@ -1623,7 +1623,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-379"><a href="#cb80-379" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-380"><a href="#cb80-380" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb80-381"><a href="#cb80-381" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-382"><a href="#cb80-382" aria-hidden="true" tabindex="-1"></a><span class="fu"># Sounds in R</span></span>
+<span id="cb80-382"><a href="#cb80-382" aria-hidden="true" tabindex="-1"></a><span class="fu"># Sound in R</span></span>
 <span id="cb80-383"><a href="#cb80-383" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-384"><a href="#cb80-384" aria-hidden="true" tabindex="-1"></a>Sound waves can be represented by 3 kinds of R objects:</span>
 <span id="cb80-385"><a href="#cb80-385" aria-hidden="true" tabindex="-1"></a></span>
@@ -2083,62 +2083,69 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb80-845"><a href="#cb80-845" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = FALSE}</span></span>
 <span id="cb80-846"><a href="#cb80-846" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-847"><a href="#cb80-847" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
-<span id="cb80-848"><a href="#cb80-848" aria-hidden="true" tabindex="-1"></a>wav <span class="ot">&lt;-</span> <span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">500</span>, <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
-<span id="cb80-849"><a href="#cb80-849" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-850"><a href="#cb80-850" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb80-851"><a href="#cb80-851" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wav<span class="sc">@</span>left) </span>
-<span id="cb80-852"><a href="#cb80-852" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-853"><a href="#cb80-853" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb80-854"><a href="#cb80-854" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-855"><a href="#cb80-855" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
-<span id="cb80-856"><a href="#cb80-856" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-857"><a href="#cb80-857" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
-<span id="cb80-858"><a href="#cb80-858" aria-hidden="true" tabindex="-1"></a>wav <span class="ot">&lt;-</span> <span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">500</span>, <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
-<span id="cb80-859"><a href="#cb80-859" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-860"><a href="#cb80-860" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#D9EDF7"</span>, <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.1</span>)</span>
+<span id="cb80-848"><a href="#cb80-848" aria-hidden="true" tabindex="-1"></a>wav <span class="ot">&lt;-</span> <span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">500</span>, </span>
+<span id="cb80-849"><a href="#cb80-849" aria-hidden="true" tabindex="-1"></a>            <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
+<span id="cb80-850"><a href="#cb80-850" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-851"><a href="#cb80-851" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb80-852"><a href="#cb80-852" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wav<span class="sc">@</span>left) </span>
+<span id="cb80-853"><a href="#cb80-853" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-854"><a href="#cb80-854" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-855"><a href="#cb80-855" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-856"><a href="#cb80-856" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
+<span id="cb80-857"><a href="#cb80-857" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-858"><a href="#cb80-858" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sine wave</span></span>
+<span id="cb80-859"><a href="#cb80-859" aria-hidden="true" tabindex="-1"></a>wav <span class="ot">&lt;-</span> <span class="fu">sine</span>(<span class="at">freq =</span> <span class="dv">440</span>, <span class="at">duration =</span> <span class="dv">500</span>, </span>
+<span id="cb80-860"><a href="#cb80-860" aria-hidden="true" tabindex="-1"></a>            <span class="at">xunit =</span> <span class="st">"samples"</span>, <span class="at">samp.rate =</span> <span class="dv">44100</span>)</span>
 <span id="cb80-861"><a href="#cb80-861" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-862"><a href="#cb80-862" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb80-863"><a href="#cb80-863" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wav<span class="sc">@</span>left) </span>
-<span id="cb80-864"><a href="#cb80-864" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb80-865"><a href="#cb80-865" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-866"><a href="#cb80-866" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb80-862"><a href="#cb80-862" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#ccebf5"</span>, <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.1</span>)</span>
+<span id="cb80-863"><a href="#cb80-863" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-864"><a href="#cb80-864" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb80-865"><a href="#cb80-865" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wav<span class="sc">@</span>left) </span>
+<span id="cb80-866"><a href="#cb80-866" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb80-867"><a href="#cb80-867" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-868"><a href="#cb80-868" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Use the function <span class="in">`downsample()`</span> to reduce the sampling rate of 'wav' (below 44100) and plot the output object. Decrease the sampling rate until you cannot recognize the wave pattern from the original wave object. Try several values so you get a sense at which sampling rate this happens.</span>
+<span id="cb80-868"><a href="#cb80-868" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb80-869"><a href="#cb80-869" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-870"><a href="#cb80-870" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval =  FALSE, echo = FALSE}</span></span>
+<span id="cb80-870"><a href="#cb80-870" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Use the function <span class="in">`downsample()`</span> to reduce the sampling rate of 'wav' (below 44100) and plot the output object. Decrease the sampling rate until you cannot recognize the wave pattern from the original wave object. Try several values so you get a sense at which sampling rate this happens.</span>
 <span id="cb80-871"><a href="#cb80-871" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-872"><a href="#cb80-872" aria-hidden="true" tabindex="-1"></a>down_wav <span class="ot">&lt;-</span> <span class="fu">downsample</span>(<span class="at">object =</span> wav, <span class="at">samp.rate =</span> <span class="dv">2756</span>)</span>
+<span id="cb80-872"><a href="#cb80-872" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval =  FALSE, echo = FALSE}</span></span>
 <span id="cb80-873"><a href="#cb80-873" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-874"><a href="#cb80-874" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb80-875"><a href="#cb80-875" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(down_wav<span class="sc">@</span>left) </span>
-<span id="cb80-876"><a href="#cb80-876" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-877"><a href="#cb80-877" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb80-878"><a href="#cb80-878" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb80-879"><a href="#cb80-879" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-880"><a href="#cb80-880" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb80-874"><a href="#cb80-874" aria-hidden="true" tabindex="-1"></a>down_wav <span class="ot">&lt;-</span> <span class="fu">downsample</span>(<span class="at">object =</span> wav, <span class="at">samp.rate =</span> <span class="dv">2756</span>)</span>
+<span id="cb80-875"><a href="#cb80-875" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-876"><a href="#cb80-876" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb80-877"><a href="#cb80-877" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(down_wav<span class="sc">@</span>left) </span>
+<span id="cb80-878"><a href="#cb80-878" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-879"><a href="#cb80-879" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-880"><a href="#cb80-880" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb80-881"><a href="#cb80-881" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-882"><a href="#cb80-882" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb80-882"><a href="#cb80-882" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb80-883"><a href="#cb80-883" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-884"><a href="#cb80-884" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb80-884"><a href="#cb80-884" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb80-885"><a href="#cb80-885" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-886"><a href="#cb80-886" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Sueur J, Aubin T, Simonis C. 2008. Equipment review: seewave, a free modular tool for sound analysis and synthesis. Bioacoustics 18(2):213--226.</span>
+<span id="cb80-886"><a href="#cb80-886" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
 <span id="cb80-887"><a href="#cb80-887" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-888"><a href="#cb80-888" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Sueur, J. (2018). Sound Analysis and Synthesis with R.</span>
+<span id="cb80-888"><a href="#cb80-888" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Sueur J, Aubin T, Simonis C. 2008. Equipment review: seewave, a free modular tool for sound analysis and synthesis. Bioacoustics 18(2):213--226.</span>
 <span id="cb80-889"><a href="#cb80-889" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-890"><a href="#cb80-890" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Sueur J. (2018). I/O of sound with R. seewave package vignette. url: https://cran.r-project.org/web/packages/seewave/vignettes/seewave_IO.pdf</span>
+<span id="cb80-890"><a href="#cb80-890" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Sueur, J. (2018). Sound Analysis and Synthesis with R.</span>
 <span id="cb80-891"><a href="#cb80-891" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-892"><a href="#cb80-892" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb80-892"><a href="#cb80-892" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Sueur J. (2018). I/O of sound with R. seewave package vignette. url: https://cran.r-project.org/web/packages/seewave/vignettes/seewave_IO.pdf</span>
 <span id="cb80-893"><a href="#cb80-893" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-894"><a href="#cb80-894" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"4"</span><span class="kw">&gt;</span>Session information<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb80-894"><a href="#cb80-894" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb80-895"><a href="#cb80-895" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-896"><a href="#cb80-896" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info, echo=F}</span></span>
+<span id="cb80-896"><a href="#cb80-896" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"4"</span><span class="kw">&gt;</span>Session information<span class="kw">&lt;/font&gt;</span></span>
 <span id="cb80-897"><a href="#cb80-897" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-898"><a href="#cb80-898" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb80-898"><a href="#cb80-898" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info, echo=F}</span></span>
 <span id="cb80-899"><a href="#cb80-899" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb80-900"><a href="#cb80-900" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb80-900"><a href="#cb80-900" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb80-901"><a href="#cb80-901" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-902"><a href="#cb80-902" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+      <div class="nav-footer-center">Copyright 2023 | <a href="https://marce10.github.io">Marcelo Araya-Salas</a></div>
+  </div>
+</footer>
 
 
 
