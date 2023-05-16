@@ -18,13 +18,11 @@ format:
  
 
 ::: {.alert .alert-info}
-
 ## **Objetives** {.unnumbered .unlisted}
 
-- Learn the basic aspects of sound as a physical phenomenom
+-   Learn the basic aspects of sound as a physical phenomenom
 
-- Get familiar with how sound is represented as a digital object in R 
-
+-   Get familiar with how sound is represented as a digital object in R
 :::
 
  
@@ -41,7 +39,7 @@ opts_chunk$set(tidy = TRUE, warning = FALSE, message = FALSE)
 
 Sound waves are characterized by compression and expansion of the medium as sound energy moves through it. There is also back and forth motion of the particles making up the medium:
 
-<img src="images/wave_white_bg.gif" alt="wave animation" width="700"/>
+<img src="images/wave_white_bg.gif" alt="wave animation" width="600"/>
 
 <font size="3"> taken from https://dosits.org</font>
 
@@ -49,7 +47,7 @@ Sound waves are characterized by compression and expansion of the medium as soun
 
 The variation in pressure that is perceived at a fixed point in space can be represented by a graph of pressure (amplitude) by time:
 
-![wave and oscillogram](images/amplitude.gif){alt="wave and oscillogram" width="700" height="400"}
+![wave and oscillogram](images/amplitude.gif){alt="wave and oscillogram" width="600" height="350"}
 
  
 
@@ -191,7 +189,7 @@ As you can see way less samples are taken per unit of time. The threshold at whi
 
 opar <- par()
 
-par(mar = c(4, 4, 1, 1), bg = "#dff0d8")
+par(mar = c(4, 4, 1, 1), bg = "#daeace")
 # generate sine wave
 sn.wv <- tuneR::sine(freq = 400, duration = 200, xunit = "samples", samp.rate = 40000)
 sn.wv2 <- tuneR::sine(freq = 400, duration = 4, xunit = "samples", samp.rate = 800)
