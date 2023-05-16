@@ -240,7 +240,7 @@ movie.name =  "periodogram.gif", interval = 0.5, ani.width = 480 * 1.5)
 
 ```
 
-<img src="images/periodogram_spectro.gif" alt="Spectrogram resolution"/>
+<img src="images/periodogram_spectro.gif" alt="Spectrogram resolution" width="600"/>
 
 This animation shows in a very simple way the logic behind the spectrograms: if we calculate Fourier transforms for short segments of time through a sound (e.g. amplitude changes in time) and concatenate them, we can visualize the variation in frequencies over time.  
 
@@ -343,7 +343,7 @@ saveGIF(for(i in c(seq(0, 99, by = 5), rep(99, 15)))
 
 ```
 
-<img src="images/spectro.overlap.gif" alt="Spectrogram overlap"/>
+<img src="images/spectro.overlap.gif" alt="Spectrogram overlap" width="600"/>
 
 This increases the number of windows as a function of the overlap for this particular sound:
 
