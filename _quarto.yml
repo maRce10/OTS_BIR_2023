@@ -48,6 +48,8 @@ website:
         menu: 
           - text: "General"
             href: general_redirect.html  
+          - text: "dynaSpec"
+            href: dynaspec_redirect.html             
       - text: "Course prep"
         href: course_prep.qmd
       - text: "Code sharing"
