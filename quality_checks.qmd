@@ -18,11 +18,9 @@ format:
  
 
 ::: {.alert .alert-info}
-
 ## **Objetive** {.unnumbered .unlisted}
 
-- Provide tools for double-checking the quality of the acoustic data and derived analyses along the acoustic analysis workflow 
-
+-   Provide tools for double-checking the quality of the acoustic data and derived analyses along the acoustic analysis workflow
 :::
 
  

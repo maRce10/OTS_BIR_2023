@@ -18,11 +18,9 @@ format:
  
 
 ::: {.alert .alert-info}
-
 ## **Objetive** {.unnumbered .unlisted}
 
-- Provide and overview of the must relevant tools in the package warbleR
-
+-   Provide and overview of the must relevant tools in the package warbleR
 :::
 
  
@@ -410,7 +408,6 @@ sp <- spectro_analysis(ext_st)
 sp
 ```
 
-
  
 
 #### Signal-to-noise ratio
@@ -441,6 +438,7 @@ dtw.dist <- freq_DTW(ext_st, img = FALSE)
 as.data.frame(dtw.dist)
 
 ```
+
  
 
 ### Performance
@@ -524,7 +522,6 @@ bs_snr <- sig2noise(bs_ext_st, mar = 0.05)
 bs_snr
 ```
 
-
  
 
 ::: {.alert .alert-info}
@@ -562,6 +559,7 @@ nrow(dat)
 format(object.size(dat), units = "auto")
 
 ```
+
 The total size of the 100 sound files from which these selections were taken adds up to 1.1 GB. The size of the extended selection table is only 10.1 MB.
 
 This data is ready to be used:
@@ -571,7 +569,6 @@ sp <- spectro_analysis(dat, bp = c(2, 10))
 
 head(sp)
 ```
-
 
 ... and the spectrograms can be visualized as follows:
 

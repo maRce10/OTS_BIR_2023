@@ -18,11 +18,9 @@ format:
  
 
 ::: {.alert .alert-info}
-
 ## **Objetive** {.unnumbered .unlisted}
 
-- Demonstrate how to obtain acoustic data from online repositories
-
+-   Demonstrate how to obtain acoustic data from online repositories
 :::
 
  

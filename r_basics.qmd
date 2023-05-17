@@ -27,10 +27,9 @@ options("digits.secs"=3)
 ::: {.alert .alert-info}
 ## **Objetives** {.unnumbered .unlisted}
 
-- Revisit the basic syntax and data structures in R
+-   Revisit the basic syntax and data structures in R
 
-- Get familiar with documentation and help resources
-
+-   Get familiar with documentation and help resources
 :::
 
  

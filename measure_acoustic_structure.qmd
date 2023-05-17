@@ -18,15 +18,13 @@ format:
  
 
 ::: {.alert .alert-info}
-
 ## **Objetives** {.unnumbered .unlisted}
 
-- Learn the different methods available to quantify acoustic structure
+-   Learn the different methods available to quantify acoustic structure
 
-- Understand their pros and cons
+-   Understand their pros and cons
 
-- Learn how to apply them in R 
-
+-   Learn how to apply them in R
 :::
 
  

@@ -15,17 +15,14 @@ format:
     link-external-newwindow: true  
 ---
 
-
  
 
 ::: {.alert .alert-info}
-
 ## **Objetives** {.unnumbered .unlisted}
 
 -   Understand how spectrograms are created
 
 -   Learn to create and customize spectrograms in R
-
 :::
 
  
@@ -36,7 +33,6 @@ library(knitr)
 opts_chunk$set(tidy = TRUE, warning = FALSE, message = FALSE)
 
 ```
-
 
 The spectrogram is a fundamental tool in the study of acoustic communication in vertebrates. They are basically a visual representation of the sound where the variation in energy (or power spectral density) is shown on both the frequency and the time domains. Spectrograms allow us to visually explore acoustic variation in our study systems, which makes it easy to distinguish structural differences at small temporal/spectral scales that our ears cannot detect.
 
@@ -580,7 +576,7 @@ spectro(tico2,  f = 22050, wl = 512, ovlp = 90,
 ::: {.alert .alert-info}
 <font size="5">Exercise</font>
 
--   Change the color of the oscillogram to a 'heat color' palette
+-   Change the color of the oscillogram to red
 
 -   These are some of the color palettes that fit well the gradients in spectrograms:  
 

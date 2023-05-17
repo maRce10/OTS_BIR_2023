@@ -18,13 +18,11 @@ format:
  
 
 ::: {.alert .alert-info}
-
 ## **Objetives** {.unnumbered .unlisted}
 
 -   Understand the most common metrics of acoustic structure
 
 -   Get familiar with manipulating and formatting sound in the R environment
-
 :::
 
  
@@ -232,7 +230,7 @@ This animation shows how the amplitude envelope of the "tico" object is smoothed
 
  
 
-<img src="images/env_sliding_window_scheme_ENG_v2_512.gif" alt="Sliding window"/>
+<img src="images/env_sliding_window_scheme_ENG_v2_1024.gif" alt="Sliding window"/>
 
  
 :::

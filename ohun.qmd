@@ -18,13 +18,11 @@ editor_options:
 ---
 
 ::: {.alert .alert-info}
-
 ## **Objetive** {.unnumbered .unlisted}
 
-- Get familiar with concepts and data formatting practices related to automatic acoustic signals detection 
+-   Get familiar with concepts and data formatting practices related to automatic acoustic signals detection
 
-- Learn how to run automatic detection using the package ohun
-
+-   Learn how to run automatic detection using the package ohun
 :::
 
  
@@ -33,32 +31,31 @@ editor_options:
 
  
 
-<div class="alert alert-info">
-
+::: {.alert .alert-info}
 <font size = "4">The main features of the package are: </font>
 
-- The use of reference annotations for detection optimization and diagnostic 
-- The use of signal detection theory indices to evaluate detection performance 
+-   The use of reference annotations for detection optimization and diagnostic
+-   The use of signal detection theory indices to evaluate detection performance
 
  
 
 <font size = "4">The package offers functions for: </font>
 
-- Curate references and acoustic data sets
-- Diagnose detection performance
-- Optimize detection routines based on reference annotations
-- Energy-based detection
-- Template-based detection
+-   Curate references and acoustic data sets
+-   Diagnose detection performance
+-   Optimize detection routines based on reference annotations
+-   Energy-based detection
+-   Template-based detection
+:::
 
-</div>
-
-&nbsp; 
+ 
 
 All functions allow the parallelization of tasks, which distributes the tasks among several processors to improve computational efficiency. The package works on sound files in '.wav', '.mp3', '.flac' and '.wac' format.
 
---- 
+------------------------------------------------------------------------
 
 To install the latest developmental version from [github](https://github.com/) you will need the R package [remotes](https://cran.r-project.org/package=devtools):
+
 ```{r, eval = FALSE}
 
 # install pacakge
@@ -97,61 +94,70 @@ opts_chunk$set(
 )
 
 ```
-&nbsp;
 
----
+ 
+
+------------------------------------------------------------------------
 
 # Automatic sound event detection
 
-Finding the position of sound events in a sound file is a challenging task. [ohun](https://github.com/maRce10/ohun) offers two methods for automated sound event detection: template-based and energy-based detection. These methods are better suited for highly stereotyped or good signal-to-noise ratio (SNR) sounds, respectively. If the target sound events don't fit these requirements, more elaborated methods (i.e. machine learning approaches) are warranted: 
+Finding the position of sound events in a sound file is a challenging task. [ohun](https://github.com/maRce10/ohun) offers two methods for automated sound event detection: template-based and energy-based detection. These methods are better suited for highly stereotyped or good signal-to-noise ratio (SNR) sounds, respectively. If the target sound events don't fit these requirements, more elaborated methods (i.e. machine learning approaches) are warranted:
 
 <figure>
-<center><img src="images/analysis_workflow.png" alt="automated signal detection diagram" width="500" height="450"></center>
+
+<center><img src="images/analysis_workflow.png" alt="automated signal detection diagram" width="500" height="450"/></center>
+
 <figcaption><i>Diagram depicting how target sound event features can be used to tell the most adequate sound event detection approach. Steps in which 'ohun' can be helpful are shown in color. (SNR = signal-to-noise ratio) </i></figcaption>
-</figure> 
 
-&nbsp; 
+</figure>
 
-Still, a detection run using other software can be optimized with the tools provided in [ohun](https://github.com/maRce10/ohun). 
+ 
 
-&nbsp; 
+Still, a detection run using other software can be optimized with the tools provided in [ohun](https://github.com/maRce10/ohun).
 
-#  Signal detection theory applied to bioacoustics  
+ 
+
+# Signal detection theory applied to bioacoustics
 
 Broadly speaking, signal detection theory deals with the process of recovering signals (i.e. target signals) from background noise (not necessarily acoustic noise) and it's widely used for optimizing this decision making process in the presence of uncertainty. During a detection routine, the detected 'items' can be classified into 4 classes:
 
-- **True positives (TPs)**: signals correctly identified as 'signal'
-- **False positives (FPs)**: background noise incorrectly identified as 'signal'
-- **False negatives (FNs)**: signals incorrectly identified as 'background noise'
-- **True negatives (TNs)**: background noise correctly identified as 'background noise'
+-   **True positives (TPs)**: signals correctly identified as 'signal'
+-   **False positives (FPs)**: background noise incorrectly identified as 'signal'
+-   **False negatives (FNs)**: signals incorrectly identified as 'background noise'
+-   **True negatives (TNs)**: background noise correctly identified as 'background noise'
 
 Several additional indices derived from these indices are used to evaluate the performance of a detection routine. These are three useful indices in the context of sound event detection included in [ohun](https://github.com/maRce10/ohun):
 
-- **Recall**: correct detections relative to total references (a.k.a. true positive rate or sensitivity; *TPs / (TPs + FNs)*)
-- **Precision**: correct detections relative to total detections (*TPs / (TPs + FPs)*).
-- **F1 score**: combines recall and precision as the harmonic mean of these two, so it provides a single value for evaluating performance (a.k.a. F-measure or Dice similarity coefficient). 
+-   **Recall**: correct detections relative to total references (a.k.a. true positive rate or sensitivity; *TPs / (TPs + FNs)*)
+-   **Precision**: correct detections relative to total detections (*TPs / (TPs + FPs)*).
+-   **F1 score**: combines recall and precision as the harmonic mean of these two, so it provides a single value for evaluating performance (a.k.a. F-measure or Dice similarity coefficient).
 
 <font size = "2">*(Metrics that make use of 'true negatives' cannot be easily applied in the context of sound event detection as noise cannot always be partitioned in discrete units)*</font>
 
-A perfect detection will have no false positives or false negatives, which will result in both recall and precision equal to 1. However, perfect detection cannot always be reached and some compromise between detecting all target signals plus some noise (recall = 1 & precision < 1) and detecting only target signals but not all of them (recall < 1 & precision = 1) is warranted. The right balance between these two extremes will be given by the relative costs of missing signals and mistaking noise for signals. Hence, these indices provide an useful framework for diagnosing and optimizing the performance of a detection routine. 
+A perfect detection will have no false positives or false negatives, which will result in both recall and precision equal to 1. However, perfect detection cannot always be reached and some compromise between detecting all target signals plus some noise (recall = 1 & precision \< 1) and detecting only target signals but not all of them (recall \< 1 & precision = 1) is warranted. The right balance between these two extremes will be given by the relative costs of missing signals and mistaking noise for signals. Hence, these indices provide an useful framework for diagnosing and optimizing the performance of a detection routine.
 
-The package [ohun](https://github.com/maRce10/ohun) provides a set of tools to evaluate the performance of an sound event detection based on the indices described above. To accomplish this, the result of a detection routine is compared against a reference table containing the time position of all target sound events in the sound files. The package comes with an example reference table containing annotations of long-billed hermit hummingbird songs from two sound files (also supplied as example data: 'lbh1' and 'lbh2'), which can be used to illustrate detection performance evaluation. The example data can be explored as follows:  
+The package [ohun](https://github.com/maRce10/ohun) provides a set of tools to evaluate the performance of an sound event detection based on the indices described above. To accomplish this, the result of a detection routine is compared against a reference table containing the time position of all target sound events in the sound files. The package comes with an example reference table containing annotations of long-billed hermit hummingbird songs from two sound files (also supplied as example data: 'lbh1' and 'lbh2'), which can be used to illustrate detection performance evaluation. The example data can be explored as follows:
+
 ```{r, eval = TRUE, }
 # load example data
 data("lbh1", "lbh2", "lbh_reference")
 
 lbh_reference
 ```
-&nbsp;
+
+ 
 
 This is a 'selection table', an object class provided by the package [warbleR](https://CRAN.R-project.org/package=warbleR) (see [`selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html) for details). Selection tables are basically data frames in which the contained information has been double-checked (using warbleR's [`check_sels()`](https://marce10.github.io/warbleR/reference/check_sels.html)). But they behave pretty much as data frames and can be easily converted to data frames:
+
 ```{r}
 # convert to data frame
 as.data.frame(lbh_reference)
 ```
-&nbsp;
+
+ 
 
 All [ohun](https://github.com/maRce10/ohun) functions that work with this kind of data can take both selection tables and data frames. Spectrograms with highlighted sound events from a selection table can be plotted with the function `label_spectro()` (this function only plots one wave object at the time):
+
 ```{r, eval = TRUE}
 # save sound file
 writeWave(lbh1, file.path(tempdir(), "lbh1.wav"))
@@ -167,6 +173,7 @@ label_spectro(wave = lbh2, reference = lbh_reference[lbh_reference$sound.files =
 ```
 
 The function `diagnose_detection()` evaluates the performance of a detection routine by comparing it to a reference table. For instance, a perfect detection is given by comparing `lbh_reference` to itself:
+
 ```{r}
 
 lbh1_reference <-
@@ -176,9 +183,11 @@ lbh1_reference <-
 diagnose_detection(reference = lbh1_reference, detection = lbh1_reference)[, c(1:3, 7:9)]
 
 ```
-&nbsp;
+
+ 
 
 We will work mostly with a single sound file for convenience but the functions can work on several sound files at the time. The files should be found in a single working directory. Although the above example is a bit silly, it shows the basic diagnostic indices, which include basic detection theory indices ('true.positives', 'false.positives', 'false.negatives', 'recall' and 'precision') mentioned above. We can play around with the reference table to see how these indices can be used to spot imperfect detection routines (and hopefully improve them!). For instance, we can remove some sound events to see how this is reflected in the diagnostics. Getting rid of some rows in 'detection', simulating a detection with some false negatives, will affect the recall but not the precision:
+
 ```{r}
 
 
@@ -199,9 +208,11 @@ label_spectro(
 diagnose_detection(reference = lbh1_reference, detection = lbh1_detection)[, c(1:3, 7:9)]
 
 ```
-&nbsp;
+
+ 
 
 Having some additional sound events not in reference will do the opposite, reducing precision but not recall. We can do this simply by switching the tables:
+
 ```{r, }
 
 
@@ -219,15 +230,17 @@ label_spectro(
 diagnose_detection(reference = lbh1_detection, detection = lbh1_reference)[, c(1:3, 7:9)]
 
 ```
-&nbsp;
 
-The function offers three additional diagnose metrics: 
+ 
 
-- **Split positives**: target sound events overlapped by more than 1 detecion 
-- **Merged positives**: number of cases in which 2 or more target sound events in 'reference' were overlapped by the same detection
-- **Proportional overlap of true positives**: ratio of the time overlap of true positives with its corresponding sound event in the reference table
+The function offers three additional diagnose metrics:
+
+-   **Split positives**: target sound events overlapped by more than 1 detecion
+-   **Merged positives**: number of cases in which 2 or more target sound events in 'reference' were overlapped by the same detection
+-   **Proportional overlap of true positives**: ratio of the time overlap of true positives with its corresponding sound event in the reference table
 
 In a perfect detection routine split and merged positives should be 0 while proportional overlap should be 1. We can shift the start of sound events a bit to reflect a detection in which there is some mismatch to the reference table regarding to the time location of sound events:
+
 ```{r, }
 
 # create new table
@@ -252,20 +265,24 @@ label_spectro(
 diagnose_detection(reference = lbh1_reference, detection = lbh1_detection)
 
 ```
-&nbsp;
+
+ 
 
 In addition, the following diagnostics related to the duration of the sound events can also be returned by setting `time.diagnostics = TRUE`. Here we tweak the reference and detection data just to have some false positives and false negatives:
+
 ```{r}
 
 # diagnose with time diagnostics
 diagnose_detection(reference = lbh1_reference[-1, ], detection = lbh1_detection[-10, ], time.diagnostics = TRUE)
 
 ```
-&nbsp;
 
-These additional metrics can be used to further filter out undesired sound events based on their duration (for instance in a energy-based detection as in `energy_detector()`, explained below). 
+ 
+
+These additional metrics can be used to further filter out undesired sound events based on their duration (for instance in a energy-based detection as in `energy_detector()`, explained below).
 
 Diagnostics can also be detailed by sound file:
+
 ```{r}
 # diagnose by sound file
 diagnostic <-
@@ -275,22 +292,26 @@ diagnostic <-
 
 diagnostic
 ```
-&nbsp;
+
+ 
 
 These diagnostics can be summarized (as in the default `diagnose_detection()` output) with the function `summarize_diagnostic()`:
+
 ```{r}
 
 # summarize
 summarize_diagnostic(diagnostic)
 
 ```
-&nbsp;
+
+ 
 
 # Detecting sound events with *ohun*
 
 ## Energy-based detection
 
 This detector uses amplitude envelopes to infer the position of sound events. Amplitude envelopes are representations of the variation in energy through time. The following code plots an amplitude envelope along with the spectrogram for the example data `lbh1`:
+
 ```{r, }
 
 # plot spectrogram and envelope
@@ -308,15 +329,17 @@ label_spectro(
 )
 
 ```
-&nbsp;
+
+ 
 
 This type of detector doesn't require highly stereotyped sound events, although they work better on high quality recordings in which the amplitude of target sound events is higher than the background noise (i.e. high signal-to-noise ratio). The function `ernergy_detector()` performs this type of detection.
 
-&nbsp;
+ 
 
-### How it works 
+### How it works
 
 We can understand how to use `ernergy_detector()` using simulated sound events. We will do that using the function `simulate_songs()` from [warbleR](https://CRAN.R-project.org/package=warbleR). In this example we simulate a recording with 10 sounds with two different frequency ranges and durations:
+
 ```{r}
 
 # install this package first if not installed
@@ -346,9 +369,11 @@ simulated_1 <-
   )$wave
 
 ```
-&nbsp;
+
+ 
 
 The function call saves a '.wav' sound file in a temporary directory (`tempdir()`) and also returns a `wave` object in the R environment. This outputs will be used to run energy-based detection and creating plots, respectively. This is how the spectrogram and amplitude envelope of the simulated recording look like:
+
 ```{r, fig.height=4, fig.width=10}
 
 # plot spectrogram and envelope
@@ -357,7 +382,8 @@ label_spectro(wave = simulated_1,
               fastdisp = TRUE)
 
 ```
-&nbsp;
+
+ 
 
 Note that the amplitude envelope shows a high signal-to-noise ratio of the sound events, which is ideal for energy-based detection. This can be conducted using `ernergy_detector()` as follows:
 
@@ -383,7 +409,8 @@ label_spectro(
 )
 
 ```
-&nbsp;
+
+ 
 
 The output is a selection table:
 
@@ -393,8 +420,8 @@ detection
 
 ```
 
-
 Now we will make use of some additional arguments to filter out specific sound events based on their structural features. For instance we can use the argument `minimum.duration` to provide a time treshold (in ms) to exclude short sound events and keep only the longest sound events:
+
 ```{r eval = TRUE, echo = TRUE, fig.height=4, fig.width=10}
 
 
@@ -413,9 +440,11 @@ detection <-
 label_spectro(wave = simulated_1, detection = detection)
 
 ```
-&nbsp;
+
+ 
 
 We can use the argument `max.duration` (also in ms) to exclude long sound events and keep the short ones:
+
 ```{r eval = TRUE, echo = TRUE, fig.height=4, fig.width=10}
 
 # run detection
@@ -425,9 +454,11 @@ detection <- energy_detector(files = "simulated_1.wav", bp = c(1, 8),  threshold
 label_spectro(wave = simulated_1,  detection = detection)
 
 ```
-&nbsp;
+
+ 
 
 We can also focus the detection on specific frequency ranges using the argument `bp` (bandpass). By setting `bp = c(5, 8)` only those sound events found within that frequency range (5-8 kHz) will be detected, which excludes sound events below 5 kHz:
+
 ```{r, fig.height=4, fig.width=10, eval = TRUE, echo = TRUE}
 
 # Detecting 
@@ -437,9 +468,11 @@ detection <- energy_detector(files = "simulated_1.wav", bp = c(5, 8), threshold 
 label_spectro(wave = simulated_1,  detection = detection)
 
 ```
-&nbsp;
+
+ 
 
 The same logic can be applied to detect those sound events found below 5 kHz. We just need to set the upper bound of the band pass filter below the range of the higher frequency sound events (for instance `bp = (0, 6)`):
+
 ```{r, fig.height=4, fig.width=10, eval = TRUE, echo = TRUE}
 
 # Detect
@@ -457,9 +490,11 @@ detection <-
 label_spectro(wave = simulated_1,  detection = detection)
 
 ```
-&nbsp;
+
+ 
 
 Amplitude modulation (variation in amplitude across a sound event) can be problematic for detection based on amplitude envelopes. We can also simulate some amplitude modulation using `warbleR::simulate_songs()`:
+
 ```{r, eval = TRUE, warning=FALSE, message=FALSE}
 
 #Creating simulated song
@@ -495,9 +530,11 @@ sim2_sel_table <- sim_2$selec.table
 label_spectro(wave = simulated_2, envelope = TRUE)
 
 ```
-&nbsp;
+
+ 
 
 When sound events have strong amplitude modulation they can be split during detection:
+
 ```{r, eval = TRUE}
 
 # detect sounds
@@ -507,9 +544,11 @@ detection <- energy_detector(files = "simulated_2.wav", threshold = 50, path = t
 label_spectro(wave = simulated_2, envelope = TRUE, threshold = 50, detection = detection)
 
 ```
-&nbsp;
 
-There are two arguments that can deal with this: `holdtime` and `smooth`. `hold.time` allows to merge split sound events that are found within a given time range (in ms). This time range should be high enough to merge things belonging to the same sound event but not too high so it merges different sound events. For this example a `hold.time` of 200 ms can do the trick (we know gaps between sound events are ~0.5 s long):
+ 
+
+There are two arguments that can deal with this: `holdtime` and `smooth`. `hold.time` allows to merge split sound events that are found within a given time range (in ms). This time range should be high enough to merge things belonging to the same sound event but not too high so it merges different sound events. For this example a `hold.time` of 200 ms can do the trick (we know gaps between sound events are \~0.5 s long):
+
 ```{r, eval = TRUE}
 
 # detect sounds
@@ -531,9 +570,10 @@ label_spectro(
 )
 
 ```
-&nbsp;
 
-`smooth` works by merging the amplitude envelope 'hills' of the split sound events themselves. It smooths envelopes by applying a sliding window averaging of amplitude values. It's given in ms of the window size. A `smooth` of 350 ms can merged back split sound events from our example:  
+ 
+
+`smooth` works by merging the amplitude envelope 'hills' of the split sound events themselves. It smooths envelopes by applying a sliding window averaging of amplitude values. It's given in ms of the window size. A `smooth` of 350 ms can merged back split sound events from our example:
 
 ```{r, eval = TRUE}
 
@@ -557,11 +597,12 @@ label_spectro(
 )
 
 ```
-&nbsp;
+
+ 
 
 The function has some additional arguments for further filtering detections (`peak.amplitude`) and speeding up analysis (`thinning` and `parallel`).
 
-&nbsp;
+ 
 
 ### Optimizing energy-based detection
 
@@ -582,17 +623,20 @@ optim_detection <-
 optim_detection[, c(1, 2:5, 7:12, 17:18)]
 
 ```
-&nbsp;
+
+ 
 
 The output contains the combination of parameters used at each iteration as well as the corresponding diagnose indices. In this case all combinations generate a good detection (recall & precision = 1). However, only the routine with the highest `smooth` (last row) has no split sound events ('split.positive' column). It also shows a better overlap to the reference sound events ('overlap.to.true.positives' closer to 1).
 
 In addition, there are two complementary functions for optimizing energy-based detection routines: `feature_reference()` and `merge_overlaps()`. `feature_reference()` allow user to get a sense of the time and frequency characteristics of a reference table. This information can be used to determine the range of tuning parameter values during optimization. This is the output of the function applied to `lbh_reference`:
+
 ```{r}
 
 feature_reference(reference = lbh_reference, path = tempdir())
 
 ```
-&nbsp;
+
+ 
 
 Features related to selection duration can be used to set the 'max.duration' and 'min.duration' values, frequency related features can inform banpass values, gap related features inform hold time values and duty cycle can be used to evaluate performance. Peak amplitude can be used to keep only those sound events with the highest intensity, mostly useful for routines in which only a subset of the target sound events present in the recordings is needed.
 
@@ -602,12 +646,11 @@ Features related to selection duration can be used to set the 'max.duration' and
 
 This detection method is better suited for highly stereotyped sound events. As it doesn't depend on the signal-to-noise ratio it's more robust to higher levels of background noise. The procedure is divided in three steps:
 
-- Choosing the right template (`get_templates()`)
-- Estimating the cross-correlation scores of templates along sound files (`template_correlator()`)  
-- Detecting sound events by applying a correlation threshold (`template_detector()`)  
+-   Choosing the right template (`get_templates()`)
+-   Estimating the cross-correlation scores of templates along sound files (`template_correlator()`)\
+-   Detecting sound events by applying a correlation threshold (`template_detector()`)
 
-
-The function `get_templates()` can help you find a template closer to the average acoustic structure of the sound events in a reference table. This is done by finding the sound events closer to the centroid of the acoustic space. When the acoustic space is not supplied ('acoustic.space' argument) the function estimates it by measuring several acoustic parameters using the function [`spectro_analysis()`](https://marce10.github.io/warbleR/reference/spectro_analysis.html) from [`warbleR`](https://CRAN.R-project.org/package=warbleR)) and summarizing it with Principal Component Analysis (after z-transforming parameters). If only 1 template is required the function returns the sound event closest to the acoustic space centroid. The rationale here is that a sound event closest to the average sound event structure is more likely to share structural features with most sounds across the acoustic space than a sound event in the periphery of the space. These 'mean structure' templates can be obtained as follows:   
+The function `get_templates()` can help you find a template closer to the average acoustic structure of the sound events in a reference table. This is done by finding the sound events closer to the centroid of the acoustic space. When the acoustic space is not supplied ('acoustic.space' argument) the function estimates it by measuring several acoustic parameters using the function [`spectro_analysis()`](https://marce10.github.io/warbleR/reference/spectro_analysis.html) from [`warbleR`](https://CRAN.R-project.org/package=warbleR)) and summarizing it with Principal Component Analysis (after z-transforming parameters). If only 1 template is required the function returns the sound event closest to the acoustic space centroid. The rationale here is that a sound event closest to the average sound event structure is more likely to share structural features with most sounds across the acoustic space than a sound event in the periphery of the space. These 'mean structure' templates can be obtained as follows:
 
 ```{r, eval = FALSE, echo = TRUE}
 
@@ -626,7 +669,8 @@ template <-
   get_templates(reference = lbh1_reference, path = tempdir())
 
 ```
-&nbsp;
+
+ 
 
 The graph above shows the overall acoustic spaces, in which the sound closest to the space centroid is highlighted. The highlighted sound is selected as the template and can be used to detect similar sound events. The function `get_templates()` can also select several templates. This can be helpful when working with sounds that are just moderately stereotyped. This is done by dividing the acoustic space into sub-spaces defined as equal-size slices of a circle centered at the centroid of the acoustic space:
 
@@ -649,6 +693,7 @@ templates <- get_templates(reference = lbh_reference,
 ```
 
 We will use the single template object ('template') to run a detection on the example 'lbh1' data:
+
 ```{r}
 
 # get correlations
@@ -658,18 +703,22 @@ correlations <-
                       path = tempdir())
 
 ```
-&nbsp;
+
+ 
 
 The output is an object of class 'template_correlations', with its own printing method:
+
 ```{r}
 
 # print
 correlations
 
 ```
-&nbsp;
+
+ 
 
 This object can then be used to detect sound events using `template_detector()`:
+
 ```{r}
 
 # run detection
@@ -678,9 +727,11 @@ detection <-
 
 detection
 ```
-&nbsp;
+
+ 
 
 The output can be explored by plotting the spectrogram along with the detection and correlation scores:
+
 ```{r, warning=FALSE}
 
 # plot spectrogram
@@ -693,16 +744,19 @@ label_spectro(
   hop.size = 10, ovlp = 50)
 
 ```
-&nbsp;
+
+ 
 
 The performance can be evaluated using `diagnose_detection()`:
+
 ```{r}
 
 #diagnose
 diagnose_detection(reference = lbh1_reference, detection = detection)
 
 ```
-&nbsp;
+
+ 
 
 ### Optimizing template-based detection
 
@@ -721,9 +775,11 @@ optimization <-
 # print output
 optimization
 ```
-&nbsp;
+
+ 
 
 Additional threshold values can be evaluated without having to run it all over again. We just need to supplied the output from the previous run with the argument `previous.output` (the same trick can be done when optimizing an energy-based detection):
+
 ```{r}
 
 # run optimization
@@ -735,15 +791,17 @@ optimize_template_detector(
 )
 
 ```
-&nbsp;
+
+ 
 
 In this case several threshold values can achieved an optimal detection.
 
-&nbsp;
+ 
 
 ### Detecting several templates
 
 Several templates can be used within the same call. Here we correlate two templates on the two example sound files, taking one template from each sound file:
+
 ```{r}
 
 # get correlations
@@ -766,18 +824,22 @@ correlations <-
   )
 
 ```
-&nbsp;
+
+ 
 
 Note that in these cases we can get the same sound event detected several times (duplicates), one by each template. We can check if that is the case just by diagnosing the detection:
+
 ```{r}
 
 #diagnose
 diagnose_detection(reference = lbh_reference, detection = detection)
 
 ```
-&nbsp;
+
+ 
 
 Duplicates are shown as split positives. Fortunately, we can leave a single detected sound event by leaving only those with the highest correlation. To do this we first need to label each row in the detection using `label_detection()` and then remove duplicates using `filter_detection()`:
+
 ```{r}
 
 # labeling detection
@@ -787,14 +849,17 @@ labeled <-
 ```
 
 This function adds a column ('detection.class') with the class label for each row:
+
 ```{r}
 
 table(labeled$detection.class)
 
 ```
-&nbsp;
+
+ 
 
 Now we can filter out duplicates and diagnose the detection again, telling the function to select a single row per duplicate using the correlation score as a criterium (`by = "scores"`, this column is part of the `template_detector()` output):
+
 ```{r}
 
 # filter
@@ -803,56 +868,55 @@ filtered <- filter_detection(detection = labeled, by = "scores")
 # diagnose
 diagnose_detection(reference = lbh_reference, detection = filtered)
 ```
-&nbsp;
+
+ 
 
 We successfully get rid of duplicates and detected every single target sound event.
 
----
+------------------------------------------------------------------------
 
 ## Improving detection speed
 
 Detection routines can take a long time when working with large amounts of acoustic data (e.g. large sound files and/or many sound files). These are some useful points to keep in mine when trying to make a routine more time-efficient:
 
-- Always test procedures on small data subsets
-- `template_detector()` is faster than `energy_detector()`
-- Parallelization (see `parallel` argument in most functions) can significantly speed-up routines, but works better on Unix-based operating systems (linux and mac OS)
-- Sampling rate matters: detecting sound events on low sampling rate files goes faster, so we should avoid having nyquist frequencies (sampling rate / 2) way higher than the highest frequency of the target sound events (sound files can be downsampled using warbleR's [`fix_sound_files()`](https://marce10.github.io/warbleR/reference/selection_table.html))
-- Large sound files can make the routine crash, use `split_acoustic_data()` to split both reference tables and files into shorter clips.
-- Think about using a computer with lots of RAM memory or a computer cluster for working on large amounts of data
-- `thinning` argument (which reduces the size of the amplitude envelope) can also speed-up `energy_detector()`
+-   Always test procedures on small data subsets
+-   `template_detector()` is faster than `energy_detector()`
+-   Parallelization (see `parallel` argument in most functions) can significantly speed-up routines, but works better on Unix-based operating systems (linux and mac OS)
+-   Sampling rate matters: detecting sound events on low sampling rate files goes faster, so we should avoid having nyquist frequencies (sampling rate / 2) way higher than the highest frequency of the target sound events (sound files can be downsampled using warbleR's [`fix_sound_files()`](https://marce10.github.io/warbleR/reference/selection_table.html))
+-   Large sound files can make the routine crash, use `split_acoustic_data()` to split both reference tables and files into shorter clips.
+-   Think about using a computer with lots of RAM memory or a computer cluster for working on large amounts of data
+-   `thinning` argument (which reduces the size of the amplitude envelope) can also speed-up `energy_detector()`
 
-&nbsp; 
+ 
 
----
+------------------------------------------------------------------------
 
 ## Additional tips
 
-- Use your knowledge about the sound event structure to determine the initial range for the tuning parameters in a detection optimization routine
-- If people have a hard time figuring out where a target sound event occurs in a recording, detection algorithms will also have a hard time
-- Several templates representing the range of variation in sound event structure can be used to detect semi-stereotyped sound events
-- Make sure reference tables contain all target sound events and only the target sound events. The performance of the detection cannot be better than the reference itself.
-- Avoid having overlapping sound events or several sound events as a single one (like a multi-syllable vocalization) in the reference table when running an energy-based detector
-- Low-precision can be improved by training a classification model (e.g. random forest) to tell sound events from noise  
+-   Use your knowledge about the sound event structure to determine the initial range for the tuning parameters in a detection optimization routine
+-   If people have a hard time figuring out where a target sound event occurs in a recording, detection algorithms will also have a hard time
+-   Several templates representing the range of variation in sound event structure can be used to detect semi-stereotyped sound events
+-   Make sure reference tables contain all target sound events and only the target sound events. The performance of the detection cannot be better than the reference itself.
+-   Avoid having overlapping sound events or several sound events as a single one (like a multi-syllable vocalization) in the reference table when running an energy-based detector
+-   Low-precision can be improved by training a classification model (e.g. random forest) to tell sound events from noise
 
----
+------------------------------------------------------------------------
 
-<div class="alert alert-info">
-
+::: {.alert .alert-info}
 Please cite [ohun](https://github.com/maRce10/ohun) like this:
 
 Araya-Salas, M. (2021), *ohun: diagnosing and optimizing automated sound event detection*. R package version 0.1.0.
-
-</div>
+:::
 
  
 
 ## References
 
-1. Araya-Salas, M. (2021), ohun: diagnosing and optimizing automated sound event detection. R package version 0.1.0.
-1. Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal sound events. Methods Ecol Evol 8:184-191.
-1. Khanna H., Gaunt S.L.L.  & McCallum D.A. (1997). Digital spectrographic cross-correlation: tests of sensitivity. Bioacoustics 7(3): 209-234.
-1. Knight, E.C., Hannah, K.C., Foley, G.J., Scott, C.D., Brigham, R.M. & Bayne, E. (2017). Recommendations for acoustic recognizer performance assessment with application to five common automated signal recognition programs. Avian Conservation and Ecology,
-1. Macmillan, N. A., & Creelman, C.D. (2004). Detection theory: A user's guide. Psychology press.
+1.  Araya-Salas, M. (2021), ohun: diagnosing and optimizing automated sound event detection. R package version 0.1.0.
+2.  Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal sound events. Methods Ecol Evol 8:184-191.
+3.  Khanna H., Gaunt S.L.L. & McCallum D.A. (1997). Digital spectrographic cross-correlation: tests of sensitivity. Bioacoustics 7(3): 209-234.
+4.  Knight, E.C., Hannah, K.C., Foley, G.J., Scott, C.D., Brigham, R.M. & Bayne, E. (2017). Recommendations for acoustic recognizer performance assessment with application to five common automated signal recognition programs. Avian Conservation and Ecology,
+5.  Macmillan, N. A., & Creelman, C.D. (2004). Detection theory: A user's guide. Psychology press.
 
  
 
