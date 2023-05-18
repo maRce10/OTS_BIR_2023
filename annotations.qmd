@@ -494,7 +494,7 @@ ext_st <- selection_table(X = lbh_selec_table, pb = FALSE,
 
  
 
-And that is. Now the acoustic data and the selection data (as well as the additional metadata) are all together in a single R object. The wave objects contained in the *extended_selection_table* can be easily extracted using the **warbleR** function [read_sound_file](https://marce10.github.io/warbleR/reference/read_sound_file.html): 
+And that is. Now the acoustic data and the selection data (as well as the additional metadata) are all together in a single R object. The wave objects contained in the *extended_selection_table* can be easily extracted using the **warbleR** function [read_sound_file](https://marce10.github.io/warbleR/reference/read_sound_file.html):
 
 ```{r}
 
@@ -540,8 +540,6 @@ for(i in 1:6){
 
 ```
 
-
-
  
 
 ::: {.alert .alert-info}
@@ -549,11 +547,11 @@ for(i in 1:6){
 
  
 
-- Run the example code in the `selection_table()` function documentation
+-   Run the example code in the `selection_table()` function documentation
 
-- What do the arguments "mar" and "by.song" do?
+-   What do the arguments "mar" and "by.song" do?
 
-- Measure the peak frequency of the 8th selection
+-   Measure the peak frequency of the 8th selection
 :::
 
  
