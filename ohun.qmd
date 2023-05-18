@@ -147,13 +147,6 @@ lbh_reference
 
  
 
-This is a 'selection table', an object class provided by the package [warbleR](https://CRAN.R-project.org/package=warbleR) (see [`selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html) for details). Selection tables are basically data frames in which the contained information has been double-checked (using warbleR's [`check_sels()`](https://marce10.github.io/warbleR/reference/check_sels.html)). But they behave pretty much as data frames and can be easily converted to data frames:
-
-```{r}
-# convert to data frame
-as.data.frame(lbh_reference)
-```
-
  
 
 All [ohun](https://github.com/maRce10/ohun) functions that work with this kind of data can take both selection tables and data frames. Spectrograms with highlighted sound events from a selection table can be plotted with the function `label_spectro()` (this function only plots one wave object at the time):
@@ -166,10 +159,22 @@ writeWave(lbh1, file.path(tempdir(), "lbh1.wav"))
 writeWave(lbh2, file.path(tempdir(), "lbh2.wav"))
 
 # print spectrogram
-label_spectro(wave = lbh1, reference = lbh_reference[lbh_reference$sound.files == "lbh1.wav", ], hop.size = 10, ovlp = 50, flim = c(1, 10))
+label_spectro(
+  wave = lbh1,
+  reference = lbh_reference[lbh_reference$sound.files == "lbh1.wav",],
+  hop.size = 10,
+  ovlp = 50,
+  flim = c(1, 10)
+)
 
 # print spectrogram
-label_spectro(wave = lbh2, reference = lbh_reference[lbh_reference$sound.files == "lbh2.wav", ], hop.size = 10, ovlp = 50, flim = c(1, 10))
+label_spectro(
+  wave = lbh2,
+  reference = lbh_reference[lbh_reference$sound.files == "lbh2.wav",],
+  hop.size = 10,
+  ovlp = 50,
+  flim = c(1, 10)
+)
 ```
 
 The function `diagnose_detection()` evaluates the performance of a detection routine by comparing it to a reference table. For instance, a perfect detection is given by comparing `lbh_reference` to itself:
@@ -180,7 +185,8 @@ lbh1_reference <-
   lbh_reference[lbh_reference$sound.files == "lbh1.wav",]
 
 # diagnose
-diagnose_detection(reference = lbh1_reference, detection = lbh1_reference)[, c(1:3, 7:9)]
+diagnose_detection(reference = lbh1_reference, 
+                   detection = lbh1_reference)[, c(1:3, 7:9)]
 
 ```
 
@@ -192,7 +198,7 @@ We will work mostly with a single sound file for convenience but the functions c
 
 
 # create new table
-lbh1_detection <- lbh1_reference[3:9,]
+lbh1_detection <- lbh1_reference[3:9, ]
 
 # print spectrogram
 label_spectro(
@@ -205,7 +211,8 @@ label_spectro(
 )
 
 # diagnose
-diagnose_detection(reference = lbh1_reference, detection = lbh1_detection)[, c(1:3, 7:9)]
+diagnose_detection(reference = lbh1_reference, 
+                   detection = lbh1_detection)[, c(1:3, 7:9)]
 
 ```
 
@@ -214,6 +221,7 @@ diagnose_detection(reference = lbh1_reference, detection = lbh1_detection)[, c(1
 Having some additional sound events not in reference will do the opposite, reducing precision but not recall. We can do this simply by switching the tables:
 
 ```{r, }
+
 
 
 # print spectrogram
@@ -227,7 +235,8 @@ label_spectro(
 )
 
 # diagnose
-diagnose_detection(reference = lbh1_detection, detection = lbh1_reference)[, c(1:3, 7:9)]
+diagnose_detection(reference = lbh1_detection, 
+                   detection = lbh1_reference)[, c(1:3, 7:9)]
 
 ```
 
@@ -249,7 +258,8 @@ lbh1_detection <- lbh1_reference
 # add 'noise' to start
 set.seed(18)
 lbh1_detection$start <-
-  lbh1_detection$start + rnorm(nrow(lbh1_detection), mean = 0, sd = 0.1)
+  lbh1_detection$start + rnorm(nrow(lbh1_detection), 
+                               mean = 0, sd = 0.1)
 
 ## print spectrogram
 label_spectro(
@@ -262,7 +272,8 @@ label_spectro(
 )
 
 # diagnose
-diagnose_detection(reference = lbh1_reference, detection = lbh1_detection)
+diagnose_detection(reference = lbh1_reference, 
+                   detection = lbh1_detection)
 
 ```
 
@@ -392,20 +403,20 @@ Note that the amplitude envelope shows a high signal-to-noise ratio of the sound
 
 # run detection
 detection <-
-  energy_detector(
-    files = "simulated_1.wav",
-    bp = c(2, 8),
-    threshold = 50,
-    smooth = 150,
-    path = tempdir()
-  )
+energy_detector(
+  files = "simulated_1.wav",
+  bp = c(2, 8),
+  threshold = 50,
+  smooth = 150,
+  path = tempdir()
+)
 
 # plot spectrogram and envelope
 label_spectro(
-  wave = simulated_1,
-  envelope = TRUE,
-  detection = detection,
-  threshold = 50
+wave = simulated_1,
+envelope = TRUE,
+detection = detection,
+threshold = 50
 )
 
 ```
@@ -461,27 +472,12 @@ We can also focus the detection on specific frequency ranges using the argument 
 
 ```{r, fig.height=4, fig.width=10, eval = TRUE, echo = TRUE}
 
-# Detecting 
-detection <- energy_detector(files = "simulated_1.wav", bp = c(5, 8), threshold = 50, smooth = 150, path = tempdir())
-
-# plot spectrogram
-label_spectro(wave = simulated_1,  detection = detection)
-
-```
-
- 
-
-The same logic can be applied to detect those sound events found below 5 kHz. We just need to set the upper bound of the band pass filter below the range of the higher frequency sound events (for instance `bp = (0, 6)`):
-
-```{r, fig.height=4, fig.width=10, eval = TRUE, echo = TRUE}
-
-# Detect
+# Detecting
 detection <-
   energy_detector(
     files = "simulated_1.wav",
-    bp = c(0, 6),
+    bp = c(5, 8),
     threshold = 50,
-    min.duration = 1,
     smooth = 150,
     path = tempdir()
   )
@@ -490,6 +486,34 @@ detection <-
 label_spectro(wave = simulated_1,  detection = detection)
 
 ```
+
+ 
+
+::: {.alert .alert-info}
+<font size="5">Exercise</font>
+
+- Detect only the short sound below 5 kHz
+
+```{r, fig.height=4, fig.width=10, eval = FALSE, echo = FALSE}
+
+# Detect
+detection <-
+  energy_detector(
+    files = "simulated_1.wav",
+    bp = c(0, 6),
+    threshold = 50,
+    max.duration = 500,
+    smooth = 150,
+    path = tempdir()
+  )
+
+# plot spectrogram
+label_spectro(wave = simulated_1,  detection = detection)
+
+```
+
+:::
+
 
  
 

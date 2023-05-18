@@ -33,8 +33,6 @@ An annotation table (or selection table in Raven's terminology and **warbleR**) 
 
 ```{r, echo = FALSE}
 
-library(kableExtra)
-
 options(digits=3)
 
 start <- rnorm(n = 4, mean = 3)
@@ -42,9 +40,9 @@ end <- start + abs(rnorm(n = 4, mean = 1))
 
 cd.anot <- data.frame(sound.files = rep(c("sound_file_1.wav", "sound_file_2.wav"), each = 2), start, end) 
 
-kbl <- kable(cd.anot, align = "c", row.names = F,  format = "html")
+kbl <- knitr::kable(cd.anot, align = "c", row.names = F,  format = "html")
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -59,11 +57,11 @@ Ideally we should also include the frequency range of the annotations:
 cd.anot$bottom.freq <- rnorm(n = 4, mean = 5)
 cd.anot$top.freq <- rnorm(n = 4, mean = 9)
 
-kbl <- kable(cd.anot, align = "c", row.names = F,  format = "html")
+kbl <- knitr::kable(cd.anot, align = "c", row.names = F,  format = "html")
 
-kbl <-  column_spec(kbl, 4:5, background = "#ccebff")
+kbl <-  kableExtra::column_spec(kbl, 4:5, background = "#ccebff")
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -79,11 +77,11 @@ cd.anot$selec <- rep(1:2, 2)
 
 cd.anot <- cd.anot[, c(1, 6, 2:5)]
 
-kbl <- kable(cd.anot, align = "c", row.names = F,  format = "html")
+kbl <- knitr::kable(cd.anot, align = "c", row.names = F,  format = "html")
 
-kbl <-  column_spec(kbl, 2, background = "#ccebff")
+kbl <-  kableExtra::column_spec(kbl, 2, background = "#ccebff")
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -97,11 +95,11 @@ cd.anot$channel <- rep(1, 4)
 
 cd.anot <- cd.anot[, c(1, 7, 2:6)]
 
-kbl <- kable(cd.anot, align = "c", row.names = F,  format = "html")
+kbl <- knitr::kable(cd.anot, align = "c", row.names = F,  format = "html")
 
-kbl <-  column_spec(kbl, 2, background = "#ccebff")
+kbl <-  kableExtra::column_spec(kbl, 2, background = "#ccebff")
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -191,11 +189,11 @@ library(Rraven)
 
 rvn.dat <- imp_raven(all.data = TRUE, path = "./examples")
 
-kbl <- kable(head(rvn.dat), align = "c", row.names = F, escape = FALSE) 
+kbl <- knitr::kable(head(rvn.dat), align = "c", row.names = F, escape = FALSE) 
 
-kbl <- kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 11)
+kbl <- kableExtra::kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 11)
 
-scroll_box(kbl, width = "808px",
+kableExtra::scroll_box(kbl, width = "808px",
 box_css = "border: 1px solid #ddd; padding: 5px; ", extra_css = NULL)
 
 ```
@@ -226,11 +224,11 @@ head(rvn.dat)
 
 rvn.dat <- imp_raven(warbler.format = TRUE, all.data = FALSE, freq.cols = TRUE, path = "./examples/")
 
-kbl <- kable(head(rvn.dat), align = "c", row.names = F, escape = FALSE)
+kbl <- knitr::kable(head(rvn.dat), align = "c", row.names = F, escape = FALSE)
 
-kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = TRUE, font_size = 12)
+kableExtra::kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = TRUE, font_size = 12)
 
-# scroll_box(kbl, width = "808",
+# kableExtra::scroll_box(kbl, width = "808",
 # box_css = "border: 1px solid #ddd; padding: 5px; ", extra_css = NULL)
 ```
 
@@ -256,9 +254,9 @@ st1
 st1 <- rvn.dat[ ,1:7]
 
 #check original column names
-kbl <- kable(st1, align = "c", row.names = F, escape = FALSE) 
+kbl <- knitr::kable(st1, align = "c", row.names = F, escape = FALSE) 
 
-kbl <- kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 14)
+kbl <- kableExtra::kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 14)
 
 ```
 
@@ -271,9 +269,9 @@ relabel_colms(st1)
 ```{r, eval = T, echo = F}
 rc <- relabel_colms(st1)
 
-kbl <- kable(rc, align = "c", row.names = F, escape = FALSE) 
+kbl <- knitr::kable(rc, align = "c", row.names = F, escape = FALSE) 
 
-kbl <- kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 14)
+kbl <- kableExtra::kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 14)
 
 ```
 
@@ -293,9 +291,9 @@ relabel_colms(st1, extra.cols.name = "View",
 rc <- relabel_colms(st1, extra.cols.name = "View",
  "Raven view")
 
-kbl <- kable(rc, align = "c", row.names = F, escape = FALSE) 
+kbl <- knitr::kable(rc, align = "c", row.names = F, escape = FALSE) 
 
-kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 14)
+kableExtra::kable_styling(kbl, bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE, font_size = 14)
 
 ```
 
@@ -407,6 +405,8 @@ options(width = 100, max.print = 100)
 
 ```{r extn_sel_4.1, eval=FALSE}
 
+library(warbleR)
+
 data("lbh_selec_table")
 
 lbh_selec_table
@@ -415,11 +415,11 @@ lbh_selec_table
 
 ```{r extn_sel_4.2, echo=FALSE}
 
-kbl <- kable(lbh_selec_table, align = "c", row.names = F,  format = "html")
+kbl <- knitr::kable(lbh_selec_table, align = "c", row.names = F,  format = "html")
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
-kbl <- scroll_box(kbl, width = "740px",
+kbl <- kableExtra::scroll_box(kbl, width = "740px",
 box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
 
 kbl
@@ -444,7 +444,15 @@ st
 
 st <- selection_table(X = lbh_selec_table, pb = FALSE)
 
-st
+kbl <- knitr::kable(st)
+
+kbl <-  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+
+kbl <- kableExtra::scroll_box(kbl, width = "740px",
+box_css = "border: 1px solid #ddd; padding: 1px; ", extra_css = NULL)
+
+kbl
+
 ```
 
 Note that the path to the sound files has been provided. This is necessary in order to verify that the data provided conforms to the characteristics of the audio files.
@@ -486,7 +494,53 @@ ext_st <- selection_table(X = lbh_selec_table, pb = FALSE,
 
  
 
-And that is. Now the acoustic data and the selection data (as well as the additional metadata) are all together in a single R object.
+And that is. Now the acoustic data and the selection data (as well as the additional metadata) are all together in a single R object. The wave objects contained in the *extended_selection_table* can be easily extracted using the **warbleR** function [read_sound_file](https://marce10.github.io/warbleR/reference/read_sound_file.html): 
+
+```{r}
+
+w1 <- read_sound_file(ext_st, index = 1)
+
+w1
+```
+
+ 
+
+The index argument indicates the row of the selection that will be read.
+
+This new object class allows to share complete data sets, including acoustic data. For example, the following code downloads a subset of the data used in [Araya-Salas *et al* (2017)](https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/araya-salas_smith-vidaurre___webster_2017._table_s1._recording_metadata.xlsx) (can also be downloaded from [here](https://marceloarayasalas.weebly.com/uploads/2/5/5/2/25524573/extended.selection.%20table.araya-salas.et.al.2017.bioacoustics.100.sels.rds)):
+
+```{r extn.sel_19, eval = T}
+
+URL <- "https://github.com/maRce10/OTS_BIR_2023/raw/master/data/extended.selection.table.araya-salas.et.al.2017.bioacoustics.100.sels.rds"
+
+dat <- readRDS(gzcon(url(URL)))
+
+nrow(dat)
+
+format(object.size(dat), units = "auto")
+
+```
+
+The total size of the 100 sound files from which these selections were taken adds up to 1.1 GB. The size of the extended selection table is only 10.1 MB.
+
+This data is ready to be used. For instance, here I create a multipanel graph with the spectrograms of the first 6 selections:
+
+```{r extn.sel_21, out.width= 750}
+
+par(mfrow = c(3, 2), mar = rep(0, 4))
+
+for(i in 1:6){
+  
+  wv <- read_wave(X = dat, index = i, from = 0.17, to = 0.4)
+
+  spectro(wv, wl = 250, grid = FALSE, scale = FALSE, axisX = FALSE,
+          axisY = FALSE, ovlp = 90, flim = c(0, 12), 
+          palette = reverse.gray.colors.1)
+}
+
+```
+
+
 
  
 
@@ -495,9 +549,11 @@ And that is. Now the acoustic data and the selection data (as well as the additi
 
  
 
--   Run the example code in the `selection_table()` function documentation
+- Run the example code in the `selection_table()` function documentation
 
--   What do the arguments "mar" and "by.song" do?
+- What do the arguments "mar" and "by.song" do?
+
+- Measure the peak frequency of the 8th selection
 :::
 
  

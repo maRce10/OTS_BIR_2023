@@ -49,7 +49,9 @@ website:
           - text: "General"
             href: general_redirect.html  
           - text: "dynaSpec"
-            href: dynaspec_redirect.html             
+            href: dynaspec_redirect.html
+          - text: "ohun"
+            href: ohun_redirect.html            
       - text: "Course prep"
         href: course_prep.qmd
       - text: "Code sharing"
