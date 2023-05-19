@@ -1081,11 +1081,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>&nbsp;</p>
-<p>This type of detector doesn’t require highly stereotyped sound events, although they work better on high quality recordings in which the amplitude of target sound events is higher than the background noise (i.e.&nbsp;high signal-to-noise ratio). The function <code>ernergy_detector()</code> performs this type of detection.</p>
+<p>This type of detector doesn’t require highly stereotyped sound events, although they work better on high quality recordings in which the amplitude of target sound events is higher than the background noise (i.e.&nbsp;high signal-to-noise ratio). The function <code>energy_detector()</code> performs this type of detection.</p>
 <p>&nbsp;</p>
 <section id="how-it-works" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">3.1.1</span> How it works</h3>
-<p>We can understand how to use <code>ernergy_detector()</code> using simulated sound events. We will do that using the function <code>simulate_songs()</code> from <a href="https://CRAN.R-project.org/package=warbleR">warbleR</a>. In this example we simulate a recording with 10 sounds with two different frequency ranges and durations:</p>
+<p>We can understand how to use <code>energy_detector()</code> using simulated sound events. We will do that using the function <code>simulate_songs()</code> from <a href="https://CRAN.R-project.org/package=warbleR">warbleR</a>. In this example we simulate a recording with 10 sounds with two different frequency ranges and durations:</p>
 <div class="cell" data-layout-align="center">
 <details open="">
 <summary>Code</summary>
@@ -1135,7 +1135,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>&nbsp;</p>
-<p>Note that the amplitude envelope shows a high signal-to-noise ratio of the sound events, which is ideal for energy-based detection. This can be conducted using <code>ernergy_detector()</code> as follows:</p>
+<p>Note that the amplitude envelope shows a high signal-to-noise ratio of the sound events, which is ideal for energy-based detection. This can be conducted using <code>energy_detector()</code> as follows:</p>
 <div class="cell" data-layout-align="center">
 <details open="">
 <summary>Code</summary>
@@ -1260,7 +1260,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<p>Now we will make use of some additional arguments to filter out specific sound events based on their structural features. For instance we can use the argument <code>minimum.duration</code> to provide a time treshold (in ms) to exclude short sound events and keep only the longest sound events:</p>
+<p>Now we will make use of some additional arguments to filter out specific sound events based on their structural features. For instance we can use the argument <code>min.duration</code> to provide a time treshold (in ms) to exclude short sound events and keep only the longest sound events:</p>
 <div class="cell" data-layout-align="center">
 <details open="">
 <summary>Code</summary>
@@ -1292,10 +1292,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run detection</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span> <span class="fu">energy_detector</span>(<span class="at">files =</span> <span class="st">"simulated_1.wav"</span>, <span class="at">bp =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>),  <span class="at">threshold =</span> <span class="dv">50</span>, <span class="at">smooth =</span> <span class="dv">150</span>, <span class="at">max.duration =</span> <span class="dv">500</span>, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_1,  <span class="at">detection =</span> detection)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_1.wav"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">bp =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="dv">150</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">max.duration =</span> <span class="dv">500</span>,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_1,  <span class="at">detection =</span> detection)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -2995,13 +3003,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb51-348"><a href="#cb51-348" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-349"><a href="#cb51-349" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-350"><a href="#cb51-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-351"><a href="#cb51-351" aria-hidden="true" tabindex="-1"></a>This type of detector doesn't require highly stereotyped sound events, although they work better on high quality recordings in which the amplitude of target sound events is higher than the background noise (i.e. high signal-to-noise ratio). The function <span class="in">`ernergy_detector()`</span> performs this type of detection.</span>
+<span id="cb51-351"><a href="#cb51-351" aria-hidden="true" tabindex="-1"></a>This type of detector doesn't require highly stereotyped sound events, although they work better on high quality recordings in which the amplitude of target sound events is higher than the background noise (i.e. high signal-to-noise ratio). The function <span class="in">`energy_detector()`</span> performs this type of detection.</span>
 <span id="cb51-352"><a href="#cb51-352" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-353"><a href="#cb51-353" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-354"><a href="#cb51-354" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-355"><a href="#cb51-355" aria-hidden="true" tabindex="-1"></a><span class="fu">### How it works</span></span>
 <span id="cb51-356"><a href="#cb51-356" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-357"><a href="#cb51-357" aria-hidden="true" tabindex="-1"></a>We can understand how to use <span class="in">`ernergy_detector()`</span> using simulated sound events. We will do that using the function <span class="in">`simulate_songs()`</span> from <span class="co">[</span><span class="ot">warbleR</span><span class="co">](https://CRAN.R-project.org/package=warbleR)</span>. In this example we simulate a recording with 10 sounds with two different frequency ranges and durations:</span>
+<span id="cb51-357"><a href="#cb51-357" aria-hidden="true" tabindex="-1"></a>We can understand how to use <span class="in">`energy_detector()`</span> using simulated sound events. We will do that using the function <span class="in">`simulate_songs()`</span> from <span class="co">[</span><span class="ot">warbleR</span><span class="co">](https://CRAN.R-project.org/package=warbleR)</span>. In this example we simulate a recording with 10 sounds with two different frequency ranges and durations:</span>
 <span id="cb51-358"><a href="#cb51-358" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-361"><a href="#cb51-361" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb51-362"><a href="#cb51-362" aria-hidden="true" tabindex="-1"></a><span class="co"># install this package first if not installed</span></span>
@@ -3047,7 +3055,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb51-402"><a href="#cb51-402" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-403"><a href="#cb51-403" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-404"><a href="#cb51-404" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-405"><a href="#cb51-405" aria-hidden="true" tabindex="-1"></a>Note that the amplitude envelope shows a high signal-to-noise ratio of the sound events, which is ideal for energy-based detection. This can be conducted using <span class="in">`ernergy_detector()`</span> as follows:</span>
+<span id="cb51-405"><a href="#cb51-405" aria-hidden="true" tabindex="-1"></a>Note that the amplitude envelope shows a high signal-to-noise ratio of the sound events, which is ideal for energy-based detection. This can be conducted using <span class="in">`energy_detector()`</span> as follows:</span>
 <span id="cb51-406"><a href="#cb51-406" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-407"><a href="#cb51-407" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, fig.height=4, fig.width=10}</span></span>
 <span id="cb51-408"><a href="#cb51-408" aria-hidden="true" tabindex="-1"></a></span>
@@ -3081,7 +3089,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb51-438"><a href="#cb51-438" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-439"><a href="#cb51-439" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb51-440"><a href="#cb51-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-441"><a href="#cb51-441" aria-hidden="true" tabindex="-1"></a>Now we will make use of some additional arguments to filter out specific sound events based on their structural features. For instance we can use the argument <span class="in">`minimum.duration`</span> to provide a time treshold (in ms) to exclude short sound events and keep only the longest sound events:</span>
+<span id="cb51-441"><a href="#cb51-441" aria-hidden="true" tabindex="-1"></a>Now we will make use of some additional arguments to filter out specific sound events based on their structural features. For instance we can use the argument <span class="in">`min.duration`</span> to provide a time treshold (in ms) to exclude short sound events and keep only the longest sound events:</span>
 <span id="cb51-442"><a href="#cb51-442" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-443"><a href="#cb51-443" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eval = TRUE, echo = TRUE, fig.height=4, fig.width=10}</span></span>
 <span id="cb51-444"><a href="#cb51-444" aria-hidden="true" tabindex="-1"></a></span>
@@ -3109,487 +3117,495 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb51-466"><a href="#cb51-466" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eval = TRUE, echo = TRUE, fig.height=4, fig.width=10}</span></span>
 <span id="cb51-467"><a href="#cb51-467" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-468"><a href="#cb51-468" aria-hidden="true" tabindex="-1"></a><span class="co"># run detection</span></span>
-<span id="cb51-469"><a href="#cb51-469" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span> <span class="fu">energy_detector</span>(<span class="at">files =</span> <span class="st">"simulated_1.wav"</span>, <span class="at">bp =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>),  <span class="at">threshold =</span> <span class="dv">50</span>, <span class="at">smooth =</span> <span class="dv">150</span>, <span class="at">max.duration =</span> <span class="dv">500</span>, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
-<span id="cb51-470"><a href="#cb51-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-471"><a href="#cb51-471" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
-<span id="cb51-472"><a href="#cb51-472" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_1,  <span class="at">detection =</span> detection)</span>
-<span id="cb51-473"><a href="#cb51-473" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-474"><a href="#cb51-474" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-475"><a href="#cb51-475" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-476"><a href="#cb51-476" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-477"><a href="#cb51-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-478"><a href="#cb51-478" aria-hidden="true" tabindex="-1"></a>We can also focus the detection on specific frequency ranges using the argument <span class="in">`bp`</span> (bandpass). By setting <span class="in">`bp = c(5, 8)`</span> only those sound events found within that frequency range (5-8 kHz) will be detected, which excludes sound events below 5 kHz:</span>
-<span id="cb51-479"><a href="#cb51-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-480"><a href="#cb51-480" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, fig.height=4, fig.width=10, eval = TRUE, echo = TRUE}</span></span>
+<span id="cb51-469"><a href="#cb51-469" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
+<span id="cb51-470"><a href="#cb51-470" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
+<span id="cb51-471"><a href="#cb51-471" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_1.wav"</span>,</span>
+<span id="cb51-472"><a href="#cb51-472" aria-hidden="true" tabindex="-1"></a>    <span class="at">bp =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>),</span>
+<span id="cb51-473"><a href="#cb51-473" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
+<span id="cb51-474"><a href="#cb51-474" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="dv">150</span>,</span>
+<span id="cb51-475"><a href="#cb51-475" aria-hidden="true" tabindex="-1"></a>    <span class="at">max.duration =</span> <span class="dv">500</span>,</span>
+<span id="cb51-476"><a href="#cb51-476" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
+<span id="cb51-477"><a href="#cb51-477" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb51-478"><a href="#cb51-478" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-479"><a href="#cb51-479" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
+<span id="cb51-480"><a href="#cb51-480" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_1,  <span class="at">detection =</span> detection)</span>
 <span id="cb51-481"><a href="#cb51-481" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-482"><a href="#cb51-482" aria-hidden="true" tabindex="-1"></a><span class="co"># Detecting</span></span>
-<span id="cb51-483"><a href="#cb51-483" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
-<span id="cb51-484"><a href="#cb51-484" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
-<span id="cb51-485"><a href="#cb51-485" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_1.wav"</span>,</span>
-<span id="cb51-486"><a href="#cb51-486" aria-hidden="true" tabindex="-1"></a>    <span class="at">bp =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">8</span>),</span>
-<span id="cb51-487"><a href="#cb51-487" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
-<span id="cb51-488"><a href="#cb51-488" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="dv">150</span>,</span>
-<span id="cb51-489"><a href="#cb51-489" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
-<span id="cb51-490"><a href="#cb51-490" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb51-491"><a href="#cb51-491" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-492"><a href="#cb51-492" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
-<span id="cb51-493"><a href="#cb51-493" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_1,  <span class="at">detection =</span> detection)</span>
-<span id="cb51-494"><a href="#cb51-494" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-495"><a href="#cb51-495" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-496"><a href="#cb51-496" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-497"><a href="#cb51-497" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-498"><a href="#cb51-498" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-499"><a href="#cb51-499" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
-<span id="cb51-500"><a href="#cb51-500" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"5"</span><span class="kw">&gt;</span>Exercise<span class="kw">&lt;/font&gt;</span></span>
-<span id="cb51-501"><a href="#cb51-501" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-502"><a href="#cb51-502" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Detect only the short sound below 5 kHz</span>
-<span id="cb51-503"><a href="#cb51-503" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-504"><a href="#cb51-504" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, fig.height=4, fig.width=10, eval = FALSE, echo = FALSE}</span></span>
-<span id="cb51-505"><a href="#cb51-505" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-506"><a href="#cb51-506" aria-hidden="true" tabindex="-1"></a><span class="co"># Detect</span></span>
-<span id="cb51-507"><a href="#cb51-507" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
-<span id="cb51-508"><a href="#cb51-508" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
-<span id="cb51-509"><a href="#cb51-509" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_1.wav"</span>,</span>
-<span id="cb51-510"><a href="#cb51-510" aria-hidden="true" tabindex="-1"></a>    <span class="at">bp =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">6</span>),</span>
-<span id="cb51-511"><a href="#cb51-511" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
-<span id="cb51-512"><a href="#cb51-512" aria-hidden="true" tabindex="-1"></a>    <span class="at">max.duration =</span> <span class="dv">500</span>,</span>
-<span id="cb51-513"><a href="#cb51-513" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="dv">150</span>,</span>
-<span id="cb51-514"><a href="#cb51-514" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
-<span id="cb51-515"><a href="#cb51-515" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb51-516"><a href="#cb51-516" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-517"><a href="#cb51-517" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
-<span id="cb51-518"><a href="#cb51-518" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_1,  <span class="at">detection =</span> detection)</span>
-<span id="cb51-519"><a href="#cb51-519" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-520"><a href="#cb51-520" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-521"><a href="#cb51-521" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-522"><a href="#cb51-522" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb51-523"><a href="#cb51-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-482"><a href="#cb51-482" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-483"><a href="#cb51-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-484"><a href="#cb51-484" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-485"><a href="#cb51-485" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-486"><a href="#cb51-486" aria-hidden="true" tabindex="-1"></a>We can also focus the detection on specific frequency ranges using the argument <span class="in">`bp`</span> (bandpass). By setting <span class="in">`bp = c(5, 8)`</span> only those sound events found within that frequency range (5-8 kHz) will be detected, which excludes sound events below 5 kHz:</span>
+<span id="cb51-487"><a href="#cb51-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-488"><a href="#cb51-488" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, fig.height=4, fig.width=10, eval = TRUE, echo = TRUE}</span></span>
+<span id="cb51-489"><a href="#cb51-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-490"><a href="#cb51-490" aria-hidden="true" tabindex="-1"></a><span class="co"># Detecting</span></span>
+<span id="cb51-491"><a href="#cb51-491" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
+<span id="cb51-492"><a href="#cb51-492" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
+<span id="cb51-493"><a href="#cb51-493" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_1.wav"</span>,</span>
+<span id="cb51-494"><a href="#cb51-494" aria-hidden="true" tabindex="-1"></a>    <span class="at">bp =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">8</span>),</span>
+<span id="cb51-495"><a href="#cb51-495" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
+<span id="cb51-496"><a href="#cb51-496" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="dv">150</span>,</span>
+<span id="cb51-497"><a href="#cb51-497" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
+<span id="cb51-498"><a href="#cb51-498" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb51-499"><a href="#cb51-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-500"><a href="#cb51-500" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
+<span id="cb51-501"><a href="#cb51-501" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_1,  <span class="at">detection =</span> detection)</span>
+<span id="cb51-502"><a href="#cb51-502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-503"><a href="#cb51-503" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-504"><a href="#cb51-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-505"><a href="#cb51-505" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-506"><a href="#cb51-506" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-507"><a href="#cb51-507" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
+<span id="cb51-508"><a href="#cb51-508" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"5"</span><span class="kw">&gt;</span>Exercise<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb51-509"><a href="#cb51-509" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-510"><a href="#cb51-510" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Detect only the short sound below 5 kHz</span>
+<span id="cb51-511"><a href="#cb51-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-512"><a href="#cb51-512" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, fig.height=4, fig.width=10, eval = FALSE, echo = FALSE}</span></span>
+<span id="cb51-513"><a href="#cb51-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-514"><a href="#cb51-514" aria-hidden="true" tabindex="-1"></a><span class="co"># Detect</span></span>
+<span id="cb51-515"><a href="#cb51-515" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
+<span id="cb51-516"><a href="#cb51-516" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
+<span id="cb51-517"><a href="#cb51-517" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_1.wav"</span>,</span>
+<span id="cb51-518"><a href="#cb51-518" aria-hidden="true" tabindex="-1"></a>    <span class="at">bp =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">6</span>),</span>
+<span id="cb51-519"><a href="#cb51-519" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
+<span id="cb51-520"><a href="#cb51-520" aria-hidden="true" tabindex="-1"></a>    <span class="at">max.duration =</span> <span class="dv">500</span>,</span>
+<span id="cb51-521"><a href="#cb51-521" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="dv">150</span>,</span>
+<span id="cb51-522"><a href="#cb51-522" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
+<span id="cb51-523"><a href="#cb51-523" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb51-524"><a href="#cb51-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-525"><a href="#cb51-525" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-526"><a href="#cb51-526" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-527"><a href="#cb51-527" aria-hidden="true" tabindex="-1"></a>Amplitude modulation (variation in amplitude across a sound event) can be problematic for detection based on amplitude envelopes. We can also simulate some amplitude modulation using <span class="in">`warbleR::simulate_songs()`</span>:</span>
-<span id="cb51-528"><a href="#cb51-528" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-529"><a href="#cb51-529" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, warning=FALSE, message=FALSE}</span></span>
-<span id="cb51-530"><a href="#cb51-530" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-531"><a href="#cb51-531" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating simulated song</span></span>
-<span id="cb51-532"><a href="#cb51-532" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
-<span id="cb51-533"><a href="#cb51-533" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-534"><a href="#cb51-534" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating vector for duration</span></span>
-<span id="cb51-535"><a href="#cb51-535" aria-hidden="true" tabindex="-1"></a>durs <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">0.3</span>, <span class="dv">1</span>), <span class="dv">5</span>)</span>
+<span id="cb51-525"><a href="#cb51-525" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
+<span id="cb51-526"><a href="#cb51-526" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_1,  <span class="at">detection =</span> detection)</span>
+<span id="cb51-527"><a href="#cb51-527" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-528"><a href="#cb51-528" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-529"><a href="#cb51-529" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-530"><a href="#cb51-530" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb51-531"><a href="#cb51-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-532"><a href="#cb51-532" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-533"><a href="#cb51-533" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-534"><a href="#cb51-534" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-535"><a href="#cb51-535" aria-hidden="true" tabindex="-1"></a>Amplitude modulation (variation in amplitude across a sound event) can be problematic for detection based on amplitude envelopes. We can also simulate some amplitude modulation using <span class="in">`warbleR::simulate_songs()`</span>:</span>
 <span id="cb51-536"><a href="#cb51-536" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-537"><a href="#cb51-537" aria-hidden="true" tabindex="-1"></a>sim_2 <span class="ot">&lt;-</span></span>
-<span id="cb51-538"><a href="#cb51-538" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sim_songs</span>(</span>
-<span id="cb51-539"><a href="#cb51-539" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">10</span>,</span>
-<span id="cb51-540"><a href="#cb51-540" aria-hidden="true" tabindex="-1"></a>    <span class="at">durs =</span> durs,</span>
-<span id="cb51-541"><a href="#cb51-541" aria-hidden="true" tabindex="-1"></a>    <span class="at">freqs =</span> <span class="dv">5</span>,</span>
-<span id="cb51-542"><a href="#cb51-542" aria-hidden="true" tabindex="-1"></a>    <span class="at">sig2 =</span> <span class="fl">0.01</span>,</span>
-<span id="cb51-543"><a href="#cb51-543" aria-hidden="true" tabindex="-1"></a>    <span class="at">gaps =</span> <span class="fl">0.5</span>,</span>
-<span id="cb51-544"><a href="#cb51-544" aria-hidden="true" tabindex="-1"></a>    <span class="at">harms =</span> <span class="dv">1</span>,</span>
-<span id="cb51-545"><a href="#cb51-545" aria-hidden="true" tabindex="-1"></a>    <span class="at">bgn =</span> <span class="fl">0.1</span>,</span>
-<span id="cb51-546"><a href="#cb51-546" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
-<span id="cb51-547"><a href="#cb51-547" aria-hidden="true" tabindex="-1"></a>    <span class="at">file.name =</span> <span class="st">"simulated_2"</span>,</span>
-<span id="cb51-548"><a href="#cb51-548" aria-hidden="true" tabindex="-1"></a>    <span class="at">selec.table =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb51-549"><a href="#cb51-549" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="st">"cos"</span>,</span>
-<span id="cb51-550"><a href="#cb51-550" aria-hidden="true" tabindex="-1"></a>    <span class="at">fin =</span> <span class="fl">0.3</span>,</span>
-<span id="cb51-551"><a href="#cb51-551" aria-hidden="true" tabindex="-1"></a>    <span class="at">fout =</span> <span class="fl">0.35</span>,</span>
-<span id="cb51-552"><a href="#cb51-552" aria-hidden="true" tabindex="-1"></a>    <span class="at">samp.rate =</span> <span class="dv">18</span>,</span>
-<span id="cb51-553"><a href="#cb51-553" aria-hidden="true" tabindex="-1"></a>    <span class="at">am.amps =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="fl">0.1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb51-554"><a href="#cb51-554" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb51-555"><a href="#cb51-555" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-556"><a href="#cb51-556" aria-hidden="true" tabindex="-1"></a><span class="co"># extract wave object and selection table</span></span>
-<span id="cb51-557"><a href="#cb51-557" aria-hidden="true" tabindex="-1"></a>simulated_2 <span class="ot">&lt;-</span> sim_2<span class="sc">$</span>wave</span>
-<span id="cb51-558"><a href="#cb51-558" aria-hidden="true" tabindex="-1"></a>sim2_sel_table <span class="ot">&lt;-</span> sim_2<span class="sc">$</span>selec.table</span>
-<span id="cb51-559"><a href="#cb51-559" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-560"><a href="#cb51-560" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
-<span id="cb51-561"><a href="#cb51-561" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_2, <span class="at">envelope =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb51-562"><a href="#cb51-562" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-563"><a href="#cb51-563" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-564"><a href="#cb51-564" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-565"><a href="#cb51-565" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-566"><a href="#cb51-566" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-567"><a href="#cb51-567" aria-hidden="true" tabindex="-1"></a>When sound events have strong amplitude modulation they can be split during detection:</span>
-<span id="cb51-568"><a href="#cb51-568" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-569"><a href="#cb51-569" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE}</span></span>
+<span id="cb51-537"><a href="#cb51-537" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE, warning=FALSE, message=FALSE}</span></span>
+<span id="cb51-538"><a href="#cb51-538" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-539"><a href="#cb51-539" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating simulated song</span></span>
+<span id="cb51-540"><a href="#cb51-540" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
+<span id="cb51-541"><a href="#cb51-541" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-542"><a href="#cb51-542" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating vector for duration</span></span>
+<span id="cb51-543"><a href="#cb51-543" aria-hidden="true" tabindex="-1"></a>durs <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">0.3</span>, <span class="dv">1</span>), <span class="dv">5</span>)</span>
+<span id="cb51-544"><a href="#cb51-544" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-545"><a href="#cb51-545" aria-hidden="true" tabindex="-1"></a>sim_2 <span class="ot">&lt;-</span></span>
+<span id="cb51-546"><a href="#cb51-546" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sim_songs</span>(</span>
+<span id="cb51-547"><a href="#cb51-547" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">10</span>,</span>
+<span id="cb51-548"><a href="#cb51-548" aria-hidden="true" tabindex="-1"></a>    <span class="at">durs =</span> durs,</span>
+<span id="cb51-549"><a href="#cb51-549" aria-hidden="true" tabindex="-1"></a>    <span class="at">freqs =</span> <span class="dv">5</span>,</span>
+<span id="cb51-550"><a href="#cb51-550" aria-hidden="true" tabindex="-1"></a>    <span class="at">sig2 =</span> <span class="fl">0.01</span>,</span>
+<span id="cb51-551"><a href="#cb51-551" aria-hidden="true" tabindex="-1"></a>    <span class="at">gaps =</span> <span class="fl">0.5</span>,</span>
+<span id="cb51-552"><a href="#cb51-552" aria-hidden="true" tabindex="-1"></a>    <span class="at">harms =</span> <span class="dv">1</span>,</span>
+<span id="cb51-553"><a href="#cb51-553" aria-hidden="true" tabindex="-1"></a>    <span class="at">bgn =</span> <span class="fl">0.1</span>,</span>
+<span id="cb51-554"><a href="#cb51-554" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
+<span id="cb51-555"><a href="#cb51-555" aria-hidden="true" tabindex="-1"></a>    <span class="at">file.name =</span> <span class="st">"simulated_2"</span>,</span>
+<span id="cb51-556"><a href="#cb51-556" aria-hidden="true" tabindex="-1"></a>    <span class="at">selec.table =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb51-557"><a href="#cb51-557" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="st">"cos"</span>,</span>
+<span id="cb51-558"><a href="#cb51-558" aria-hidden="true" tabindex="-1"></a>    <span class="at">fin =</span> <span class="fl">0.3</span>,</span>
+<span id="cb51-559"><a href="#cb51-559" aria-hidden="true" tabindex="-1"></a>    <span class="at">fout =</span> <span class="fl">0.35</span>,</span>
+<span id="cb51-560"><a href="#cb51-560" aria-hidden="true" tabindex="-1"></a>    <span class="at">samp.rate =</span> <span class="dv">18</span>,</span>
+<span id="cb51-561"><a href="#cb51-561" aria-hidden="true" tabindex="-1"></a>    <span class="at">am.amps =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="fl">0.1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb51-562"><a href="#cb51-562" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb51-563"><a href="#cb51-563" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-564"><a href="#cb51-564" aria-hidden="true" tabindex="-1"></a><span class="co"># extract wave object and selection table</span></span>
+<span id="cb51-565"><a href="#cb51-565" aria-hidden="true" tabindex="-1"></a>simulated_2 <span class="ot">&lt;-</span> sim_2<span class="sc">$</span>wave</span>
+<span id="cb51-566"><a href="#cb51-566" aria-hidden="true" tabindex="-1"></a>sim2_sel_table <span class="ot">&lt;-</span> sim_2<span class="sc">$</span>selec.table</span>
+<span id="cb51-567"><a href="#cb51-567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-568"><a href="#cb51-568" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
+<span id="cb51-569"><a href="#cb51-569" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_2, <span class="at">envelope =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb51-570"><a href="#cb51-570" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-571"><a href="#cb51-571" aria-hidden="true" tabindex="-1"></a><span class="co"># detect sounds</span></span>
-<span id="cb51-572"><a href="#cb51-572" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span> <span class="fu">energy_detector</span>(<span class="at">files =</span> <span class="st">"simulated_2.wav"</span>, <span class="at">threshold =</span> <span class="dv">50</span>, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
-<span id="cb51-573"><a href="#cb51-573" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-574"><a href="#cb51-574" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
-<span id="cb51-575"><a href="#cb51-575" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_2, <span class="at">envelope =</span> <span class="cn">TRUE</span>, <span class="at">threshold =</span> <span class="dv">50</span>, <span class="at">detection =</span> detection)</span>
+<span id="cb51-571"><a href="#cb51-571" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-572"><a href="#cb51-572" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-573"><a href="#cb51-573" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-574"><a href="#cb51-574" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-575"><a href="#cb51-575" aria-hidden="true" tabindex="-1"></a>When sound events have strong amplitude modulation they can be split during detection:</span>
 <span id="cb51-576"><a href="#cb51-576" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-577"><a href="#cb51-577" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-577"><a href="#cb51-577" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE}</span></span>
 <span id="cb51-578"><a href="#cb51-578" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-579"><a href="#cb51-579" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-580"><a href="#cb51-580" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-581"><a href="#cb51-581" aria-hidden="true" tabindex="-1"></a>There are two arguments that can deal with this: <span class="in">`holdtime`</span> and <span class="in">`smooth`</span>. <span class="in">`hold.time`</span> allows to merge split sound events that are found within a given time range (in ms). This time range should be high enough to merge things belonging to the same sound event but not too high so it merges different sound events. For this example a <span class="in">`hold.time`</span> of 200 ms can do the trick (we know gaps between sound events are \~0.5 s long):</span>
-<span id="cb51-582"><a href="#cb51-582" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-583"><a href="#cb51-583" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE}</span></span>
+<span id="cb51-579"><a href="#cb51-579" aria-hidden="true" tabindex="-1"></a><span class="co"># detect sounds</span></span>
+<span id="cb51-580"><a href="#cb51-580" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span> <span class="fu">energy_detector</span>(<span class="at">files =</span> <span class="st">"simulated_2.wav"</span>, <span class="at">threshold =</span> <span class="dv">50</span>, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb51-581"><a href="#cb51-581" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-582"><a href="#cb51-582" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
+<span id="cb51-583"><a href="#cb51-583" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(<span class="at">wave =</span> simulated_2, <span class="at">envelope =</span> <span class="cn">TRUE</span>, <span class="at">threshold =</span> <span class="dv">50</span>, <span class="at">detection =</span> detection)</span>
 <span id="cb51-584"><a href="#cb51-584" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-585"><a href="#cb51-585" aria-hidden="true" tabindex="-1"></a><span class="co"># detect sounds</span></span>
-<span id="cb51-586"><a href="#cb51-586" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
-<span id="cb51-587"><a href="#cb51-587" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
-<span id="cb51-588"><a href="#cb51-588" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_2.wav"</span>,</span>
-<span id="cb51-589"><a href="#cb51-589" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
-<span id="cb51-590"><a href="#cb51-590" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.duration =</span> <span class="dv">1</span>,</span>
-<span id="cb51-591"><a href="#cb51-591" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
-<span id="cb51-592"><a href="#cb51-592" aria-hidden="true" tabindex="-1"></a>    <span class="at">hold.time =</span> <span class="dv">200</span></span>
-<span id="cb51-593"><a href="#cb51-593" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb51-594"><a href="#cb51-594" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-595"><a href="#cb51-595" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
-<span id="cb51-596"><a href="#cb51-596" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(</span>
-<span id="cb51-597"><a href="#cb51-597" aria-hidden="true" tabindex="-1"></a>  <span class="at">wave =</span> simulated_2,</span>
-<span id="cb51-598"><a href="#cb51-598" aria-hidden="true" tabindex="-1"></a>  <span class="at">envelope =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb51-599"><a href="#cb51-599" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="dv">50</span>,</span>
-<span id="cb51-600"><a href="#cb51-600" aria-hidden="true" tabindex="-1"></a>  <span class="at">detection =</span> detection</span>
-<span id="cb51-601"><a href="#cb51-601" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb51-585"><a href="#cb51-585" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-586"><a href="#cb51-586" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-587"><a href="#cb51-587" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-588"><a href="#cb51-588" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-589"><a href="#cb51-589" aria-hidden="true" tabindex="-1"></a>There are two arguments that can deal with this: <span class="in">`holdtime`</span> and <span class="in">`smooth`</span>. <span class="in">`hold.time`</span> allows to merge split sound events that are found within a given time range (in ms). This time range should be high enough to merge things belonging to the same sound event but not too high so it merges different sound events. For this example a <span class="in">`hold.time`</span> of 200 ms can do the trick (we know gaps between sound events are \~0.5 s long):</span>
+<span id="cb51-590"><a href="#cb51-590" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-591"><a href="#cb51-591" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE}</span></span>
+<span id="cb51-592"><a href="#cb51-592" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-593"><a href="#cb51-593" aria-hidden="true" tabindex="-1"></a><span class="co"># detect sounds</span></span>
+<span id="cb51-594"><a href="#cb51-594" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
+<span id="cb51-595"><a href="#cb51-595" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
+<span id="cb51-596"><a href="#cb51-596" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_2.wav"</span>,</span>
+<span id="cb51-597"><a href="#cb51-597" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
+<span id="cb51-598"><a href="#cb51-598" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.duration =</span> <span class="dv">1</span>,</span>
+<span id="cb51-599"><a href="#cb51-599" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
+<span id="cb51-600"><a href="#cb51-600" aria-hidden="true" tabindex="-1"></a>    <span class="at">hold.time =</span> <span class="dv">200</span></span>
+<span id="cb51-601"><a href="#cb51-601" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb51-602"><a href="#cb51-602" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-603"><a href="#cb51-603" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-604"><a href="#cb51-604" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-605"><a href="#cb51-605" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-606"><a href="#cb51-606" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-607"><a href="#cb51-607" aria-hidden="true" tabindex="-1"></a><span class="in">`smooth`</span> works by merging the amplitude envelope 'hills' of the split sound events themselves. It smooths envelopes by applying a sliding window averaging of amplitude values. It's given in ms of the window size. A <span class="in">`smooth`</span> of 350 ms can merged back split sound events from our example:</span>
-<span id="cb51-608"><a href="#cb51-608" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-609"><a href="#cb51-609" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE}</span></span>
+<span id="cb51-603"><a href="#cb51-603" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
+<span id="cb51-604"><a href="#cb51-604" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(</span>
+<span id="cb51-605"><a href="#cb51-605" aria-hidden="true" tabindex="-1"></a>  <span class="at">wave =</span> simulated_2,</span>
+<span id="cb51-606"><a href="#cb51-606" aria-hidden="true" tabindex="-1"></a>  <span class="at">envelope =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb51-607"><a href="#cb51-607" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="dv">50</span>,</span>
+<span id="cb51-608"><a href="#cb51-608" aria-hidden="true" tabindex="-1"></a>  <span class="at">detection =</span> detection</span>
+<span id="cb51-609"><a href="#cb51-609" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb51-610"><a href="#cb51-610" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-611"><a href="#cb51-611" aria-hidden="true" tabindex="-1"></a><span class="co"># detect sounds</span></span>
-<span id="cb51-612"><a href="#cb51-612" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
-<span id="cb51-613"><a href="#cb51-613" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
-<span id="cb51-614"><a href="#cb51-614" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_2.wav"</span>,</span>
-<span id="cb51-615"><a href="#cb51-615" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
-<span id="cb51-616"><a href="#cb51-616" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.duration =</span> <span class="dv">1</span>,</span>
-<span id="cb51-617"><a href="#cb51-617" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
-<span id="cb51-618"><a href="#cb51-618" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="dv">350</span></span>
-<span id="cb51-619"><a href="#cb51-619" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb51-620"><a href="#cb51-620" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-621"><a href="#cb51-621" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
-<span id="cb51-622"><a href="#cb51-622" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(</span>
-<span id="cb51-623"><a href="#cb51-623" aria-hidden="true" tabindex="-1"></a>  <span class="at">wave =</span> simulated_2,</span>
-<span id="cb51-624"><a href="#cb51-624" aria-hidden="true" tabindex="-1"></a>  <span class="at">envelope =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb51-625"><a href="#cb51-625" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="dv">50</span>,</span>
-<span id="cb51-626"><a href="#cb51-626" aria-hidden="true" tabindex="-1"></a>  <span class="at">detection =</span> detection,</span>
-<span id="cb51-627"><a href="#cb51-627" aria-hidden="true" tabindex="-1"></a>  <span class="at">smooth =</span> <span class="dv">350</span></span>
-<span id="cb51-628"><a href="#cb51-628" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb51-629"><a href="#cb51-629" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-630"><a href="#cb51-630" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-631"><a href="#cb51-631" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-632"><a href="#cb51-632" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-633"><a href="#cb51-633" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-634"><a href="#cb51-634" aria-hidden="true" tabindex="-1"></a>The function has some additional arguments for further filtering detections (<span class="in">`peak.amplitude`</span>) and speeding up analysis (<span class="in">`thinning`</span> and <span class="in">`parallel`</span>).</span>
-<span id="cb51-635"><a href="#cb51-635" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-636"><a href="#cb51-636" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-611"><a href="#cb51-611" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-612"><a href="#cb51-612" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-613"><a href="#cb51-613" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-614"><a href="#cb51-614" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-615"><a href="#cb51-615" aria-hidden="true" tabindex="-1"></a><span class="in">`smooth`</span> works by merging the amplitude envelope 'hills' of the split sound events themselves. It smooths envelopes by applying a sliding window averaging of amplitude values. It's given in ms of the window size. A <span class="in">`smooth`</span> of 350 ms can merged back split sound events from our example:</span>
+<span id="cb51-616"><a href="#cb51-616" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-617"><a href="#cb51-617" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = TRUE}</span></span>
+<span id="cb51-618"><a href="#cb51-618" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-619"><a href="#cb51-619" aria-hidden="true" tabindex="-1"></a><span class="co"># detect sounds</span></span>
+<span id="cb51-620"><a href="#cb51-620" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
+<span id="cb51-621"><a href="#cb51-621" aria-hidden="true" tabindex="-1"></a>  <span class="fu">energy_detector</span>(</span>
+<span id="cb51-622"><a href="#cb51-622" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_2.wav"</span>,</span>
+<span id="cb51-623"><a href="#cb51-623" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
+<span id="cb51-624"><a href="#cb51-624" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.duration =</span> <span class="dv">1</span>,</span>
+<span id="cb51-625"><a href="#cb51-625" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
+<span id="cb51-626"><a href="#cb51-626" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="dv">350</span></span>
+<span id="cb51-627"><a href="#cb51-627" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb51-628"><a href="#cb51-628" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-629"><a href="#cb51-629" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
+<span id="cb51-630"><a href="#cb51-630" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(</span>
+<span id="cb51-631"><a href="#cb51-631" aria-hidden="true" tabindex="-1"></a>  <span class="at">wave =</span> simulated_2,</span>
+<span id="cb51-632"><a href="#cb51-632" aria-hidden="true" tabindex="-1"></a>  <span class="at">envelope =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb51-633"><a href="#cb51-633" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="dv">50</span>,</span>
+<span id="cb51-634"><a href="#cb51-634" aria-hidden="true" tabindex="-1"></a>  <span class="at">detection =</span> detection,</span>
+<span id="cb51-635"><a href="#cb51-635" aria-hidden="true" tabindex="-1"></a>  <span class="at">smooth =</span> <span class="dv">350</span></span>
+<span id="cb51-636"><a href="#cb51-636" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb51-637"><a href="#cb51-637" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-638"><a href="#cb51-638" aria-hidden="true" tabindex="-1"></a><span class="fu">### Optimizing energy-based detection</span></span>
+<span id="cb51-638"><a href="#cb51-638" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb51-639"><a href="#cb51-639" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-640"><a href="#cb51-640" aria-hidden="true" tabindex="-1"></a>This last example using <span class="in">`smooth`</span> can be used to showcase how the tunning parameters can be optimized. As explained above, to do this we need a reference table that contains the time position of the target sound events. The function <span class="in">`optimize_energy_detector()`</span> can be used finding the optimal parameter values. We must provide the range of parameter values that will be evaluated:</span>
+<span id="cb51-640"><a href="#cb51-640" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-641"><a href="#cb51-641" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-644"><a href="#cb51-644" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-645"><a href="#cb51-645" aria-hidden="true" tabindex="-1"></a>optim_detection <span class="ot">&lt;-</span></span>
-<span id="cb51-646"><a href="#cb51-646" aria-hidden="true" tabindex="-1"></a>  <span class="fu">optimize_energy_detector</span>(</span>
-<span id="cb51-647"><a href="#cb51-647" aria-hidden="true" tabindex="-1"></a>    <span class="at">reference =</span> sim2_sel_table,</span>
-<span id="cb51-648"><a href="#cb51-648" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_2.wav"</span>,</span>
-<span id="cb51-649"><a href="#cb51-649" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
-<span id="cb51-650"><a href="#cb51-650" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.duration =</span> <span class="dv">1</span>,</span>
-<span id="cb51-651"><a href="#cb51-651" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
-<span id="cb51-652"><a href="#cb51-652" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">250</span>, <span class="dv">350</span>)</span>
-<span id="cb51-653"><a href="#cb51-653" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb51-654"><a href="#cb51-654" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-655"><a href="#cb51-655" aria-hidden="true" tabindex="-1"></a>optim_detection[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">17</span><span class="sc">:</span><span class="dv">18</span>)]</span>
-<span id="cb51-656"><a href="#cb51-656" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-657"><a href="#cb51-657" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-658"><a href="#cb51-658" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-659"><a href="#cb51-659" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-660"><a href="#cb51-660" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-661"><a href="#cb51-661" aria-hidden="true" tabindex="-1"></a>The output contains the combination of parameters used at each iteration as well as the corresponding diagnose indices. In this case all combinations generate a good detection (recall &amp; precision = 1). However, only the routine with the highest <span class="in">`smooth`</span> (last row) has no split sound events ('split.positive' column). It also shows a better overlap to the reference sound events ('overlap.to.true.positives' closer to 1).</span>
+<span id="cb51-642"><a href="#cb51-642" aria-hidden="true" tabindex="-1"></a>The function has some additional arguments for further filtering detections (<span class="in">`peak.amplitude`</span>) and speeding up analysis (<span class="in">`thinning`</span> and <span class="in">`parallel`</span>).</span>
+<span id="cb51-643"><a href="#cb51-643" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-644"><a href="#cb51-644" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-645"><a href="#cb51-645" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-646"><a href="#cb51-646" aria-hidden="true" tabindex="-1"></a><span class="fu">### Optimizing energy-based detection</span></span>
+<span id="cb51-647"><a href="#cb51-647" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-648"><a href="#cb51-648" aria-hidden="true" tabindex="-1"></a>This last example using <span class="in">`smooth`</span> can be used to showcase how the tunning parameters can be optimized. As explained above, to do this we need a reference table that contains the time position of the target sound events. The function <span class="in">`optimize_energy_detector()`</span> can be used finding the optimal parameter values. We must provide the range of parameter values that will be evaluated:</span>
+<span id="cb51-649"><a href="#cb51-649" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-652"><a href="#cb51-652" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-653"><a href="#cb51-653" aria-hidden="true" tabindex="-1"></a>optim_detection <span class="ot">&lt;-</span></span>
+<span id="cb51-654"><a href="#cb51-654" aria-hidden="true" tabindex="-1"></a>  <span class="fu">optimize_energy_detector</span>(</span>
+<span id="cb51-655"><a href="#cb51-655" aria-hidden="true" tabindex="-1"></a>    <span class="at">reference =</span> sim2_sel_table,</span>
+<span id="cb51-656"><a href="#cb51-656" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="st">"simulated_2.wav"</span>,</span>
+<span id="cb51-657"><a href="#cb51-657" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">50</span>,</span>
+<span id="cb51-658"><a href="#cb51-658" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.duration =</span> <span class="dv">1</span>,</span>
+<span id="cb51-659"><a href="#cb51-659" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>(),</span>
+<span id="cb51-660"><a href="#cb51-660" aria-hidden="true" tabindex="-1"></a>    <span class="at">smooth =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">250</span>, <span class="dv">350</span>)</span>
+<span id="cb51-661"><a href="#cb51-661" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb51-662"><a href="#cb51-662" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-663"><a href="#cb51-663" aria-hidden="true" tabindex="-1"></a>In addition, there are two complementary functions for optimizing energy-based detection routines: <span class="in">`feature_reference()`</span> and <span class="in">`merge_overlaps()`</span>. <span class="in">`feature_reference()`</span> allow user to get a sense of the time and frequency characteristics of a reference table. This information can be used to determine the range of tuning parameter values during optimization. This is the output of the function applied to <span class="in">`lbh_reference`</span>:</span>
+<span id="cb51-663"><a href="#cb51-663" aria-hidden="true" tabindex="-1"></a>optim_detection[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">17</span><span class="sc">:</span><span class="dv">18</span>)]</span>
 <span id="cb51-664"><a href="#cb51-664" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-667"><a href="#cb51-667" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-668"><a href="#cb51-668" aria-hidden="true" tabindex="-1"></a><span class="fu">feature_reference</span>(<span class="at">reference =</span> lbh_reference, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
-<span id="cb51-669"><a href="#cb51-669" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-670"><a href="#cb51-670" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-671"><a href="#cb51-671" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-672"><a href="#cb51-672" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-673"><a href="#cb51-673" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-674"><a href="#cb51-674" aria-hidden="true" tabindex="-1"></a>Features related to selection duration can be used to set the 'max.duration' and 'min.duration' values, frequency related features can inform banpass values, gap related features inform hold time values and duty cycle can be used to evaluate performance. Peak amplitude can be used to keep only those sound events with the highest intensity, mostly useful for routines in which only a subset of the target sound events present in the recordings is needed.</span>
-<span id="cb51-675"><a href="#cb51-675" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-676"><a href="#cb51-676" aria-hidden="true" tabindex="-1"></a><span class="in">`merge_overlaps()`</span> finds time-overlapping selections in reference tables and collapses them into a single selection. Overlapping selections would more likely appear as a single amplitude 'hill' and thus would be detected as a single sound event. So <span class="in">`merge_overlaps()`</span> can be useful to prepare references in a format representing a more realistic expectation of how a pefect energy detection routine would look like.</span>
+<span id="cb51-665"><a href="#cb51-665" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-666"><a href="#cb51-666" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-667"><a href="#cb51-667" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-668"><a href="#cb51-668" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-669"><a href="#cb51-669" aria-hidden="true" tabindex="-1"></a>The output contains the combination of parameters used at each iteration as well as the corresponding diagnose indices. In this case all combinations generate a good detection (recall &amp; precision = 1). However, only the routine with the highest <span class="in">`smooth`</span> (last row) has no split sound events ('split.positive' column). It also shows a better overlap to the reference sound events ('overlap.to.true.positives' closer to 1).</span>
+<span id="cb51-670"><a href="#cb51-670" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-671"><a href="#cb51-671" aria-hidden="true" tabindex="-1"></a>In addition, there are two complementary functions for optimizing energy-based detection routines: <span class="in">`feature_reference()`</span> and <span class="in">`merge_overlaps()`</span>. <span class="in">`feature_reference()`</span> allow user to get a sense of the time and frequency characteristics of a reference table. This information can be used to determine the range of tuning parameter values during optimization. This is the output of the function applied to <span class="in">`lbh_reference`</span>:</span>
+<span id="cb51-672"><a href="#cb51-672" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-675"><a href="#cb51-675" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-676"><a href="#cb51-676" aria-hidden="true" tabindex="-1"></a><span class="fu">feature_reference</span>(<span class="at">reference =</span> lbh_reference, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
 <span id="cb51-677"><a href="#cb51-677" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-678"><a href="#cb51-678" aria-hidden="true" tabindex="-1"></a><span class="fu">## Template-based detection</span></span>
+<span id="cb51-678"><a href="#cb51-678" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb51-679"><a href="#cb51-679" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-680"><a href="#cb51-680" aria-hidden="true" tabindex="-1"></a>This detection method is better suited for highly stereotyped sound events. As it doesn't depend on the signal-to-noise ratio it's more robust to higher levels of background noise. The procedure is divided in three steps:</span>
+<span id="cb51-680"><a href="#cb51-680" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-681"><a href="#cb51-681" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-682"><a href="#cb51-682" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Choosing the right template (<span class="in">`get_templates()`</span>)</span>
-<span id="cb51-683"><a href="#cb51-683" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Estimating the cross-correlation scores of templates along sound files (<span class="in">`template_correlator()`</span>)\</span>
-<span id="cb51-684"><a href="#cb51-684" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Detecting sound events by applying a correlation threshold (<span class="in">`template_detector()`</span>)</span>
+<span id="cb51-682"><a href="#cb51-682" aria-hidden="true" tabindex="-1"></a>Features related to selection duration can be used to set the 'max.duration' and 'min.duration' values, frequency related features can inform banpass values, gap related features inform hold time values and duty cycle can be used to evaluate performance. Peak amplitude can be used to keep only those sound events with the highest intensity, mostly useful for routines in which only a subset of the target sound events present in the recordings is needed.</span>
+<span id="cb51-683"><a href="#cb51-683" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-684"><a href="#cb51-684" aria-hidden="true" tabindex="-1"></a><span class="in">`merge_overlaps()`</span> finds time-overlapping selections in reference tables and collapses them into a single selection. Overlapping selections would more likely appear as a single amplitude 'hill' and thus would be detected as a single sound event. So <span class="in">`merge_overlaps()`</span> can be useful to prepare references in a format representing a more realistic expectation of how a pefect energy detection routine would look like.</span>
 <span id="cb51-685"><a href="#cb51-685" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-686"><a href="#cb51-686" aria-hidden="true" tabindex="-1"></a>The function <span class="in">`get_templates()`</span> can help you find a template closer to the average acoustic structure of the sound events in a reference table. This is done by finding the sound events closer to the centroid of the acoustic space. When the acoustic space is not supplied ('acoustic.space' argument) the function estimates it by measuring several acoustic parameters using the function <span class="co">[</span><span class="ot">`spectro_analysis()`</span><span class="co">](https://marce10.github.io/warbleR/reference/spectro_analysis.html)</span> from <span class="co">[</span><span class="ot">`warbleR`</span><span class="co">](https://CRAN.R-project.org/package=warbleR)</span>) and summarizing it with Principal Component Analysis (after z-transforming parameters). If only 1 template is required the function returns the sound event closest to the acoustic space centroid. The rationale here is that a sound event closest to the average sound event structure is more likely to share structural features with most sounds across the acoustic space than a sound event in the periphery of the space. These 'mean structure' templates can be obtained as follows:</span>
+<span id="cb51-686"><a href="#cb51-686" aria-hidden="true" tabindex="-1"></a><span class="fu">## Template-based detection</span></span>
 <span id="cb51-687"><a href="#cb51-687" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-688"><a href="#cb51-688" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = FALSE, echo = TRUE}</span></span>
+<span id="cb51-688"><a href="#cb51-688" aria-hidden="true" tabindex="-1"></a>This detection method is better suited for highly stereotyped sound events. As it doesn't depend on the signal-to-noise ratio it's more robust to higher levels of background noise. The procedure is divided in three steps:</span>
 <span id="cb51-689"><a href="#cb51-689" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-690"><a href="#cb51-690" aria-hidden="true" tabindex="-1"></a><span class="co"># get mean structure template</span></span>
-<span id="cb51-691"><a href="#cb51-691" aria-hidden="true" tabindex="-1"></a>template <span class="ot">&lt;-</span></span>
-<span id="cb51-692"><a href="#cb51-692" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_templates</span>(<span class="at">reference =</span> lbh1_reference, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb51-690"><a href="#cb51-690" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Choosing the right template (<span class="in">`get_templates()`</span>)</span>
+<span id="cb51-691"><a href="#cb51-691" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Estimating the cross-correlation scores of templates along sound files (<span class="in">`template_correlator()`</span>)\</span>
+<span id="cb51-692"><a href="#cb51-692" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Detecting sound events by applying a correlation threshold (<span class="in">`template_detector()`</span>)</span>
 <span id="cb51-693"><a href="#cb51-693" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-694"><a href="#cb51-694" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-694"><a href="#cb51-694" aria-hidden="true" tabindex="-1"></a>The function <span class="in">`get_templates()`</span> can help you find a template closer to the average acoustic structure of the sound events in a reference table. This is done by finding the sound events closer to the centroid of the acoustic space. When the acoustic space is not supplied ('acoustic.space' argument) the function estimates it by measuring several acoustic parameters using the function <span class="co">[</span><span class="ot">`spectro_analysis()`</span><span class="co">](https://marce10.github.io/warbleR/reference/spectro_analysis.html)</span> from <span class="co">[</span><span class="ot">`warbleR`</span><span class="co">](https://CRAN.R-project.org/package=warbleR)</span>) and summarizing it with Principal Component Analysis (after z-transforming parameters). If only 1 template is required the function returns the sound event closest to the acoustic space centroid. The rationale here is that a sound event closest to the average sound event structure is more likely to share structural features with most sounds across the acoustic space than a sound event in the periphery of the space. These 'mean structure' templates can be obtained as follows:</span>
 <span id="cb51-695"><a href="#cb51-695" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-696"><a href="#cb51-696" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, fig.width=6, fig.height=5, eval = TRUE, echo = FALSE}</span></span>
+<span id="cb51-696"><a href="#cb51-696" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = FALSE, echo = TRUE}</span></span>
 <span id="cb51-697"><a href="#cb51-697" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-698"><a href="#cb51-698" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"white"</span>)</span>
-<span id="cb51-699"><a href="#cb51-699" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-700"><a href="#cb51-700" aria-hidden="true" tabindex="-1"></a><span class="co"># get mean structure template</span></span>
-<span id="cb51-701"><a href="#cb51-701" aria-hidden="true" tabindex="-1"></a>template <span class="ot">&lt;-</span></span>
-<span id="cb51-702"><a href="#cb51-702" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_templates</span>(<span class="at">reference =</span> lbh1_reference, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb51-698"><a href="#cb51-698" aria-hidden="true" tabindex="-1"></a><span class="co"># get mean structure template</span></span>
+<span id="cb51-699"><a href="#cb51-699" aria-hidden="true" tabindex="-1"></a>template <span class="ot">&lt;-</span></span>
+<span id="cb51-700"><a href="#cb51-700" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_templates</span>(<span class="at">reference =</span> lbh1_reference, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb51-701"><a href="#cb51-701" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-702"><a href="#cb51-702" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb51-703"><a href="#cb51-703" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-704"><a href="#cb51-704" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-704"><a href="#cb51-704" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, fig.width=6, fig.height=5, eval = TRUE, echo = FALSE}</span></span>
 <span id="cb51-705"><a href="#cb51-705" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-706"><a href="#cb51-706" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-706"><a href="#cb51-706" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"white"</span>)</span>
 <span id="cb51-707"><a href="#cb51-707" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-708"><a href="#cb51-708" aria-hidden="true" tabindex="-1"></a>The graph above shows the overall acoustic spaces, in which the sound closest to the space centroid is highlighted. The highlighted sound is selected as the template and can be used to detect similar sound events. The function <span class="in">`get_templates()`</span> can also select several templates. This can be helpful when working with sounds that are just moderately stereotyped. This is done by dividing the acoustic space into sub-spaces defined as equal-size slices of a circle centered at the centroid of the acoustic space:</span>
-<span id="cb51-709"><a href="#cb51-709" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-710"><a href="#cb51-710" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = FALSE, echo = TRUE}</span></span>
+<span id="cb51-708"><a href="#cb51-708" aria-hidden="true" tabindex="-1"></a><span class="co"># get mean structure template</span></span>
+<span id="cb51-709"><a href="#cb51-709" aria-hidden="true" tabindex="-1"></a>template <span class="ot">&lt;-</span></span>
+<span id="cb51-710"><a href="#cb51-710" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_templates</span>(<span class="at">reference =</span> lbh1_reference, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
 <span id="cb51-711"><a href="#cb51-711" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-712"><a href="#cb51-712" aria-hidden="true" tabindex="-1"></a><span class="co"># get 3 templates</span></span>
-<span id="cb51-713"><a href="#cb51-713" aria-hidden="true" tabindex="-1"></a><span class="fu">get_templates</span>(<span class="at">reference =</span> lbh_reference, </span>
-<span id="cb51-714"><a href="#cb51-714" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.sub.spaces =</span> <span class="dv">3</span>, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb51-712"><a href="#cb51-712" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-713"><a href="#cb51-713" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-714"><a href="#cb51-714" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-715"><a href="#cb51-715" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-716"><a href="#cb51-716" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-716"><a href="#cb51-716" aria-hidden="true" tabindex="-1"></a>The graph above shows the overall acoustic spaces, in which the sound closest to the space centroid is highlighted. The highlighted sound is selected as the template and can be used to detect similar sound events. The function <span class="in">`get_templates()`</span> can also select several templates. This can be helpful when working with sounds that are just moderately stereotyped. This is done by dividing the acoustic space into sub-spaces defined as equal-size slices of a circle centered at the centroid of the acoustic space:</span>
 <span id="cb51-717"><a href="#cb51-717" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-718"><a href="#cb51-718" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, fig.width=6, fig.height=5, eval = TRUE, echo = FALSE}</span></span>
+<span id="cb51-718"><a href="#cb51-718" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = FALSE, echo = TRUE}</span></span>
 <span id="cb51-719"><a href="#cb51-719" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-720"><a href="#cb51-720" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"white"</span>)</span>
-<span id="cb51-721"><a href="#cb51-721" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-722"><a href="#cb51-722" aria-hidden="true" tabindex="-1"></a><span class="co"># get 3 templates</span></span>
-<span id="cb51-723"><a href="#cb51-723" aria-hidden="true" tabindex="-1"></a>templates <span class="ot">&lt;-</span> <span class="fu">get_templates</span>(<span class="at">reference =</span> lbh_reference, </span>
-<span id="cb51-724"><a href="#cb51-724" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.sub.spaces =</span> <span class="dv">3</span>, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb51-720"><a href="#cb51-720" aria-hidden="true" tabindex="-1"></a><span class="co"># get 3 templates</span></span>
+<span id="cb51-721"><a href="#cb51-721" aria-hidden="true" tabindex="-1"></a><span class="fu">get_templates</span>(<span class="at">reference =</span> lbh_reference, </span>
+<span id="cb51-722"><a href="#cb51-722" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.sub.spaces =</span> <span class="dv">3</span>, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb51-723"><a href="#cb51-723" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-724"><a href="#cb51-724" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb51-725"><a href="#cb51-725" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-726"><a href="#cb51-726" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-726"><a href="#cb51-726" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, fig.width=6, fig.height=5, eval = TRUE, echo = FALSE}</span></span>
 <span id="cb51-727"><a href="#cb51-727" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-728"><a href="#cb51-728" aria-hidden="true" tabindex="-1"></a>We will use the single template object ('template') to run a detection on the example 'lbh1' data:</span>
+<span id="cb51-728"><a href="#cb51-728" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">bg =</span> <span class="st">"white"</span>)</span>
 <span id="cb51-729"><a href="#cb51-729" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-732"><a href="#cb51-732" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-733"><a href="#cb51-733" aria-hidden="true" tabindex="-1"></a><span class="co"># get correlations</span></span>
-<span id="cb51-734"><a href="#cb51-734" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span></span>
-<span id="cb51-735"><a href="#cb51-735" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_correlator</span>(<span class="at">templates =</span> template,</span>
-<span id="cb51-736"><a href="#cb51-736" aria-hidden="true" tabindex="-1"></a>                      <span class="at">files =</span> <span class="st">"lbh1.wav"</span>,</span>
-<span id="cb51-737"><a href="#cb51-737" aria-hidden="true" tabindex="-1"></a>                      <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
-<span id="cb51-738"><a href="#cb51-738" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-739"><a href="#cb51-739" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-740"><a href="#cb51-740" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-741"><a href="#cb51-741" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-742"><a href="#cb51-742" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-743"><a href="#cb51-743" aria-hidden="true" tabindex="-1"></a>The output is an object of class 'template_correlations', with its own printing method:</span>
-<span id="cb51-744"><a href="#cb51-744" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-747"><a href="#cb51-747" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-748"><a href="#cb51-748" aria-hidden="true" tabindex="-1"></a><span class="co"># print</span></span>
-<span id="cb51-749"><a href="#cb51-749" aria-hidden="true" tabindex="-1"></a>correlations</span>
+<span id="cb51-730"><a href="#cb51-730" aria-hidden="true" tabindex="-1"></a><span class="co"># get 3 templates</span></span>
+<span id="cb51-731"><a href="#cb51-731" aria-hidden="true" tabindex="-1"></a>templates <span class="ot">&lt;-</span> <span class="fu">get_templates</span>(<span class="at">reference =</span> lbh_reference, </span>
+<span id="cb51-732"><a href="#cb51-732" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.sub.spaces =</span> <span class="dv">3</span>, <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb51-733"><a href="#cb51-733" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-734"><a href="#cb51-734" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-735"><a href="#cb51-735" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-736"><a href="#cb51-736" aria-hidden="true" tabindex="-1"></a>We will use the single template object ('template') to run a detection on the example 'lbh1' data:</span>
+<span id="cb51-737"><a href="#cb51-737" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-740"><a href="#cb51-740" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-741"><a href="#cb51-741" aria-hidden="true" tabindex="-1"></a><span class="co"># get correlations</span></span>
+<span id="cb51-742"><a href="#cb51-742" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span></span>
+<span id="cb51-743"><a href="#cb51-743" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_correlator</span>(<span class="at">templates =</span> template,</span>
+<span id="cb51-744"><a href="#cb51-744" aria-hidden="true" tabindex="-1"></a>                      <span class="at">files =</span> <span class="st">"lbh1.wav"</span>,</span>
+<span id="cb51-745"><a href="#cb51-745" aria-hidden="true" tabindex="-1"></a>                      <span class="at">path =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb51-746"><a href="#cb51-746" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-747"><a href="#cb51-747" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-748"><a href="#cb51-748" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-749"><a href="#cb51-749" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-750"><a href="#cb51-750" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-751"><a href="#cb51-751" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-751"><a href="#cb51-751" aria-hidden="true" tabindex="-1"></a>The output is an object of class 'template_correlations', with its own printing method:</span>
 <span id="cb51-752"><a href="#cb51-752" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-753"><a href="#cb51-753" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-754"><a href="#cb51-754" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-755"><a href="#cb51-755" aria-hidden="true" tabindex="-1"></a>This object can then be used to detect sound events using <span class="in">`template_detector()`</span>:</span>
-<span id="cb51-756"><a href="#cb51-756" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-759"><a href="#cb51-759" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-760"><a href="#cb51-760" aria-hidden="true" tabindex="-1"></a><span class="co"># run detection</span></span>
-<span id="cb51-761"><a href="#cb51-761" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
-<span id="cb51-762"><a href="#cb51-762" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_detector</span>(<span class="at">template.correlations =</span> correlations, <span class="at">threshold =</span> <span class="fl">0.4</span>)</span>
-<span id="cb51-763"><a href="#cb51-763" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-764"><a href="#cb51-764" aria-hidden="true" tabindex="-1"></a>detection</span>
-<span id="cb51-765"><a href="#cb51-765" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-766"><a href="#cb51-766" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-767"><a href="#cb51-767" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-768"><a href="#cb51-768" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-769"><a href="#cb51-769" aria-hidden="true" tabindex="-1"></a>The output can be explored by plotting the spectrogram along with the detection and correlation scores:</span>
-<span id="cb51-770"><a href="#cb51-770" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-771"><a href="#cb51-771" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, warning=FALSE}</span></span>
-<span id="cb51-772"><a href="#cb51-772" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-773"><a href="#cb51-773" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
-<span id="cb51-774"><a href="#cb51-774" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(</span>
-<span id="cb51-775"><a href="#cb51-775" aria-hidden="true" tabindex="-1"></a>  <span class="at">wave =</span> lbh1,</span>
-<span id="cb51-776"><a href="#cb51-776" aria-hidden="true" tabindex="-1"></a>  <span class="at">detection =</span> detection,</span>
-<span id="cb51-777"><a href="#cb51-777" aria-hidden="true" tabindex="-1"></a>  <span class="at">template.correlation =</span> correlations[[<span class="dv">1</span>]],</span>
-<span id="cb51-778"><a href="#cb51-778" aria-hidden="true" tabindex="-1"></a>  <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
-<span id="cb51-779"><a href="#cb51-779" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="fl">0.4</span>,</span>
-<span id="cb51-780"><a href="#cb51-780" aria-hidden="true" tabindex="-1"></a>  <span class="at">hop.size =</span> <span class="dv">10</span>, <span class="at">ovlp =</span> <span class="dv">50</span>)</span>
-<span id="cb51-781"><a href="#cb51-781" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-782"><a href="#cb51-782" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-783"><a href="#cb51-783" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-784"><a href="#cb51-784" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-785"><a href="#cb51-785" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-786"><a href="#cb51-786" aria-hidden="true" tabindex="-1"></a>The performance can be evaluated using <span class="in">`diagnose_detection()`</span>:</span>
-<span id="cb51-787"><a href="#cb51-787" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-790"><a href="#cb51-790" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-791"><a href="#cb51-791" aria-hidden="true" tabindex="-1"></a><span class="co">#diagnose</span></span>
-<span id="cb51-792"><a href="#cb51-792" aria-hidden="true" tabindex="-1"></a><span class="fu">diagnose_detection</span>(<span class="at">reference =</span> lbh1_reference, <span class="at">detection =</span> detection)</span>
+<span id="cb51-755"><a href="#cb51-755" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-756"><a href="#cb51-756" aria-hidden="true" tabindex="-1"></a><span class="co"># print</span></span>
+<span id="cb51-757"><a href="#cb51-757" aria-hidden="true" tabindex="-1"></a>correlations</span>
+<span id="cb51-758"><a href="#cb51-758" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-759"><a href="#cb51-759" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-760"><a href="#cb51-760" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-761"><a href="#cb51-761" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-762"><a href="#cb51-762" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-763"><a href="#cb51-763" aria-hidden="true" tabindex="-1"></a>This object can then be used to detect sound events using <span class="in">`template_detector()`</span>:</span>
+<span id="cb51-764"><a href="#cb51-764" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-767"><a href="#cb51-767" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-768"><a href="#cb51-768" aria-hidden="true" tabindex="-1"></a><span class="co"># run detection</span></span>
+<span id="cb51-769"><a href="#cb51-769" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
+<span id="cb51-770"><a href="#cb51-770" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_detector</span>(<span class="at">template.correlations =</span> correlations, <span class="at">threshold =</span> <span class="fl">0.4</span>)</span>
+<span id="cb51-771"><a href="#cb51-771" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-772"><a href="#cb51-772" aria-hidden="true" tabindex="-1"></a>detection</span>
+<span id="cb51-773"><a href="#cb51-773" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-774"><a href="#cb51-774" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-775"><a href="#cb51-775" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-776"><a href="#cb51-776" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-777"><a href="#cb51-777" aria-hidden="true" tabindex="-1"></a>The output can be explored by plotting the spectrogram along with the detection and correlation scores:</span>
+<span id="cb51-778"><a href="#cb51-778" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-779"><a href="#cb51-779" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, warning=FALSE}</span></span>
+<span id="cb51-780"><a href="#cb51-780" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-781"><a href="#cb51-781" aria-hidden="true" tabindex="-1"></a><span class="co"># plot spectrogram</span></span>
+<span id="cb51-782"><a href="#cb51-782" aria-hidden="true" tabindex="-1"></a><span class="fu">label_spectro</span>(</span>
+<span id="cb51-783"><a href="#cb51-783" aria-hidden="true" tabindex="-1"></a>  <span class="at">wave =</span> lbh1,</span>
+<span id="cb51-784"><a href="#cb51-784" aria-hidden="true" tabindex="-1"></a>  <span class="at">detection =</span> detection,</span>
+<span id="cb51-785"><a href="#cb51-785" aria-hidden="true" tabindex="-1"></a>  <span class="at">template.correlation =</span> correlations[[<span class="dv">1</span>]],</span>
+<span id="cb51-786"><a href="#cb51-786" aria-hidden="true" tabindex="-1"></a>  <span class="at">flim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb51-787"><a href="#cb51-787" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="fl">0.4</span>,</span>
+<span id="cb51-788"><a href="#cb51-788" aria-hidden="true" tabindex="-1"></a>  <span class="at">hop.size =</span> <span class="dv">10</span>, <span class="at">ovlp =</span> <span class="dv">50</span>)</span>
+<span id="cb51-789"><a href="#cb51-789" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-790"><a href="#cb51-790" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-791"><a href="#cb51-791" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-792"><a href="#cb51-792" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-793"><a href="#cb51-793" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-794"><a href="#cb51-794" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-794"><a href="#cb51-794" aria-hidden="true" tabindex="-1"></a>The performance can be evaluated using <span class="in">`diagnose_detection()`</span>:</span>
 <span id="cb51-795"><a href="#cb51-795" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-796"><a href="#cb51-796" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-797"><a href="#cb51-797" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-798"><a href="#cb51-798" aria-hidden="true" tabindex="-1"></a><span class="fu">### Optimizing template-based detection</span></span>
-<span id="cb51-799"><a href="#cb51-799" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-800"><a href="#cb51-800" aria-hidden="true" tabindex="-1"></a>The function <span class="in">`optimize_template_detector()`</span> allows to evaluate the performance under different correlation thresholds:</span>
+<span id="cb51-798"><a href="#cb51-798" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-799"><a href="#cb51-799" aria-hidden="true" tabindex="-1"></a><span class="co">#diagnose</span></span>
+<span id="cb51-800"><a href="#cb51-800" aria-hidden="true" tabindex="-1"></a><span class="fu">diagnose_detection</span>(<span class="at">reference =</span> lbh1_reference, <span class="at">detection =</span> detection)</span>
 <span id="cb51-801"><a href="#cb51-801" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-804"><a href="#cb51-804" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-805"><a href="#cb51-805" aria-hidden="true" tabindex="-1"></a><span class="co"># run optimization</span></span>
-<span id="cb51-806"><a href="#cb51-806" aria-hidden="true" tabindex="-1"></a>optimization <span class="ot">&lt;-</span></span>
-<span id="cb51-807"><a href="#cb51-807" aria-hidden="true" tabindex="-1"></a>  <span class="fu">optimize_template_detector</span>(</span>
-<span id="cb51-808"><a href="#cb51-808" aria-hidden="true" tabindex="-1"></a>    <span class="at">template.correlations =</span> correlations,</span>
-<span id="cb51-809"><a href="#cb51-809" aria-hidden="true" tabindex="-1"></a>    <span class="at">reference =</span> lbh1_reference,</span>
-<span id="cb51-810"><a href="#cb51-810" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>)</span>
-<span id="cb51-811"><a href="#cb51-811" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb51-812"><a href="#cb51-812" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-813"><a href="#cb51-813" aria-hidden="true" tabindex="-1"></a><span class="co"># print output</span></span>
-<span id="cb51-814"><a href="#cb51-814" aria-hidden="true" tabindex="-1"></a>optimization</span>
-<span id="cb51-815"><a href="#cb51-815" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-816"><a href="#cb51-816" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-817"><a href="#cb51-817" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-818"><a href="#cb51-818" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-819"><a href="#cb51-819" aria-hidden="true" tabindex="-1"></a>Additional threshold values can be evaluated without having to run it all over again. We just need to supplied the output from the previous run with the argument <span class="in">`previous.output`</span> (the same trick can be done when optimizing an energy-based detection):</span>
+<span id="cb51-802"><a href="#cb51-802" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-803"><a href="#cb51-803" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-804"><a href="#cb51-804" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-805"><a href="#cb51-805" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-806"><a href="#cb51-806" aria-hidden="true" tabindex="-1"></a><span class="fu">### Optimizing template-based detection</span></span>
+<span id="cb51-807"><a href="#cb51-807" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-808"><a href="#cb51-808" aria-hidden="true" tabindex="-1"></a>The function <span class="in">`optimize_template_detector()`</span> allows to evaluate the performance under different correlation thresholds:</span>
+<span id="cb51-809"><a href="#cb51-809" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-812"><a href="#cb51-812" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-813"><a href="#cb51-813" aria-hidden="true" tabindex="-1"></a><span class="co"># run optimization</span></span>
+<span id="cb51-814"><a href="#cb51-814" aria-hidden="true" tabindex="-1"></a>optimization <span class="ot">&lt;-</span></span>
+<span id="cb51-815"><a href="#cb51-815" aria-hidden="true" tabindex="-1"></a>  <span class="fu">optimize_template_detector</span>(</span>
+<span id="cb51-816"><a href="#cb51-816" aria-hidden="true" tabindex="-1"></a>    <span class="at">template.correlations =</span> correlations,</span>
+<span id="cb51-817"><a href="#cb51-817" aria-hidden="true" tabindex="-1"></a>    <span class="at">reference =</span> lbh1_reference,</span>
+<span id="cb51-818"><a href="#cb51-818" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>)</span>
+<span id="cb51-819"><a href="#cb51-819" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb51-820"><a href="#cb51-820" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-823"><a href="#cb51-823" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-824"><a href="#cb51-824" aria-hidden="true" tabindex="-1"></a><span class="co"># run optimization</span></span>
-<span id="cb51-825"><a href="#cb51-825" aria-hidden="true" tabindex="-1"></a><span class="fu">optimize_template_detector</span>(</span>
-<span id="cb51-826"><a href="#cb51-826" aria-hidden="true" tabindex="-1"></a>  <span class="at">template.correlations =</span> correlations,</span>
-<span id="cb51-827"><a href="#cb51-827" aria-hidden="true" tabindex="-1"></a>  <span class="at">reference =</span> lbh1_reference,</span>
-<span id="cb51-828"><a href="#cb51-828" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.7</span>),</span>
-<span id="cb51-829"><a href="#cb51-829" aria-hidden="true" tabindex="-1"></a>  <span class="at">previous.output =</span> optimization</span>
-<span id="cb51-830"><a href="#cb51-830" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb51-831"><a href="#cb51-831" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-832"><a href="#cb51-832" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-833"><a href="#cb51-833" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-834"><a href="#cb51-834" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-835"><a href="#cb51-835" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-836"><a href="#cb51-836" aria-hidden="true" tabindex="-1"></a>In this case several threshold values can achieved an optimal detection.</span>
-<span id="cb51-837"><a href="#cb51-837" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-838"><a href="#cb51-838" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-821"><a href="#cb51-821" aria-hidden="true" tabindex="-1"></a><span class="co"># print output</span></span>
+<span id="cb51-822"><a href="#cb51-822" aria-hidden="true" tabindex="-1"></a>optimization</span>
+<span id="cb51-823"><a href="#cb51-823" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-824"><a href="#cb51-824" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-825"><a href="#cb51-825" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-826"><a href="#cb51-826" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-827"><a href="#cb51-827" aria-hidden="true" tabindex="-1"></a>Additional threshold values can be evaluated without having to run it all over again. We just need to supplied the output from the previous run with the argument <span class="in">`previous.output`</span> (the same trick can be done when optimizing an energy-based detection):</span>
+<span id="cb51-828"><a href="#cb51-828" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-831"><a href="#cb51-831" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-832"><a href="#cb51-832" aria-hidden="true" tabindex="-1"></a><span class="co"># run optimization</span></span>
+<span id="cb51-833"><a href="#cb51-833" aria-hidden="true" tabindex="-1"></a><span class="fu">optimize_template_detector</span>(</span>
+<span id="cb51-834"><a href="#cb51-834" aria-hidden="true" tabindex="-1"></a>  <span class="at">template.correlations =</span> correlations,</span>
+<span id="cb51-835"><a href="#cb51-835" aria-hidden="true" tabindex="-1"></a>  <span class="at">reference =</span> lbh1_reference,</span>
+<span id="cb51-836"><a href="#cb51-836" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.7</span>),</span>
+<span id="cb51-837"><a href="#cb51-837" aria-hidden="true" tabindex="-1"></a>  <span class="at">previous.output =</span> optimization</span>
+<span id="cb51-838"><a href="#cb51-838" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb51-839"><a href="#cb51-839" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-840"><a href="#cb51-840" aria-hidden="true" tabindex="-1"></a><span class="fu">### Detecting several templates</span></span>
+<span id="cb51-840"><a href="#cb51-840" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb51-841"><a href="#cb51-841" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-842"><a href="#cb51-842" aria-hidden="true" tabindex="-1"></a>Several templates can be used within the same call. Here we correlate two templates on the two example sound files, taking one template from each sound file:</span>
+<span id="cb51-842"><a href="#cb51-842" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-843"><a href="#cb51-843" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-846"><a href="#cb51-846" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-847"><a href="#cb51-847" aria-hidden="true" tabindex="-1"></a><span class="co"># get correlations</span></span>
-<span id="cb51-848"><a href="#cb51-848" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span></span>
-<span id="cb51-849"><a href="#cb51-849" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_correlator</span>(</span>
-<span id="cb51-850"><a href="#cb51-850" aria-hidden="true" tabindex="-1"></a>    <span class="at">templates =</span> lbh_reference[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>),],</span>
-<span id="cb51-851"><a href="#cb51-851" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="fu">c</span>(<span class="st">"lbh1.wav"</span>, <span class="st">"lbh2.wav"</span>),</span>
-<span id="cb51-852"><a href="#cb51-852" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
-<span id="cb51-853"><a href="#cb51-853" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb51-854"><a href="#cb51-854" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-855"><a href="#cb51-855" aria-hidden="true" tabindex="-1"></a><span class="co"># run detection</span></span>
-<span id="cb51-856"><a href="#cb51-856" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
-<span id="cb51-857"><a href="#cb51-857" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_detector</span>(<span class="at">template.correlations =</span> correlations, <span class="at">threshold =</span> <span class="fl">0.5</span>)</span>
-<span id="cb51-858"><a href="#cb51-858" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-859"><a href="#cb51-859" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span></span>
-<span id="cb51-860"><a href="#cb51-860" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_correlator</span>(</span>
-<span id="cb51-861"><a href="#cb51-861" aria-hidden="true" tabindex="-1"></a>    <span class="at">templates =</span> lbh_reference[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>),],</span>
-<span id="cb51-862"><a href="#cb51-862" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="fu">c</span>(<span class="st">"lbh1.wav"</span>, <span class="st">"lbh2.wav"</span>),</span>
-<span id="cb51-863"><a href="#cb51-863" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
-<span id="cb51-864"><a href="#cb51-864" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb51-865"><a href="#cb51-865" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-866"><a href="#cb51-866" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-867"><a href="#cb51-867" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-868"><a href="#cb51-868" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-869"><a href="#cb51-869" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-870"><a href="#cb51-870" aria-hidden="true" tabindex="-1"></a>Note that in these cases we can get the same sound event detected several times (duplicates), one by each template. We can check if that is the case just by diagnosing the detection:</span>
-<span id="cb51-871"><a href="#cb51-871" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-874"><a href="#cb51-874" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-875"><a href="#cb51-875" aria-hidden="true" tabindex="-1"></a><span class="co">#diagnose</span></span>
-<span id="cb51-876"><a href="#cb51-876" aria-hidden="true" tabindex="-1"></a><span class="fu">diagnose_detection</span>(<span class="at">reference =</span> lbh_reference, <span class="at">detection =</span> detection)</span>
+<span id="cb51-844"><a href="#cb51-844" aria-hidden="true" tabindex="-1"></a>In this case several threshold values can achieved an optimal detection.</span>
+<span id="cb51-845"><a href="#cb51-845" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-846"><a href="#cb51-846" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-847"><a href="#cb51-847" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-848"><a href="#cb51-848" aria-hidden="true" tabindex="-1"></a><span class="fu">### Detecting several templates</span></span>
+<span id="cb51-849"><a href="#cb51-849" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-850"><a href="#cb51-850" aria-hidden="true" tabindex="-1"></a>Several templates can be used within the same call. Here we correlate two templates on the two example sound files, taking one template from each sound file:</span>
+<span id="cb51-851"><a href="#cb51-851" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-854"><a href="#cb51-854" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-855"><a href="#cb51-855" aria-hidden="true" tabindex="-1"></a><span class="co"># get correlations</span></span>
+<span id="cb51-856"><a href="#cb51-856" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span></span>
+<span id="cb51-857"><a href="#cb51-857" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_correlator</span>(</span>
+<span id="cb51-858"><a href="#cb51-858" aria-hidden="true" tabindex="-1"></a>    <span class="at">templates =</span> lbh_reference[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>),],</span>
+<span id="cb51-859"><a href="#cb51-859" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="fu">c</span>(<span class="st">"lbh1.wav"</span>, <span class="st">"lbh2.wav"</span>),</span>
+<span id="cb51-860"><a href="#cb51-860" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
+<span id="cb51-861"><a href="#cb51-861" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb51-862"><a href="#cb51-862" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-863"><a href="#cb51-863" aria-hidden="true" tabindex="-1"></a><span class="co"># run detection</span></span>
+<span id="cb51-864"><a href="#cb51-864" aria-hidden="true" tabindex="-1"></a>detection <span class="ot">&lt;-</span></span>
+<span id="cb51-865"><a href="#cb51-865" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_detector</span>(<span class="at">template.correlations =</span> correlations, <span class="at">threshold =</span> <span class="fl">0.5</span>)</span>
+<span id="cb51-866"><a href="#cb51-866" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-867"><a href="#cb51-867" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span></span>
+<span id="cb51-868"><a href="#cb51-868" aria-hidden="true" tabindex="-1"></a>  <span class="fu">template_correlator</span>(</span>
+<span id="cb51-869"><a href="#cb51-869" aria-hidden="true" tabindex="-1"></a>    <span class="at">templates =</span> lbh_reference[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>),],</span>
+<span id="cb51-870"><a href="#cb51-870" aria-hidden="true" tabindex="-1"></a>    <span class="at">files =</span> <span class="fu">c</span>(<span class="st">"lbh1.wav"</span>, <span class="st">"lbh2.wav"</span>),</span>
+<span id="cb51-871"><a href="#cb51-871" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="fu">tempdir</span>()</span>
+<span id="cb51-872"><a href="#cb51-872" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb51-873"><a href="#cb51-873" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-874"><a href="#cb51-874" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-875"><a href="#cb51-875" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-876"><a href="#cb51-876" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-877"><a href="#cb51-877" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-878"><a href="#cb51-878" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-878"><a href="#cb51-878" aria-hidden="true" tabindex="-1"></a>Note that in these cases we can get the same sound event detected several times (duplicates), one by each template. We can check if that is the case just by diagnosing the detection:</span>
 <span id="cb51-879"><a href="#cb51-879" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-880"><a href="#cb51-880" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-881"><a href="#cb51-881" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-882"><a href="#cb51-882" aria-hidden="true" tabindex="-1"></a>Duplicates are shown as split positives. Fortunately, we can leave a single detected sound event by leaving only those with the highest correlation. To do this we first need to label each row in the detection using <span class="in">`label_detection()`</span> and then remove duplicates using <span class="in">`filter_detection()`</span>:</span>
-<span id="cb51-883"><a href="#cb51-883" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-886"><a href="#cb51-886" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-887"><a href="#cb51-887" aria-hidden="true" tabindex="-1"></a><span class="co"># labeling detection</span></span>
-<span id="cb51-888"><a href="#cb51-888" aria-hidden="true" tabindex="-1"></a>labeled <span class="ot">&lt;-</span></span>
-<span id="cb51-889"><a href="#cb51-889" aria-hidden="true" tabindex="-1"></a>  <span class="fu">label_detection</span>(<span class="at">reference =</span> lbh_reference, <span class="at">detection =</span> detection)</span>
-<span id="cb51-890"><a href="#cb51-890" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-891"><a href="#cb51-891" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-892"><a href="#cb51-892" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-893"><a href="#cb51-893" aria-hidden="true" tabindex="-1"></a>This function adds a column ('detection.class') with the class label for each row:</span>
-<span id="cb51-894"><a href="#cb51-894" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-897"><a href="#cb51-897" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-898"><a href="#cb51-898" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(labeled<span class="sc">$</span>detection.class)</span>
-<span id="cb51-899"><a href="#cb51-899" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-900"><a href="#cb51-900" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-901"><a href="#cb51-901" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-902"><a href="#cb51-902" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-903"><a href="#cb51-903" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-904"><a href="#cb51-904" aria-hidden="true" tabindex="-1"></a>Now we can filter out duplicates and diagnose the detection again, telling the function to select a single row per duplicate using the correlation score as a criterium (<span class="in">`by = "scores"`</span>, this column is part of the <span class="in">`template_detector()`</span> output):</span>
-<span id="cb51-905"><a href="#cb51-905" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-908"><a href="#cb51-908" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb51-909"><a href="#cb51-909" aria-hidden="true" tabindex="-1"></a><span class="co"># filter</span></span>
-<span id="cb51-910"><a href="#cb51-910" aria-hidden="true" tabindex="-1"></a>filtered <span class="ot">&lt;-</span> <span class="fu">filter_detection</span>(<span class="at">detection =</span> labeled, <span class="at">by =</span> <span class="st">"scores"</span>)</span>
+<span id="cb51-882"><a href="#cb51-882" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-883"><a href="#cb51-883" aria-hidden="true" tabindex="-1"></a><span class="co">#diagnose</span></span>
+<span id="cb51-884"><a href="#cb51-884" aria-hidden="true" tabindex="-1"></a><span class="fu">diagnose_detection</span>(<span class="at">reference =</span> lbh_reference, <span class="at">detection =</span> detection)</span>
+<span id="cb51-885"><a href="#cb51-885" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-886"><a href="#cb51-886" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-887"><a href="#cb51-887" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-888"><a href="#cb51-888" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-889"><a href="#cb51-889" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-890"><a href="#cb51-890" aria-hidden="true" tabindex="-1"></a>Duplicates are shown as split positives. Fortunately, we can leave a single detected sound event by leaving only those with the highest correlation. To do this we first need to label each row in the detection using <span class="in">`label_detection()`</span> and then remove duplicates using <span class="in">`filter_detection()`</span>:</span>
+<span id="cb51-891"><a href="#cb51-891" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-894"><a href="#cb51-894" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-895"><a href="#cb51-895" aria-hidden="true" tabindex="-1"></a><span class="co"># labeling detection</span></span>
+<span id="cb51-896"><a href="#cb51-896" aria-hidden="true" tabindex="-1"></a>labeled <span class="ot">&lt;-</span></span>
+<span id="cb51-897"><a href="#cb51-897" aria-hidden="true" tabindex="-1"></a>  <span class="fu">label_detection</span>(<span class="at">reference =</span> lbh_reference, <span class="at">detection =</span> detection)</span>
+<span id="cb51-898"><a href="#cb51-898" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-899"><a href="#cb51-899" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-900"><a href="#cb51-900" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-901"><a href="#cb51-901" aria-hidden="true" tabindex="-1"></a>This function adds a column ('detection.class') with the class label for each row:</span>
+<span id="cb51-902"><a href="#cb51-902" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-905"><a href="#cb51-905" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-906"><a href="#cb51-906" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(labeled<span class="sc">$</span>detection.class)</span>
+<span id="cb51-907"><a href="#cb51-907" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-908"><a href="#cb51-908" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-909"><a href="#cb51-909" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-910"><a href="#cb51-910" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-911"><a href="#cb51-911" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-912"><a href="#cb51-912" aria-hidden="true" tabindex="-1"></a><span class="co"># diagnose</span></span>
-<span id="cb51-913"><a href="#cb51-913" aria-hidden="true" tabindex="-1"></a><span class="fu">diagnose_detection</span>(<span class="at">reference =</span> lbh_reference, <span class="at">detection =</span> filtered)</span>
-<span id="cb51-914"><a href="#cb51-914" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb51-915"><a href="#cb51-915" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-916"><a href="#cb51-916" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-917"><a href="#cb51-917" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-918"><a href="#cb51-918" aria-hidden="true" tabindex="-1"></a>We successfully get rid of duplicates and detected every single target sound event.</span>
+<span id="cb51-912"><a href="#cb51-912" aria-hidden="true" tabindex="-1"></a>Now we can filter out duplicates and diagnose the detection again, telling the function to select a single row per duplicate using the correlation score as a criterium (<span class="in">`by = "scores"`</span>, this column is part of the <span class="in">`template_detector()`</span> output):</span>
+<span id="cb51-913"><a href="#cb51-913" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-916"><a href="#cb51-916" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb51-917"><a href="#cb51-917" aria-hidden="true" tabindex="-1"></a><span class="co"># filter</span></span>
+<span id="cb51-918"><a href="#cb51-918" aria-hidden="true" tabindex="-1"></a>filtered <span class="ot">&lt;-</span> <span class="fu">filter_detection</span>(<span class="at">detection =</span> labeled, <span class="at">by =</span> <span class="st">"scores"</span>)</span>
 <span id="cb51-919"><a href="#cb51-919" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-920"><a href="#cb51-920" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb51-921"><a href="#cb51-921" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-922"><a href="#cb51-922" aria-hidden="true" tabindex="-1"></a><span class="fu">## Improving detection speed</span></span>
+<span id="cb51-920"><a href="#cb51-920" aria-hidden="true" tabindex="-1"></a><span class="co"># diagnose</span></span>
+<span id="cb51-921"><a href="#cb51-921" aria-hidden="true" tabindex="-1"></a><span class="fu">diagnose_detection</span>(<span class="at">reference =</span> lbh_reference, <span class="at">detection =</span> filtered)</span>
+<span id="cb51-922"><a href="#cb51-922" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb51-923"><a href="#cb51-923" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-924"><a href="#cb51-924" aria-hidden="true" tabindex="-1"></a>Detection routines can take a long time when working with large amounts of acoustic data (e.g. large sound files and/or many sound files). These are some useful points to keep in mine when trying to make a routine more time-efficient:</span>
+<span id="cb51-924"><a href="#cb51-924" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-925"><a href="#cb51-925" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-926"><a href="#cb51-926" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Always test procedures on small data subsets</span>
-<span id="cb51-927"><a href="#cb51-927" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`template_detector()`</span> is faster than <span class="in">`energy_detector()`</span></span>
-<span id="cb51-928"><a href="#cb51-928" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Parallelization (see <span class="in">`parallel`</span> argument in most functions) can significantly speed-up routines, but works better on Unix-based operating systems (linux and mac OS)</span>
-<span id="cb51-929"><a href="#cb51-929" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Sampling rate matters: detecting sound events on low sampling rate files goes faster, so we should avoid having nyquist frequencies (sampling rate / 2) way higher than the highest frequency of the target sound events (sound files can be downsampled using warbleR's <span class="co">[</span><span class="ot">`fix_sound_files()`</span><span class="co">](https://marce10.github.io/warbleR/reference/selection_table.html)</span>)</span>
-<span id="cb51-930"><a href="#cb51-930" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Large sound files can make the routine crash, use <span class="in">`split_acoustic_data()`</span> to split both reference tables and files into shorter clips.</span>
-<span id="cb51-931"><a href="#cb51-931" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Think about using a computer with lots of RAM memory or a computer cluster for working on large amounts of data</span>
-<span id="cb51-932"><a href="#cb51-932" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`thinning`</span> argument (which reduces the size of the amplitude envelope) can also speed-up <span class="in">`energy_detector()`</span></span>
+<span id="cb51-926"><a href="#cb51-926" aria-hidden="true" tabindex="-1"></a>We successfully get rid of duplicates and detected every single target sound event.</span>
+<span id="cb51-927"><a href="#cb51-927" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-928"><a href="#cb51-928" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb51-929"><a href="#cb51-929" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-930"><a href="#cb51-930" aria-hidden="true" tabindex="-1"></a><span class="fu">## Improving detection speed</span></span>
+<span id="cb51-931"><a href="#cb51-931" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-932"><a href="#cb51-932" aria-hidden="true" tabindex="-1"></a>Detection routines can take a long time when working with large amounts of acoustic data (e.g. large sound files and/or many sound files). These are some useful points to keep in mine when trying to make a routine more time-efficient:</span>
 <span id="cb51-933"><a href="#cb51-933" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-934"><a href="#cb51-934" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
-<span id="cb51-935"><a href="#cb51-935" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-936"><a href="#cb51-936" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb51-937"><a href="#cb51-937" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-938"><a href="#cb51-938" aria-hidden="true" tabindex="-1"></a><span class="fu">## Additional tips</span></span>
-<span id="cb51-939"><a href="#cb51-939" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-940"><a href="#cb51-940" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Use your knowledge about the sound event structure to determine the initial range for the tuning parameters in a detection optimization routine</span>
-<span id="cb51-941"><a href="#cb51-941" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>If people have a hard time figuring out where a target sound event occurs in a recording, detection algorithms will also have a hard time</span>
-<span id="cb51-942"><a href="#cb51-942" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Several templates representing the range of variation in sound event structure can be used to detect semi-stereotyped sound events</span>
-<span id="cb51-943"><a href="#cb51-943" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Make sure reference tables contain all target sound events and only the target sound events. The performance of the detection cannot be better than the reference itself.</span>
-<span id="cb51-944"><a href="#cb51-944" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Avoid having overlapping sound events or several sound events as a single one (like a multi-syllable vocalization) in the reference table when running an energy-based detector</span>
-<span id="cb51-945"><a href="#cb51-945" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Low-precision can be improved by training a classification model (e.g. random forest) to tell sound events from noise</span>
-<span id="cb51-946"><a href="#cb51-946" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-947"><a href="#cb51-947" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb51-948"><a href="#cb51-948" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-949"><a href="#cb51-949" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
-<span id="cb51-950"><a href="#cb51-950" aria-hidden="true" tabindex="-1"></a>Please cite <span class="co">[</span><span class="ot">ohun</span><span class="co">](https://github.com/maRce10/ohun)</span> like this:</span>
-<span id="cb51-951"><a href="#cb51-951" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-952"><a href="#cb51-952" aria-hidden="true" tabindex="-1"></a>Araya-Salas, M. (2021), *ohun: diagnosing and optimizing automated sound event detection*. R package version 0.1.0.</span>
-<span id="cb51-953"><a href="#cb51-953" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb51-934"><a href="#cb51-934" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Always test procedures on small data subsets</span>
+<span id="cb51-935"><a href="#cb51-935" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`template_detector()`</span> is faster than <span class="in">`energy_detector()`</span></span>
+<span id="cb51-936"><a href="#cb51-936" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Parallelization (see <span class="in">`parallel`</span> argument in most functions) can significantly speed-up routines, but works better on Unix-based operating systems (linux and mac OS)</span>
+<span id="cb51-937"><a href="#cb51-937" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Sampling rate matters: detecting sound events on low sampling rate files goes faster, so we should avoid having nyquist frequencies (sampling rate / 2) way higher than the highest frequency of the target sound events (sound files can be downsampled using warbleR's <span class="co">[</span><span class="ot">`fix_sound_files()`</span><span class="co">](https://marce10.github.io/warbleR/reference/selection_table.html)</span>)</span>
+<span id="cb51-938"><a href="#cb51-938" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Large sound files can make the routine crash, use <span class="in">`split_acoustic_data()`</span> to split both reference tables and files into shorter clips.</span>
+<span id="cb51-939"><a href="#cb51-939" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Think about using a computer with lots of RAM memory or a computer cluster for working on large amounts of data</span>
+<span id="cb51-940"><a href="#cb51-940" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`thinning`</span> argument (which reduces the size of the amplitude envelope) can also speed-up <span class="in">`energy_detector()`</span></span>
+<span id="cb51-941"><a href="#cb51-941" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-942"><a href="#cb51-942" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-943"><a href="#cb51-943" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-944"><a href="#cb51-944" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb51-945"><a href="#cb51-945" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-946"><a href="#cb51-946" aria-hidden="true" tabindex="-1"></a><span class="fu">## Additional tips</span></span>
+<span id="cb51-947"><a href="#cb51-947" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-948"><a href="#cb51-948" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Use your knowledge about the sound event structure to determine the initial range for the tuning parameters in a detection optimization routine</span>
+<span id="cb51-949"><a href="#cb51-949" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>If people have a hard time figuring out where a target sound event occurs in a recording, detection algorithms will also have a hard time</span>
+<span id="cb51-950"><a href="#cb51-950" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Several templates representing the range of variation in sound event structure can be used to detect semi-stereotyped sound events</span>
+<span id="cb51-951"><a href="#cb51-951" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Make sure reference tables contain all target sound events and only the target sound events. The performance of the detection cannot be better than the reference itself.</span>
+<span id="cb51-952"><a href="#cb51-952" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Avoid having overlapping sound events or several sound events as a single one (like a multi-syllable vocalization) in the reference table when running an energy-based detector</span>
+<span id="cb51-953"><a href="#cb51-953" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Low-precision can be improved by training a classification model (e.g. random forest) to tell sound events from noise</span>
 <span id="cb51-954"><a href="#cb51-954" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-955"><a href="#cb51-955" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-955"><a href="#cb51-955" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb51-956"><a href="#cb51-956" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-957"><a href="#cb51-957" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
-<span id="cb51-958"><a href="#cb51-958" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-959"><a href="#cb51-959" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Araya-Salas, M. (2021), ohun: diagnosing and optimizing automated sound event detection. R package version 0.1.0.</span>
-<span id="cb51-960"><a href="#cb51-960" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal sound events. Methods Ecol Evol 8:184-191.</span>
-<span id="cb51-961"><a href="#cb51-961" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Khanna H., Gaunt S.L.L. &amp; McCallum D.A. (1997). Digital spectrographic cross-correlation: tests of sensitivity. Bioacoustics 7(3): 209-234.</span>
-<span id="cb51-962"><a href="#cb51-962" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Knight, E.C., Hannah, K.C., Foley, G.J., Scott, C.D., Brigham, R.M. &amp; Bayne, E. (2017). Recommendations for acoustic recognizer performance assessment with application to five common automated signal recognition programs. Avian Conservation and Ecology,</span>
-<span id="cb51-963"><a href="#cb51-963" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Macmillan, N. A., &amp; Creelman, C.D. (2004). Detection theory: A user's guide. Psychology press.</span>
+<span id="cb51-957"><a href="#cb51-957" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
+<span id="cb51-958"><a href="#cb51-958" aria-hidden="true" tabindex="-1"></a>Please cite <span class="co">[</span><span class="ot">ohun</span><span class="co">](https://github.com/maRce10/ohun)</span> like this:</span>
+<span id="cb51-959"><a href="#cb51-959" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-960"><a href="#cb51-960" aria-hidden="true" tabindex="-1"></a>Araya-Salas, M. (2021), *ohun: diagnosing and optimizing automated sound event detection*. R package version 0.1.0.</span>
+<span id="cb51-961"><a href="#cb51-961" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb51-962"><a href="#cb51-962" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-963"><a href="#cb51-963" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-964"><a href="#cb51-964" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-965"><a href="#cb51-965" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
+<span id="cb51-965"><a href="#cb51-965" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
 <span id="cb51-966"><a href="#cb51-966" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-967"><a href="#cb51-967" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb51-968"><a href="#cb51-968" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-969"><a href="#cb51-969" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"4"</span><span class="kw">&gt;</span>Session information<span class="kw">&lt;/font&gt;</span></span>
-<span id="cb51-970"><a href="#cb51-970" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-971"><a href="#cb51-971" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info, echo=F}</span></span>
+<span id="cb51-967"><a href="#cb51-967" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Araya-Salas, M. (2021), ohun: diagnosing and optimizing automated sound event detection. R package version 0.1.0.</span>
+<span id="cb51-968"><a href="#cb51-968" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal sound events. Methods Ecol Evol 8:184-191.</span>
+<span id="cb51-969"><a href="#cb51-969" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Khanna H., Gaunt S.L.L. &amp; McCallum D.A. (1997). Digital spectrographic cross-correlation: tests of sensitivity. Bioacoustics 7(3): 209-234.</span>
+<span id="cb51-970"><a href="#cb51-970" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Knight, E.C., Hannah, K.C., Foley, G.J., Scott, C.D., Brigham, R.M. &amp; Bayne, E. (2017). Recommendations for acoustic recognizer performance assessment with application to five common automated signal recognition programs. Avian Conservation and Ecology,</span>
+<span id="cb51-971"><a href="#cb51-971" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Macmillan, N. A., &amp; Creelman, C.D. (2004). Detection theory: A user's guide. Psychology press.</span>
 <span id="cb51-972"><a href="#cb51-972" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-973"><a href="#cb51-973" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb51-973"><a href="#cb51-973" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb51-974"><a href="#cb51-974" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-975"><a href="#cb51-975" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-975"><a href="#cb51-975" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb51-976"><a href="#cb51-976" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-977"><a href="#cb51-977" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;font</span> <span class="er">size</span><span class="ot">=</span><span class="st">"4"</span><span class="kw">&gt;</span>Session information<span class="kw">&lt;/font&gt;</span></span>
+<span id="cb51-978"><a href="#cb51-978" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-979"><a href="#cb51-979" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info, echo=F}</span></span>
+<span id="cb51-980"><a href="#cb51-980" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-981"><a href="#cb51-981" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb51-982"><a href="#cb51-982" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-983"><a href="#cb51-983" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
