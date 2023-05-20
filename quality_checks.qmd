@@ -526,7 +526,7 @@ tailor_sels(X = lbh_selec_table[1:4, ], auto.next = TRUE)
 
 ```
 
-<img src="images/seltailor.contour.gif" alt="expraven1" width="820"/>
+<img src="images/seltailor.autonext.gif" alt="seltailor autonext" width="820"/>
 
  
 
@@ -542,7 +542,7 @@ tail.cntours <-tailor_sels(X = lbh_selec_table[1:5, ], ts.df = cntours,
                 auto.contour = TRUE)
 ```
 
-<img src="images/seltailor.contour.gif" alt="expraven1" width="820"/>
+<img src="images/seltailor.contour.gif" alt="seltailor autonext" width="820"/>
 
  
 
